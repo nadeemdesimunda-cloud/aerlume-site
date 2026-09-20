@@ -34,7 +34,7 @@
     --violet:#6857F5;
     --rose:#FF5E7D;
     --mint:#14B89A;
-    --brand-gradient:linear-gradient(120deg,var(--aqua) 0%,var(--sky) 38%,var(--violet) 68%,var(--rose) 100%);
+    --brand-gradient:linear-gradient(120deg,var(--aqua) 0%,var(--sky) 52%,var(--violet) 100%);
     --shadow-sm:0 2px 8px -4px rgba(10,25,49,.12);
     --shadow-md:0 14px 34px -18px rgba(10,25,49,.28);
     --shadow-lg:0 24px 60px -24px rgba(10,25,49,.38);
@@ -75,9 +75,9 @@
   .brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:19px;white-space:nowrap;}
   .brand .mark{width:36px;height:36px;border-radius:12px;color:#fff;display:flex;align-items:center;justify-content:center;flex:none;}
   .brand .mark img{display:block;width:100%;height:100%;}
-  .brand-word{letter-spacing:-.045em;}
+  .brand-word{letter-spacing:-.045em;color:inherit;}
   .brand-word .color{
-    background:var(--brand-gradient);-webkit-background-clip:text;background-clip:text;color:transparent;
+    background:none;color:inherit;
   }
   .hamburger{display:none;flex-direction:column;justify-content:center;gap:4px;width:34px;height:30px;background:none;border:none;cursor:pointer;}
   .hamburger span{display:block;height:2px;background:var(--ink);border-radius:2px;}
@@ -375,11 +375,11 @@
   .brand .mark{
     width:42px;height:42px;border-radius:14px;
     background:transparent;
-    box-shadow:0 10px 24px -12px rgba(73,84,255,.75);
-    transform:rotate(-3deg);
+    box-shadow:0 10px 24px -13px rgba(7,23,45,.85);
+    transform:none;
     transition:transform .25s ease,box-shadow .25s ease;
   }
-  .brand:hover .mark{transform:rotate(2deg) translateY(-1px);box-shadow:0 14px 28px -12px rgba(104,87,245,.9);}
+  .brand:hover .mark{transform:translateY(-1px);box-shadow:0 14px 28px -13px rgba(7,23,45,.9);}
   .pillnav{
     border:1px solid color-mix(in srgb,var(--line) 75%,transparent);
     padding:5px;gap:3px;box-shadow:0 10px 30px -24px rgba(10,25,49,.5);
@@ -399,7 +399,7 @@
     .navright{justify-self:end;}
   }
   .signinbtn{box-shadow:0 8px 22px -14px rgba(10,25,49,.85);}
-  .pillnav button.active{background:var(--brand-gradient);box-shadow:0 10px 24px -14px rgba(86,103,255,.9);}
+  .pillnav button.active{background:var(--ink);box-shadow:0 10px 24px -14px rgba(10,25,49,.9);}
   .hero{position:relative;padding-top:clamp(48px,7vw,92px);}
   .hero::before{
     content:"";
@@ -452,8 +452,8 @@
   .fromto:focus-within,.travelerbtn:hover{border-color:var(--sky);box-shadow:0 0 0 3px var(--sky-soft);}
   .searchbtn{
     min-height:58px;border-radius:16px;padding-inline:28px;
-    background:linear-gradient(120deg,#FF7854,var(--rose) 52%,var(--violet));
-    box-shadow:0 16px 30px -18px var(--rose);
+    background:linear-gradient(120deg,#FF7A4F,var(--coral-deep));
+    box-shadow:0 16px 30px -18px var(--coral);
   }
   .scanbadge{box-shadow:0 12px 26px -18px rgba(10,25,49,.8);}
   .trustbar{max-width:1180px;margin-inline:auto;}
