@@ -272,29 +272,6 @@
   .xcard .info .price{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-soft);margin-top:8px;padding-top:8px;border-top:1px solid var(--line);}
   .xcard .info .price b{color:var(--coral);font-size:14px;}
 
-  /* ---- AI ---- */
-  .aisection{display:grid;grid-template-columns:1fr 1fr;gap:44px;margin-top:80px;align-items:start;}
-  @media (max-width:900px){.aisection{grid-template-columns:1fr;}}
-  .aibadge{display:inline-flex;gap:6px;align-items:center;background:var(--ink);color:#fff;border-radius:100px;padding:6px 14px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;}
-  .aisection h2{font-size:29px;margin-top:16px;}
-  .aisection > div > p{color:var(--ink-soft);margin-top:10px;font-size:14.5px;line-height:1.55;}
-  .ai-label{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin:18px 0 8px;font-weight:700;}
-  .vibegrid{display:flex;flex-wrap:wrap;gap:10px;}
-  .vibebtn{border:1px solid var(--line);background:var(--paper-raised);border-radius:100px;padding:10px 18px;font-size:13.5px;cursor:pointer;display:flex;gap:6px;align-items:center;color:var(--ink);}
-  .vibebtn.on{background:var(--ink);color:#fff;border-color:var(--ink);}
-  .generatebtn{margin-top:22px;background:var(--ink);color:#fff;border-radius:12px;padding:14px 26px;font-weight:700;border:none;cursor:pointer;display:flex;gap:8px;align-items:center;font-size:14px;}
-  .ai-results{margin-top:16px;display:grid;gap:10px;}
-  .aiplancard{background:var(--paper-raised);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow-md);}
-  .aiplancard .head{display:flex;justify-content:space-between;align-items:center;}
-  .aiplancard .head b{font-size:15px;}
-  .aiplancard .head .sub{font-size:12px;color:var(--ink-soft);}
-  .readypill{background:var(--good-soft);color:var(--good);font-size:10.5px;font-weight:800;padding:4px 10px;border-radius:100px;text-transform:uppercase;}
-  .aiplanrow{display:flex;gap:12px;padding:12px 0;border-top:1px solid var(--line);}
-  .aiplanrow .icon{width:32px;height:32px;border-radius:10px;background:var(--sky-soft);color:var(--sky);display:flex;align-items:center;justify-content:center;flex:none;}
-  .aiplanrow b{font-size:13.5px;}
-  .aiplanrow .sub{font-size:12px;color:var(--ink-soft);margin-top:2px;}
-  .checkoutbtn{background:var(--coral);color:#fff;border-radius:12px;padding:13px;font-weight:700;width:100%;margin-top:14px;border:none;cursor:pointer;font-size:13.5px;}
-
   /* ---- WHY ---- */
   .why3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:80px;}
   @media (max-width:820px){.why3{grid-template-columns:1fr;}}
@@ -393,7 +370,6 @@
     <button class="dlink" data-drawer-mode="buses"> Buses</button>
     <hr>
     <div class="drawer-sub">Plan</div>
-    <a href="#ai" class="dlink" id="drawerAi"> Plan with AI</a>
     <a href="#explore" class="dlink" id="drawerExplore"> Explore</a>
     <button class="dlink" id="drawerBesttime"> Best time to book</button>
     <button class="dlink" id="drawerTrips"> Trips</button>
@@ -610,36 +586,6 @@
     <div class="exploregrid reveal" id="exploreGrid"></div>
   </section>
 
-  <section id="ai">
-    <div class="aisection">
-      <div>
-        <div class="aibadge"> Aerlume AI · Beta</div>
-        <h2>Plan a trip with Aerlume AI</h2>
-        <p>Tell us your vibe and budget — we'll match you to real routes from our search data and draft an itinerary you can act on.</p>
-        <div class="ai-label">What's the vibe?</div>
-        <div class="vibegrid" id="aiVibe">
-          <button class="vibebtn on" data-v="beach"> Beach</button>
-          <button class="vibebtn" data-v="city"> City break</button>
-          <button class="vibebtn" data-v="adventure"> Adventure</button>
-          <button class="vibebtn" data-v="culture"> Culture</button>
-        </div>
-        <div class="ai-label">Budget per person</div>
-        <div class="vibegrid" id="aiBudget">
-          <button class="vibebtn on" data-b="150">Under €150</button>
-          <button class="vibebtn" data-b="300">Under €300</button>
-          <button class="vibebtn" data-b="9999">No limit</button>
-        </div>
-        <div class="ai-label">When</div>
-        <div class="vibegrid" id="aiWhen">
-          <button class="vibebtn on" data-w="soon">Next 4 weeks</button>
-          <button class="vibebtn" data-w="flex">I'm flexible</button>
-        </div>
-        <button class="generatebtn" id="aiGoBtn" type="button"> Generate my trip</button>
-      </div>
-      <div class="ai-results" id="aiResults"></div>
-    </div>
-  </section>
-
   <section class="why3" id="why">
     <div class="whycard reveal"><h3>Every mode, one search</h3><p>Flights, hotels, cars, and buses side by side — compare without juggling ten tabs. We scan 5+ trusted partners in seconds.</p></div>
     <div class="whycard reveal"><h3>The price you see is final</h3><p>No bait fares. Taxes and fees are included from the start — nothing new appears at your partner's checkout.</p></div>
@@ -655,7 +601,7 @@
         <p class="tag">The travel meta-search that scans flights, hotels, cars, and buses in one search. Find, compare, go.</p>
         <div class="footbadge"> SSL secure · GDPR compliant</div>
       </div>
-      <div class="footcol"><h5>Company</h5><a href="#">About</a><a href="#">Careers</a><a href="#">Press</a><a href="#explore">Explore</a><a href="#ai">AI trips</a></div>
+      <div class="footcol"><h5>Company</h5><a href="#">About</a><a href="#">Careers</a><a href="#">Press</a><a href="#explore">Explore</a></div>
       <div class="footcol"><h5>Support</h5><a href="#">Help center</a><a href="#">Price alerts</a><a href="#" id="footContact">Contact</a><a href="#">Status</a></div>
       <div class="footcol"><h5>Legal</h5><a href="#">Terms</a><a href="#">Privacy</a><a href="#">Cookies</a><a href="#">Affiliate disclosure</a></div>
     </div>
@@ -1109,7 +1055,6 @@
       document.getElementById('drawerCurVal').textContent = label;
       document.getElementById('curMenu').classList.remove('open');
       renderResults(); renderExplore(); renderBestTime();
-      if(document.getElementById('aiResults').children.length) document.getElementById('aiGoBtn').click();
       if(document.getElementById('tripsModal').classList.contains('open')) renderTripsList();
     });
   });
@@ -1133,7 +1078,6 @@
       closeDrawer(); runSearch();
     });
   });
-  document.getElementById('drawerAi').addEventListener('click', closeDrawer);
   document.getElementById('drawerExplore').addEventListener('click', closeDrawer);
   document.getElementById('drawerBesttime').addEventListener('click', ()=>{ closeDrawer(); runSearch(); document.querySelector('.besttime-row').scrollIntoView({behavior:'smooth', block:'center'}); });
   document.getElementById('drawerBesttime2').addEventListener('click', ()=>{ document.querySelector('.pillnav .mode[data-mode="flights"]').click(); runSearch(); document.querySelector('.besttime-row').scrollIntoView({behavior:'smooth', block:'center'}); });
@@ -1258,38 +1202,6 @@
       });
     });
   }
-
-  /* ---------- AI trip planner ---------- */
-  let aiVibe = 'beach', aiBudget = 150, aiWhen = 'soon';
-  document.querySelectorAll('#aiVibe .vibebtn').forEach(b=>b.addEventListener('click', ()=>{
-    document.querySelectorAll('#aiVibe .vibebtn').forEach(x=>x.classList.remove('on')); b.classList.add('on'); aiVibe = b.dataset.v;
-  }));
-  document.querySelectorAll('#aiBudget .vibebtn').forEach(b=>b.addEventListener('click', ()=>{
-    document.querySelectorAll('#aiBudget .vibebtn').forEach(x=>x.classList.remove('on')); b.classList.add('on'); aiBudget = Number(b.dataset.b);
-  }));
-  document.querySelectorAll('#aiWhen .vibebtn').forEach(b=>b.addEventListener('click', ()=>{
-    document.querySelectorAll('#aiWhen .vibebtn').forEach(x=>x.classList.remove('on')); b.classList.add('on'); aiWhen = b.dataset.w;
-  }));
-  document.getElementById('aiGoBtn').addEventListener('click', ()=>{
-    let matches = DESTINATIONS.filter(d=> d.price <= aiBudget);
-    matches = matches.map(d=>{
-      let score = 0;
-      if(d.vibe === aiVibe) score += 3;
-      score += (aiBudget - d.price) / 20;
-      if(aiWhen==='soon' && d.price < 50) score += 1;
-      return {...d, score};
-    }).sort((a,b)=>b.score-a.score).slice(0,1);
-    const wrap = document.getElementById('aiResults');
-    if(!matches.length){ wrap.innerHTML = `<div class="noresults">No matches yet — try raising your budget.</div>`; return; }
-    const d = matches[0];
-    wrap.innerHTML = `<div class="aiplancard">
-      <div class="head"><div><b>Your Aerlume plan</b><div class="sub">${aiVibe.charAt(0).toUpperCase()+aiVibe.slice(1)} · ${fmt(d.price*2+37)} · 3 days</div></div><span class="readypill">Ready to book</span></div>
-      <div class="aiplanrow"><div class="icon">F</div><div><b>Madrid → ${d.city} · Iberline direct</b><div class="sub">07:30 – 08:45 · ${fmt(d.price)} round trip · via Kiwi.com</div></div></div>
-      <div class="aiplanrow"><div class="icon">H</div><div><b>Stay near ${d.city} center</b><div class="sub">${fmt(Math.round(d.price*3.4))} / night · free cancel</div></div></div>
-      <div class="aiplanrow"><div class="icon">D</div><div><b>Day plan</b><div class="sub">Old town walk → local market → sunset viewpoint → dinner</div></div></div>
-      <button class="checkoutbtn" onclick="document.querySelector('.xcard[data-city=\\'${d.city}\\']')?.click()">Open all in one checkout →</button>
-    </div>`;
-  });
 
   /* ---------- Custom date-range calendar picker ---------- */
   (function(){
