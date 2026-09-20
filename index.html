@@ -423,7 +423,7 @@
           <button data-cur="PKR">PKR ₨</button>
         </div>
       </div>
-      <button class="btn-ghost" data-i18n="nav.signin">Sign in</button>
+      <button class="btn-ghost" id="signinBtn" data-i18n="nav.signin">Sign in</button>
     </div>
   </nav>
 
@@ -450,7 +450,7 @@
       <div class="drawer-sub">Settings</div>
       <button class="dlink" id="drawerLang">🌐 Language — <span id="drawerLangVal">English</span></button>
       <button class="dlink" id="drawerCur">💱 Currency — <span id="drawerCurVal">EUR €</span></button>
-      <button class="dlink">✉️ Contact us</button>
+      <button class="dlink" id="drawerContact">✉️ Contact us</button>
     </nav>
   </div>
 
@@ -469,6 +469,31 @@
         <button class="drawer-close" id="tripsClose">×</button>
       </div>
       <div id="tripsList"></div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="bookingModal">
+    <div class="modal-box">
+      <div class="m-head">
+        <h3>Confirm &amp; continue</h3>
+        <button class="drawer-close" id="bookingClose">×</button>
+      </div>
+      <div id="bookingBody"></div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="signinModal">
+    <div class="modal-box">
+      <div class="m-head">
+        <h3>Sign in to Aerlume</h3>
+        <button class="drawer-close" id="signinClose">×</button>
+      </div>
+      <form id="signinForm" style="display:flex;flex-direction:column;gap:12px;">
+        <div class="field"><label>Email</label><input type="email" id="signinEmail" placeholder="you@email.com" required></div>
+        <div class="field"><label>Password</label><input type="password" id="signinPassword" placeholder="••••••••" required></div>
+        <button class="btn-solid" type="submit" style="margin-top:4px;">Sign in</button>
+        <p style="font-size:12px;color:var(--ink-soft);margin:0;">Demo only — connect an auth provider (e.g. your own API, Auth0, Firebase) to enable real sign-in.</p>
+      </form>
     </div>
   </div>
 
@@ -502,60 +527,60 @@
 
     <div class="searchcard">
       <div id="fields-flights">
-        <div class="tabs">
-          <button class="tab active" type="button">Round trip</button>
-          <button class="tab" type="button">One way</button>
-          <button class="tab" type="button">Multi-city</button>
+        <div class="tabs" id="flightTripTabs">
+          <button class="tab active" type="button" data-trip="round">Round trip</button>
+          <button class="tab" type="button" data-trip="oneway">One way</button>
+          <button class="tab" type="button" data-trip="multi">Multi-city</button>
         </div>
         <div class="fields">
-          <div class="field"><label>From</label><input type="text" value="Madrid (MAD)"/></div>
-          <div class="field"><label>To</label><input type="text" value="Lisbon (LIS)"/></div>
-          <div class="field"><label>Depart</label><input type="date" value="2026-10-12"/></div>
-          <div class="field"><label>Return</label><input type="date" value="2026-10-19"/></div>
-          <button class="searchbtn" type="button" onclick="runSearch()">Search flights</button>
+          <div class="field"><label>From</label><input type="text" id="flFrom" value="Madrid (MAD)"/></div>
+          <div class="field"><label>To</label><input type="text" id="flTo" value="Lisbon (LIS)"/></div>
+          <div class="field"><label>Depart</label><input type="date" id="flDepart" value="2026-10-12"/></div>
+          <div class="field" id="flReturnField"><label>Return</label><input type="date" id="flReturn" value="2026-10-19"/></div>
+          <button class="searchbtn" type="button" id="flightSearchBtn" onclick="runSearch()">Search flights</button>
         </div>
       </div>
 
       <div id="fields-hotels" hidden>
-        <div class="tabs">
-          <button class="tab active" type="button">Hotels</button>
-          <button class="tab" type="button">Apartments</button>
-          <button class="tab" type="button">Resorts</button>
+        <div class="tabs" id="hotelTypeTabs">
+          <button class="tab active" type="button" data-htype="hotel">Hotels</button>
+          <button class="tab" type="button" data-htype="apartment">Apartments</button>
+          <button class="tab" type="button" data-htype="resort">Resorts</button>
         </div>
         <div class="fields">
-          <div class="field"><label>Destination</label><input type="text" value="Lisbon, Portugal"/></div>
-          <div class="field"><label>Check-in</label><input type="date" value="2026-10-12"/></div>
-          <div class="field"><label>Check-out</label><input type="date" value="2026-10-19"/></div>
-          <div class="field"><label>Guests</label><input type="text" value="2 adults, 1 room"/></div>
+          <div class="field"><label>Destination</label><input type="text" id="hoDest" value="Lisbon, Portugal"/></div>
+          <div class="field"><label>Check-in</label><input type="date" id="hoIn" value="2026-10-12"/></div>
+          <div class="field"><label>Check-out</label><input type="date" id="hoOut" value="2026-10-19"/></div>
+          <div class="field"><label>Guests</label><input type="text" id="hoGuests" value="2 adults, 1 room"/></div>
           <button class="searchbtn" type="button" onclick="runSearch()">Search hotels</button>
         </div>
       </div>
 
       <div id="fields-cars" hidden>
-        <div class="tabs">
-          <button class="tab active" type="button">All cars</button>
-          <button class="tab" type="button">Economy</button>
-          <button class="tab" type="button">SUV</button>
+        <div class="tabs" id="carTypeTabs">
+          <button class="tab active" type="button" data-ctype="all">All cars</button>
+          <button class="tab" type="button" data-ctype="Economy">Economy</button>
+          <button class="tab" type="button" data-ctype="SUV">SUV</button>
         </div>
         <div class="fields">
-          <div class="field"><label>Pick-up</label><input type="text" value="Lisbon Airport (LIS)"/></div>
-          <div class="field"><label>Drop-off</label><input type="text" value="Lisbon Airport (LIS)"/></div>
-          <div class="field"><label>Pick-up date</label><input type="date" value="2026-10-12"/></div>
-          <div class="field"><label>Drop-off date</label><input type="date" value="2026-10-19"/></div>
+          <div class="field"><label>Pick-up</label><input type="text" id="caPickup" value="Lisbon Airport (LIS)"/></div>
+          <div class="field"><label>Drop-off</label><input type="text" id="caDropoff" value="Lisbon Airport (LIS)"/></div>
+          <div class="field"><label>Pick-up date</label><input type="date" id="caPickupDate" value="2026-10-12"/></div>
+          <div class="field"><label>Drop-off date</label><input type="date" id="caDropoffDate" value="2026-10-19"/></div>
           <button class="searchbtn" type="button" onclick="runSearch()">Search cars</button>
         </div>
       </div>
 
       <div id="fields-buses" hidden>
-        <div class="tabs">
-          <button class="tab active" type="button">Round trip</button>
-          <button class="tab" type="button">One way</button>
+        <div class="tabs" id="busTripTabs">
+          <button class="tab active" type="button" data-trip="round">Round trip</button>
+          <button class="tab" type="button" data-trip="oneway">One way</button>
         </div>
         <div class="fields">
-          <div class="field"><label>From</label><input type="text" value="Madrid"/></div>
-          <div class="field"><label>To</label><input type="text" value="Porto"/></div>
-          <div class="field"><label>Depart</label><input type="date" value="2026-10-12"/></div>
-          <div class="field"><label>Return</label><input type="date" value="2026-10-19"/></div>
+          <div class="field"><label>From</label><input type="text" id="buFrom" value="Madrid"/></div>
+          <div class="field"><label>To</label><input type="text" id="buTo" value="Porto"/></div>
+          <div class="field"><label>Depart</label><input type="date" id="buDepart" value="2026-10-12"/></div>
+          <div class="field" id="buReturnField"><label>Return</label><input type="date" id="buReturn" value="2026-10-19"/></div>
           <button class="searchbtn" type="button" onclick="runSearch()">Search buses</button>
         </div>
       </div>
@@ -565,10 +590,10 @@
           <button class="tab active" type="button">Flight + Hotel</button>
         </div>
         <div class="fields">
-          <div class="field"><label>From</label><input type="text" value="Madrid (MAD)"/></div>
-          <div class="field"><label>To</label><input type="text" value="Lisbon (LIS)"/></div>
-          <div class="field"><label>Depart</label><input type="date" value="2026-10-12"/></div>
-          <div class="field"><label>Return</label><input type="date" value="2026-10-19"/></div>
+          <div class="field"><label>From</label><input type="text" id="pkFrom" value="Madrid (MAD)"/></div>
+          <div class="field"><label>To</label><input type="text" id="pkTo" value="Lisbon (LIS)"/></div>
+          <div class="field"><label>Depart</label><input type="date" id="pkDepart" value="2026-10-12"/></div>
+          <div class="field"><label>Return</label><input type="date" id="pkReturn" value="2026-10-19"/></div>
           <button class="searchbtn" type="button" onclick="runSearch()">Search packages</button>
         </div>
       </div>
@@ -731,6 +756,22 @@
   let CUR = {code:'EUR', ...CURRENCIES.EUR};
   function fmt(n){ return CUR.symbol + Math.round(n * CUR.rate).toLocaleString(); }
 
+  /* Replace these with your real affiliate/booking deep links or wire openBooking() to a live API call. */
+  const BOOKING_LINKS = {"Kiwi.com":"#","Trip.com":"#","CheapOair":"#","Omio":"#","WayAway":"#"};
+
+  /* Deterministic pseudo-search: lets typed From/To/dates actually change results without a backend yet.
+     Swap searchSeed()/priceMultiplier() usage for a real fetch() to your search API later. */
+  function searchSeed(str){
+    let h = 0;
+    for(let i=0;i<str.length;i++){ h = (h*31 + str.charCodeAt(i)) >>> 0; }
+    return h;
+  }
+  function priceMultiplier(seed){
+    const x = Math.sin(seed) * 10000;
+    const frac = x - Math.floor(x);
+    return 0.78 + frac*0.55;
+  }
+
   const PARTNER_CLASS = {"Kiwi.com":"pb-teal","Trip.com":"pb-purple","CheapOair":"pb-pink","Omio":"pb-amber","WayAway":"pb-sky"};
   function partnerBadge(partner){
     const cls = PARTNER_CLASS[partner] || '';
@@ -757,11 +798,11 @@
   ];
 
   const HOTELS = [
-    {name:"Baixa Riverside Hotel", stars:5, area:"Baixa, 0.4km from center", price:112, tag:"Best value", partner:"Trip.com", color:"#1F8A94"},
-    {name:"Alfama Boutique Stay", stars:4, area:"Alfama, 0.9km from center", price:78, tag:"Cheapest", partner:"CheapOair", color:"#8B5CF6"},
-    {name:"Chiado Design Suites", stars:4, area:"Chiado, 0.2km from center", price:96, tag:null, partner:"Kiwi.com", color:"#FF5A3C"},
-    {name:"Belem Garden Hotel", stars:3, area:"Belém, 3.1km from center", price:61, tag:null, partner:"Omio", color:"#D9A441"},
-    {name:"Principe Real Loft", stars:4, area:"Príncipe Real, 1.2km from center", price:89, tag:null, partner:"WayAway", color:"#3B5BA5"},
+    {name:"Baixa Riverside Hotel", stars:5, area:"Baixa, 0.4km from center", price:112, tag:"Best value", partner:"Trip.com", color:"#1F8A94", type:"hotel"},
+    {name:"Alfama Boutique Stay", stars:4, area:"Alfama, 0.9km from center", price:78, tag:"Cheapest", partner:"CheapOair", color:"#8B5CF6", type:"apartment"},
+    {name:"Chiado Design Suites", stars:4, area:"Chiado, 0.2km from center", price:96, tag:null, partner:"Kiwi.com", color:"#FF5A3C", type:"hotel"},
+    {name:"Belem Garden Hotel", stars:3, area:"Belém, 3.1km from center", price:61, tag:null, partner:"Omio", color:"#D9A441", type:"resort"},
+    {name:"Principe Real Loft", stars:4, area:"Príncipe Real, 1.2km from center", price:89, tag:null, partner:"WayAway", color:"#3B5BA5", type:"apartment"},
   ];
 
   const CARS = [
@@ -787,6 +828,11 @@
 
   let mode = 'flights';
   let sortKey = 'best';
+  let hotelTypeFilter = 'hotel';
+  let carTypeFilter = 'all';
+  let flightTrip = 'round';
+  let busTrip = 'round';
+  let currentQuery = {from:'Madrid (MAD)', to:'Lisbon (LIS)'};
   let favorites = {};
   try{ favorites = JSON.parse(localStorage.getItem('aerlume_favs')||'{}'); }catch(e){ favorites = {}; }
 
@@ -847,8 +893,10 @@
   function renderFlights(){
     document.querySelector('#dateStrip').style.display = '';
     document.querySelector('.filterbox').style.display = '';
-    renderProviderFilter(FLIGHTS);
-    let items = FLIGHTS.filter(f=> stopsAllowed(f.stops) && inTimeSlot(f.slot) && f.price<=maxPrice() && providerAllowed(f.partner));
+    const mult = priceMultiplier(searchSeed((currentQuery.from||'')+(currentQuery.to||'')+(currentQuery.depart||'')));
+    const priced = FLIGHTS.map(f=>({...f, price: Math.max(9, Math.round(f.price*mult))}));
+    renderProviderFilter(priced);
+    let items = priced.filter(f=> stopsAllowed(f.stops) && inTimeSlot(f.slot) && f.price<=maxPrice() && providerAllowed(f.partner));
     items = sortList(items, 'price');
     const list = document.getElementById('flightList');
     list.innerHTML = '';
@@ -860,6 +908,7 @@
       row.className = 'flight';
       row.style.animationDelay = (i*0.05)+'s';
       const stopsLabel = f.stops===0?'Nonstop':(f.stops===1?'1 stop':f.stops+' stops');
+      const tripLabel = flightTrip==='oneway' ? 'one way, all fees in' : (flightTrip==='multi' ? 'per leg, all fees in' : 'round trip, all fees in');
       itemMeta[id] = {name: air.name+' · '+f.dep+'→'+f.arr, sub: stopsLabel, price:f.price, partner:f.partner, mode:'flights'};
       row.innerHTML = `
         ${favHeart(id)}
@@ -876,19 +925,22 @@
         <div class="duration">Trip length<b>${f.dur}</b></div>
         <div class="price-col">
           <div class="price mono">${fmt(f.price)}</div>
-          <div class="price-sub">round trip, all fees in</div>
-          <button class="selectbtn">Continue to ${f.partner}</button>
+          <div class="price-sub">${tripLabel}</div>
+          <button class="selectbtn" onclick="openBooking('${id}')">Continue to ${f.partner}</button>
         </div>`;
       list.appendChild(row);
     });
     document.getElementById('resultCount').textContent = items.length;
-    document.getElementById('resultTotal').textContent = FLIGHTS.length;
+    document.getElementById('resultTotal').textContent = priced.length;
   }
 
   function renderHotels(){
     document.querySelector('#dateStrip').style.display = 'none';
-    renderProviderFilter(HOTELS);
-    let items = HOTELS.filter(h=> h.price<=maxPrice() && providerAllowed(h.partner));
+    const mult = priceMultiplier(searchSeed((currentQuery.dest||'')+(currentQuery.checkin||'')));
+    const priced = HOTELS.map(h=>({...h, price: Math.max(15, Math.round(h.price*mult))}));
+    const byType = priced.filter(h=> h.type===hotelTypeFilter);
+    renderProviderFilter(byType.length ? byType : priced);
+    let items = (byType.length ? byType : priced).filter(h=> h.price<=maxPrice() && providerAllowed(h.partner));
     items = sortList(items, 'price');
     const list = document.getElementById('flightList');
     list.innerHTML = '';
@@ -915,18 +967,19 @@
         <div class="price-col">
           <div class="price mono">${fmt(h.price)}</div>
           <div class="price-sub">per night, taxes included</div>
-          <button class="selectbtn">Continue to ${h.partner}</button>
+          <button class="selectbtn" onclick="openBooking('${id}')">Continue to ${h.partner}</button>
         </div>`;
       list.appendChild(row);
     });
     document.getElementById('resultCount').textContent = items.length;
-    document.getElementById('resultTotal').textContent = HOTELS.length;
+    document.getElementById('resultTotal').textContent = priced.length;
   }
 
   function renderCars(){
     document.querySelector('#dateStrip').style.display = 'none';
-    renderProviderFilter(CARS);
-    let items = CARS.filter(c=> c.price<=maxPrice() && providerAllowed(c.partner));
+    const byType = carTypeFilter==='all' ? CARS : CARS.filter(c=> c.type===carTypeFilter);
+    renderProviderFilter(byType.length ? byType : CARS);
+    let items = (byType.length ? byType : CARS).filter(c=> c.price<=maxPrice() && providerAllowed(c.partner));
     items = sortList(items, 'price');
     const list = document.getElementById('flightList');
     list.innerHTML = '';
@@ -953,7 +1006,7 @@
         <div class="price-col">
           <div class="price mono">${fmt(c.price)}</div>
           <div class="price-sub">per day, taxes included</div>
-          <button class="selectbtn">Continue to ${c.partner}</button>
+          <button class="selectbtn" onclick="openBooking('${id}')">Continue to ${c.partner}</button>
         </div>`;
       list.appendChild(row);
     });
@@ -990,8 +1043,8 @@
         <div class="duration">Trip length<b>${b.dur}</b></div>
         <div class="price-col">
           <div class="price mono">${fmt(b.price)}</div>
-          <div class="price-sub">one way, all fees in</div>
-          <button class="selectbtn">Continue to ${b.partner}</button>
+          <div class="price-sub">${busTrip==='round' ? 'round trip, all fees in' : 'one way, all fees in'}</div>
+          <button class="selectbtn" onclick="openBooking('${id}')">Continue to ${b.partner}</button>
         </div>`;
       list.appendChild(row);
     });
@@ -1029,7 +1082,7 @@
         <div class="price-col">
           <div class="price mono">${fmt(Math.round(p.price/p.nights))}</div>
           <div class="price-sub">per night equivalent</div>
-          <button class="selectbtn">Continue to ${p.partner}</button>
+          <button class="selectbtn" onclick="openBooking('${id}')">Continue to ${p.partner}</button>
         </div>`;
       list.appendChild(row);
     });
@@ -1042,11 +1095,12 @@
   }
 
   function renderResults(){
-    if(mode==='flights'){ document.getElementById('resultsTitle').textContent='Madrid → Lisbon'; renderFlights(); }
-    if(mode==='hotels'){ document.getElementById('resultsTitle').textContent='Hotels in Lisbon'; renderHotels(); }
-    if(mode==='cars'){ document.getElementById('resultsTitle').textContent='Cars in Lisbon'; renderCars(); }
-    if(mode==='buses'){ document.getElementById('resultsTitle').textContent='Madrid → Porto'; renderBuses(); }
-    if(mode==='packages'){ document.getElementById('resultsTitle').textContent='Packages · Lisbon & Porto'; renderPackages(); }
+    const title = document.getElementById('resultsTitle');
+    if(mode==='flights'){ title.textContent = (currentQuery.from||'Madrid')+' → '+(currentQuery.to||'Lisbon'); renderFlights(); }
+    if(mode==='hotels'){ title.textContent = 'Hotels in '+(currentQuery.dest||'Lisbon'); renderHotels(); }
+    if(mode==='cars'){ title.textContent = 'Cars in '+(currentQuery.pickup||'Lisbon'); renderCars(); }
+    if(mode==='buses'){ title.textContent = (currentQuery.busFrom||'Madrid')+' → '+(currentQuery.busTo||'Porto'); renderBuses(); }
+    if(mode==='packages'){ title.textContent = 'Packages · '+(currentQuery.pkTo||'Lisbon & Porto'); renderPackages(); }
     document.getElementById('bestTimeBox').style.display = (mode==='flights') ? '' : 'none';
     document.getElementById('directOnlyChip').style.display = (mode==='flights') ? '' : 'none';
   }
@@ -1106,8 +1160,104 @@
   }
 
   function runSearch(){
+    if(mode==='flights'){
+      currentQuery.from = document.getElementById('flFrom').value.trim() || 'Madrid (MAD)';
+      currentQuery.to = document.getElementById('flTo').value.trim() || 'Lisbon (LIS)';
+      currentQuery.depart = document.getElementById('flDepart').value;
+    } else if(mode==='hotels'){
+      currentQuery.dest = document.getElementById('hoDest').value.trim() || 'Lisbon, Portugal';
+      currentQuery.checkin = document.getElementById('hoIn').value;
+    } else if(mode==='cars'){
+      currentQuery.pickup = document.getElementById('caPickup').value.trim() || 'Lisbon Airport (LIS)';
+    } else if(mode==='buses'){
+      currentQuery.busFrom = document.getElementById('buFrom').value.trim() || 'Madrid';
+      currentQuery.busTo = document.getElementById('buTo').value.trim() || 'Porto';
+    } else if(mode==='packages'){
+      currentQuery.pkTo = document.getElementById('pkTo').value.trim() || 'Lisbon & Porto';
+    }
+    renderResults();
     document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
   }
+
+  /* ---------- Trip-type tabs (round trip / one way / multi-city) ---------- */
+  function wireTripTabs(tabsId, returnFieldId, btnId, baseLabel, stateSetter){
+    const tabs = document.getElementById(tabsId);
+    if(!tabs) return;
+    tabs.querySelectorAll('.tab').forEach(tab=>{
+      tab.addEventListener('click', ()=>{
+        tabs.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+        tab.classList.add('active');
+        const trip = tab.dataset.trip;
+        stateSetter(trip);
+        const returnField = document.getElementById(returnFieldId);
+        if(returnField) returnField.style.display = (trip==='oneway') ? 'none' : '';
+        const btn = btnId ? document.getElementById(btnId) : null;
+        if(btn) btn.textContent = trip==='multi' ? baseLabel+' (multi-city)' : baseLabel;
+      });
+    });
+  }
+  wireTripTabs('flightTripTabs', 'flReturnField', 'flightSearchBtn', 'Search flights', (t)=>{ flightTrip = t; });
+  wireTripTabs('busTripTabs', 'buReturnField', null, 'Search buses', (t)=>{ busTrip = t; renderResults(); });
+
+  /* ---------- Hotel type tabs ---------- */
+  document.querySelectorAll('#hotelTypeTabs .tab').forEach(tab=>{
+    tab.addEventListener('click', ()=>{
+      document.querySelectorAll('#hotelTypeTabs .tab').forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active');
+      hotelTypeFilter = tab.dataset.htype;
+      if(mode==='hotels') renderResults();
+    });
+  });
+
+  /* ---------- Car type tabs ---------- */
+  document.querySelectorAll('#carTypeTabs .tab').forEach(tab=>{
+    tab.addEventListener('click', ()=>{
+      document.querySelectorAll('#carTypeTabs .tab').forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active');
+      carTypeFilter = tab.dataset.ctype;
+      if(mode==='cars') renderResults();
+    });
+  });
+
+  /* ---------- Booking modal (demo checkout hand-off) ---------- */
+  function openBooking(id){
+    const it = itemMeta[id];
+    if(!it) return;
+    document.getElementById('bookingBody').innerHTML = `
+      <div class="triprow" style="margin-bottom:16px;">
+        <div>
+          <div class="tr-name">${it.name}</div>
+          <div class="tr-sub">${it.sub || ''}</div>
+        </div>
+        <div class="tr-price mono">${fmt(it.price)}</div>
+      </div>
+      <p style="font-size:13.5px;color:var(--ink-soft);line-height:1.6;margin:0 0 16px;">
+        You'll finish payment on ${it.partner}'s secure site. This demo isn't wired to a live booking API yet —
+        set your real affiliate/deep link in <code>BOOKING_LINKS['${it.partner}']</code> to send users to actual checkout.
+      </p>
+      <button class="btn-solid" style="width:100%;" onclick="window.open(BOOKING_LINKS['${it.partner}']||'#', '_blank')">Continue to ${it.partner} →</button>
+    `;
+    document.getElementById('bookingModal').classList.add('open');
+  }
+  document.getElementById('bookingClose').addEventListener('click', ()=>document.getElementById('bookingModal').classList.remove('open'));
+  document.getElementById('bookingModal').addEventListener('click', (e)=>{ if(e.target.id==='bookingModal') document.getElementById('bookingModal').classList.remove('open'); });
+
+  /* ---------- Sign in modal ---------- */
+  document.getElementById('signinBtn').addEventListener('click', ()=>document.getElementById('signinModal').classList.add('open'));
+  document.getElementById('signinClose').addEventListener('click', ()=>document.getElementById('signinModal').classList.remove('open'));
+  document.getElementById('signinModal').addEventListener('click', (e)=>{ if(e.target.id==='signinModal') document.getElementById('signinModal').classList.remove('open'); });
+  document.getElementById('signinForm').addEventListener('submit', (e)=>{
+    e.preventDefault();
+    const btn = e.target.querySelector('button[type="submit"]');
+    btn.textContent = 'Connect an auth API to enable this';
+    btn.disabled = true;
+  });
+
+  /* ---------- Contact us ---------- */
+  document.getElementById('drawerContact').addEventListener('click', ()=>{
+    closeDrawer();
+    window.location.href = 'mailto:hello@aerlume.com';
+  });
 
   /* Nearby dates strip */
   function buildDateStrip(){
