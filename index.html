@@ -7,415 +7,325 @@
 <style>
   :root{
     --ink:#0A1931;
-    --ink-soft:#4A5A78;
+    --ink-soft:#5B6B85;
     --paper:#FFF8F0;
+    --paper-alt:#F7F5F2;
     --paper-raised:#FFFFFF;
-    --line:#EAE2D6;
+    --line:#ECE4D8;
     --coral:#FF6B35;
     --coral-deep:#E0501C;
     --sky:#3A86FF;
-    --sky-soft:#E8F0FF;
-    --gold:#D9A441;
+    --sky-soft:#EAF1FF;
     --good:#1F8A5C;
+    --good-soft:#E7F6EE;
+    --gold:#D9A441;
     --purple:#8B5CF6;
-    --purple-deep:#6D3FD1;
-    --purple-soft:#F0EBFE;
     --pink:#F0529C;
-    --pink-deep:#D6317E;
-    --pink-soft:#FDE9F2;
-    --teal:#0EA5A0;
-    --teal-deep:#0B7F7C;
-    --teal-soft:#DFF5F1;
-    --amber:#F5A623;
-    --amber-soft:#FDF0DB;
     --shadow-sm:0 2px 8px -4px rgba(10,25,49,.12);
     --shadow-md:0 14px 34px -18px rgba(10,25,49,.28);
     --shadow-lg:0 24px 60px -24px rgba(10,25,49,.38);
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --ink:#FFF8F0; --ink-soft:#C3CCDE; --paper:#0A1931; --paper-raised:#122344;
-      --line:#233047; --coral:#FF8A5C; --coral-deep:#FF6B35; --sky:#7AA5FF;
-      --sky-soft:#132a4f; --gold:#E8BC66; --good:#3FCB8E;
-      --purple:#A78BFA; --purple-deep:#8B5CF6; --purple-soft:#241C42;
-      --pink:#F776B4; --pink-deep:#F0529C; --pink-soft:#3B1730;
-      --teal:#3FD1CB; --teal-deep:#1FB0AA; --teal-soft:#0F2E2C;
-      --amber:#FFC55C; --amber-soft:#3A2A0F;
+      --ink:#FFF8F0; --ink-soft:#B9C3D6; --paper:#0A1931; --paper-alt:#0F2447; --paper-raised:#122344;
+      --line:#233047; --coral:#FF8A5C; --coral-deep:#FF6B35; --sky:#7AA5FF; --sky-soft:#13294f;
+      --good:#3FCB8E; --good-soft:#0f2c22; --gold:#E8BC66;
       --shadow-sm:0 2px 8px -4px rgba(0,0,0,.5); --shadow-md:0 14px 34px -18px rgba(0,0,0,.6); --shadow-lg:0 24px 60px -24px rgba(0,0,0,.7);
     }
   }
   :root[data-theme="dark"]{
-    --ink:#FFF8F0; --ink-soft:#C3CCDE; --paper:#0A1931; --paper-raised:#122344;
-    --line:#233047; --coral:#FF8A5C; --coral-deep:#FF6B35; --sky:#7AA5FF;
-    --sky-soft:#132a4f; --gold:#E8BC66; --good:#3FCB8E;
-    --purple:#A78BFA; --purple-deep:#8B5CF6; --purple-soft:#241C42;
-    --pink:#F776B4; --pink-deep:#F0529C; --pink-soft:#3B1730;
-    --teal:#3FD1CB; --teal-deep:#1FB0AA; --teal-soft:#0F2E2C;
-    --amber:#FFC55C; --amber-soft:#3A2A0F;
+    --ink:#FFF8F0; --ink-soft:#B9C3D6; --paper:#0A1931; --paper-alt:#0F2447; --paper-raised:#122344;
+    --line:#233047; --coral:#FF8A5C; --coral-deep:#FF6B35; --sky:#7AA5FF; --sky-soft:#13294f;
+    --good:#3FCB8E; --good-soft:#0f2c22; --gold:#E8BC66;
     --shadow-sm:0 2px 8px -4px rgba(0,0,0,.5); --shadow-md:0 14px 34px -18px rgba(0,0,0,.6); --shadow-lg:0 24px 60px -24px rgba(0,0,0,.7);
   }
 
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
-  body{
-    margin:0;background:var(--paper);color:var(--ink);
-    font-family:'Inter',system-ui,-apple-system,sans-serif;
-    padding-inline:clamp(16px,4vw,64px);padding-block:0 48px;overflow-x:hidden;
-  }
-  a{color:inherit;}
-  h1,h2,h3{font-family:'Fraunces',Georgia,serif;font-weight:600;margin:0;text-wrap:balance;}
-  .mono{font-family:'JetBrains Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;}
-  .wrap{max-width:1280px;margin-inline:auto;position:relative;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'Inter',system-ui,-apple-system,sans-serif;overflow-x:hidden;}
+  a{color:inherit;text-decoration:none;}
   button{font-family:inherit;}
-
-  .bg-glow{
-    position:fixed;inset:0;z-index:-1;pointer-events:none;
-    background:
-      radial-gradient(600px 400px at 10% -5%, color-mix(in srgb, var(--coral) 20%, transparent), transparent 60%),
-      radial-gradient(700px 500px at 100% 0%, color-mix(in srgb, var(--sky) 22%, transparent), transparent 60%),
-      radial-gradient(560px 420px at 85% 40%, color-mix(in srgb, var(--purple) 14%, transparent), transparent 62%),
-      radial-gradient(520px 420px at 8% 55%, color-mix(in srgb, var(--teal) 14%, transparent), transparent 62%),
-      radial-gradient(480px 380px at 55% 95%, color-mix(in srgb, var(--pink) 12%, transparent), transparent 60%);
-  }
-
-  /* NAV */
-  nav{
-    display:flex;align-items:center;justify-content:space-between;padding-block:20px;
-    max-width:1280px;margin-inline:auto;position:sticky;top:0;z-index:50;
-    background:color-mix(in srgb, var(--paper) 78%, transparent);
-    backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);
-    transition:box-shadow .25s ease, padding-block .25s ease;
-  }
-  nav.scrolled{box-shadow:var(--shadow-sm);padding-block:12px;}
-  .logo{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-weight:600;font-size:20px;letter-spacing:.2px;}
-  .logo-mark{width:30px;height:30px;flex:none;transition:transform .4s cubic-bezier(.2,.8,.2,1);}
-  .logo:hover .logo-mark{transform:rotate(-14deg) scale(1.08);}
-  .navlinks{display:flex;gap:32px;font-size:14.5px;color:var(--ink-soft);}
-  .navlinks a{text-decoration:none;position:relative;padding-block:4px;transition:color .2s ease;}
-  .navlinks a::after{content:"";position:absolute;left:0;right:100%;bottom:0;height:1.5px;background:var(--coral);transition:right .25s cubic-bezier(.2,.8,.2,1);}
-  .navlinks a:hover{color:var(--ink);}
-  .navlinks a:hover::after{right:0;}
-  .navcta{display:flex;gap:14px;align-items:center;}
-  .btn-ghost{
-    border:1px solid var(--line);background:transparent;color:var(--ink);
-    padding:9px 18px;border-radius:100px;font-size:14px;cursor:pointer;transition:all .2s ease;
-  }
-  .btn-ghost:hover{border-color:var(--ink);box-shadow:var(--shadow-sm);transform:translateY(-1px);}
-  .currency{border:1px solid var(--line);background:var(--paper-raised);color:var(--ink-soft);padding:8px 12px;border-radius:100px;font-size:13px;}
-  @media (max-width:900px){.navlinks{display:none;}}
-
-  /* HERO */
-  .hero{padding-block:clamp(24px,5vw,48px) 8px;display:grid;gap:16px;}
-  .eyebrow{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--sky);font-weight:600;display:flex;align-items:center;gap:8px;animation:fadeUp .6s cubic-bezier(.2,.8,.2,1) both;}
-  .eyebrow::before{content:"";width:16px;height:1px;background:var(--sky);}
-  .hero h1{font-size:clamp(30px,4.6vw,50px);line-height:1.05;max-width:20ch;animation:fadeUp .7s .05s cubic-bezier(.2,.8,.2,1) both;}
-  .hero h1 em{font-style:italic;background:linear-gradient(100deg, var(--purple-deep), var(--coral) 45%, var(--amber) 80%, var(--teal));-webkit-background-clip:text;background-clip:text;color:transparent;}
-  .hero p{color:var(--ink-soft);font-size:16px;max-width:52ch;line-height:1.55;margin-top:2px;animation:fadeUp .7s .1s cubic-bezier(.2,.8,.2,1) both;}
-  @keyframes fadeUp{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
-
-  /* MODE SWITCH */
-  .modebar{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap;animation:fadeUp .7s .15s cubic-bezier(.2,.8,.2,1) both;}
-  .mode{
-    display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--paper-raised);color:var(--ink-soft);
-    padding:10px 18px;border-radius:100px;font-size:14px;cursor:pointer;font-weight:600;
-    transition:background .25s ease, color .25s ease, border-color .25s ease, transform .15s ease, box-shadow .25s ease;
-  }
-  .mode svg{width:16px;height:16px;flex:none;transition:transform .3s ease;}
-  .mode:hover{transform:translateY(-1px);box-shadow:var(--shadow-sm);border-color:color-mix(in srgb, var(--ink) 30%, var(--line));}
-  .mode:hover svg{transform:scale(1.1);}
-  .mode.active{background:var(--ink);color:var(--paper);border-color:var(--ink);box-shadow:var(--shadow-sm);}
-  .mode[data-mode="flights"].active{background:linear-gradient(135deg, var(--coral-deep), var(--coral));border-color:transparent;}
-  .mode[data-mode="hotels"].active{background:linear-gradient(135deg, var(--sky), var(--teal));border-color:transparent;}
-  .mode[data-mode="cars"].active{background:linear-gradient(135deg, var(--amber), var(--gold));border-color:transparent;color:var(--ink);}
-  .mode[data-mode="buses"].active{background:linear-gradient(135deg, var(--purple-deep), var(--purple));border-color:transparent;}
-  .mode[data-mode="packages"].active{background:linear-gradient(135deg, var(--pink-deep), var(--pink));border-color:transparent;}
-
-  /* SEARCH CARD */
-  .searchcard{background:var(--paper-raised);border:1px solid var(--line);border-radius:20px;padding:20px;margin-top:12px;box-shadow:var(--shadow-md);animation:fadeUp .7s .2s cubic-bezier(.2,.8,.2,1) both;transition:box-shadow .3s ease;}
-  .searchcard:hover{box-shadow:var(--shadow-lg);}
-  .tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
-  .tab{border:none;background:transparent;color:var(--ink-soft);font-size:13.5px;padding:7px 14px;border-radius:100px;cursor:pointer;transition:background .2s ease, color .2s ease;}
-  .tab:hover{background:color-mix(in srgb, var(--sky) 8%, transparent);}
-  .tab.active{background:var(--sky-soft);color:var(--sky);font-weight:600;}
-  .fields{display:grid;grid-template-columns:1.3fr 1.3fr 1fr 1fr auto;gap:10px;align-items:end;}
-  @media (max-width:900px){.fields{grid-template-columns:1fr 1fr;}}
-  .field{display:flex;flex-direction:column;gap:6px;}
-  .field label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);}
-  .field input, .field select{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:10px;padding:11px 12px;font-size:14.5px;font-family:inherit;width:100%;transition:border-color .2s ease, box-shadow .2s ease;}
-  .field input:hover, .field select:hover{border-color:color-mix(in srgb, var(--ink) 25%, var(--line));}
-  .field input:focus,.field select:focus{outline:none;border-color:var(--sky);box-shadow:0 0 0 3px color-mix(in srgb, var(--sky) 22%, transparent);}
-  .searchbtn{
-    background:linear-gradient(135deg, var(--coral), var(--coral-deep));color:#fff;border:none;border-radius:12px;
-    padding:12px 22px;font-size:14.5px;font-weight:600;cursor:pointer;white-space:nowrap;
-    transition:transform .18s cubic-bezier(.2,.8,.2,1), box-shadow .18s ease, filter .18s ease;
-    box-shadow:0 10px 24px -12px color-mix(in srgb, var(--coral) 70%, transparent);
-  }
-  .searchbtn:hover{transform:translateY(-2px);filter:brightness(1.05);box-shadow:0 16px 30px -12px color-mix(in srgb, var(--coral) 75%, transparent);}
-  .searchbtn:active{transform:translateY(0);}
-  .trustrow{display:flex;gap:24px;flex-wrap:wrap;margin-top:18px;color:var(--ink-soft);font-size:13px;}
-  .trustrow span{display:flex;align-items:center;gap:7px;}
-  .dot{width:6px;height:6px;border-radius:50%;background:var(--good);flex:none;box-shadow:0 0 0 3px color-mix(in srgb, var(--good) 22%, transparent);}
-
-  /* NEARBY DATES STRIP */
-  .datestrip{display:flex;gap:8px;overflow-x:auto;margin-top:44px;padding-bottom:6px;scrollbar-width:thin;}
-  .datestrip::-webkit-scrollbar{height:6px;}
-  .datestrip::-webkit-scrollbar-thumb{background:var(--line);border-radius:10px;}
-  .datepill{
-    flex:none;min-width:92px;text-align:center;border:1px solid var(--line);background:var(--paper-raised);
-    border-radius:14px;padding:10px 12px;cursor:pointer;transition:all .2s ease;
-  }
-  .datepill:hover{border-color:var(--sky);transform:translateY(-2px);box-shadow:var(--shadow-sm);}
-  .datepill.active{border-color:transparent;background:linear-gradient(135deg, var(--purple-deep), var(--coral));color:#fff;}
-  .datepill .d{font-size:11.5px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.05em;}
-  .datepill.active .d{color:color-mix(in srgb, var(--paper) 70%, transparent);}
-  .datepill .p{font-size:15px;font-weight:700;margin-top:3px;}
-  .datepill .low{color:var(--good);font-size:10.5px;margin-top:2px;}
-  .datepill.active .low{color:#9CF0C6;}
-
-  /* RESULTS LAYOUT */
-  .results-shell{display:grid;grid-template-columns:260px 1fr;gap:24px;margin-top:20px;align-items:start;}
-  @media (max-width:920px){.results-shell{grid-template-columns:1fr;}}
-
-  .filterbox{
-    background:var(--paper-raised);border:1px solid var(--line);border-radius:16px;padding:18px;
-    position:sticky;top:96px;display:flex;flex-direction:column;gap:20px;
-  }
-  @media (max-width:920px){.filterbox{position:static;}}
-  .filterbox h4{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin:0 0 10px;}
-  .filtergroup label.opt{display:flex;align-items:center;gap:9px;font-size:13.5px;padding:5px 0;cursor:pointer;color:var(--ink-soft);}
-  .filtergroup label.opt:hover{color:var(--ink);}
-  .filtergroup input[type=checkbox]{accent-color:var(--sky);width:15px;height:15px;}
-  .pricerange input[type=range]{width:100%;accent-color:var(--coral);}
-  .pricerange .val{display:flex;justify-content:space-between;font-size:12.5px;color:var(--ink-soft);margin-top:4px;}
-  .timegrid{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
-  .timebtn{border:1px solid var(--line);background:var(--paper);color:var(--ink-soft);border-radius:10px;padding:8px 6px;font-size:12px;cursor:pointer;text-align:center;transition:all .18s ease;}
-  .timebtn:hover{border-color:var(--sky);}
-  .timebtn.on{border-color:var(--sky);background:var(--sky-soft);color:var(--sky);font-weight:600;}
-  .resetlink{background:none;border:none;color:var(--coral);font-size:12.5px;cursor:pointer;padding:0;text-decoration:underline;}
-
-  .results-main{min-width:0;}
-  .results-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;flex-wrap:wrap;gap:10px;}
-  .results-head h2{font-size:22px;}
-  .results-head .count{color:var(--ink-soft);font-size:13.5px;}
-  .sortbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;align-items:center;}
-  .chip{border:1px solid var(--line);background:var(--paper-raised);color:var(--ink-soft);font-size:12.5px;padding:7px 13px;border-radius:100px;cursor:pointer;transition:all .2s ease;}
-  .chip:hover{border-color:color-mix(in srgb, var(--ink) 30%, var(--line));transform:translateY(-1px);}
-  .chip.on{border-color:var(--sky);color:var(--sky);background:var(--sky-soft);font-weight:600;}
-  .chip#directOnlyChip.on{border-color:var(--purple-deep);color:var(--purple-deep);background:var(--purple-soft);}
-  .source-note{font-size:12px;color:var(--ink-soft);margin-bottom:16px;}
-
-  .flight{
-    display:grid;grid-template-columns:56px 1.6fr 1fr auto;gap:18px;align-items:center;
-    background:var(--paper-raised);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin-bottom:12px;
-    position:relative;overflow:hidden;transition:transform .22s cubic-bezier(.2,.8,.2,1), box-shadow .22s ease, border-color .22s ease;
-    opacity:0;transform:translateY(10px);animation:fadeUp .5s cubic-bezier(.2,.8,.2,1) forwards;
-  }
-  .flight::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg, var(--sky), var(--coral));opacity:0;transition:opacity .22s ease;}
-  .flight:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:transparent;}
-  .flight:hover::before{opacity:1;}
-  .flight.hotelrow{grid-template-columns:96px 1.8fr 1fr auto;}
-  .flight.carrow{grid-template-columns:64px 1.6fr 1fr auto;}
-  @media (max-width:820px){.flight, .flight.hotelrow, .flight.carrow{grid-template-columns:1fr;text-align:left;}}
-
-  .favbtn{position:absolute;top:14px;right:14px;background:none;border:none;cursor:pointer;color:var(--line);width:26px;height:26px;transition:transform .18s ease, color .18s ease;z-index:2;}
-  .favbtn:hover{transform:scale(1.15);}
-  .favbtn.on{color:var(--coral);}
-  .favbtn svg{width:100%;height:100%;}
-
-  .airline-mark{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex:none;box-shadow:var(--shadow-sm);transition:transform .22s cubic-bezier(.2,.8,.2,1);}
-  .flight:hover .airline-mark{transform:scale(1.06) rotate(-3deg);}
-  .hotel-thumb{width:76px;height:76px;border-radius:12px;flex:none;background-size:cover;background-position:center;box-shadow:var(--shadow-sm);transition:transform .22s cubic-bezier(.2,.8,.2,1);}
-  .flight:hover .hotel-thumb{transform:scale(1.04);}
-  .route{display:flex;flex-direction:column;gap:4px;}
-  .route .times{display:flex;align-items:center;gap:10px;font-size:19px;font-weight:600;}
-  .route .times .arrow{flex:1;min-width:60px;max-width:140px;height:1px;background:var(--line);position:relative;}
-  .route .times .arrow::after{content:"";position:absolute;right:0;top:-3px;width:6px;height:6px;border-right:1px solid var(--ink-soft);border-top:1px solid var(--ink-soft);transform:rotate(45deg);}
-  .route .meta{font-size:12.5px;color:var(--ink-soft);display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
-  .stopdot{color:var(--gold);}
-  .stars{color:var(--gold);letter-spacing:1px;}
-  .duration{color:var(--ink-soft);font-size:13px;display:flex;flex-direction:column;gap:4px;}
-  .duration b{color:var(--ink);font-size:14px;}
-  .price-col{display:flex;flex-direction:column;align-items:flex-end;gap:6px;margin-top:14px;}
-  .price{font-size:22px;font-weight:700;}
-  .price-sub{font-size:11.5px;color:var(--ink-soft);}
-  .selectbtn{background:var(--ink);color:var(--paper);border:none;border-radius:10px;padding:9px 18px;font-size:13.5px;font-weight:600;cursor:pointer;transition:transform .18s cubic-bezier(.2,.8,.2,1), box-shadow .18s ease, background .18s ease;}
-  .selectbtn:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);background:var(--coral);}
-  .partner-badge{font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;background:var(--sky-soft);color:var(--sky);padding:3px 8px;border-radius:100px;font-weight:700;}
-  .partner-badge.pb-teal{background:var(--teal-soft);color:var(--teal-deep);}
-  .partner-badge.pb-purple{background:var(--purple-soft);color:var(--purple-deep);}
-  .partner-badge.pb-pink{background:var(--pink-soft);color:var(--pink-deep);}
-  .partner-badge.pb-amber{background:var(--amber-soft);color:var(--gold);}
-  .partner-badge.pb-sky{background:var(--sky-soft);color:var(--sky);}
-  .noresults{padding:60px 20px;text-align:center;color:var(--ink-soft);border:1px dashed var(--line);border-radius:16px;}
-  .noresults b{color:var(--ink);}
-
-  /* PRICE ALERT */
-  .alertbox{
-    margin-top:26px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;
-    background:linear-gradient(120deg, var(--teal-soft), var(--sky-soft) 55%, var(--amber-soft));
-    border:1px solid var(--line);border-radius:16px;padding:18px 22px;
-  }
-  .alertbox .txt b{display:block;font-size:15px;}
-  .alertbox .txt span{font-size:12.5px;color:var(--ink-soft);}
-  .alertform{display:flex;gap:8px;}
-  .alertform input{border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-size:13.5px;width:200px;background:var(--paper-raised);color:var(--ink);}
-  .alertform button{background:var(--ink);color:var(--paper);border:none;border-radius:10px;padding:9px 16px;font-size:13.5px;font-weight:600;cursor:pointer;transition:background .2s ease;}
-  .alertform button:hover{background:var(--coral);}
-
-  /* WHY */
-  .why{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:60px;}
-  @media (max-width:820px){.why{grid-template-columns:1fr;}}
-  .why-card{border:1px solid var(--line);border-radius:16px;padding:22px;background:var(--paper-raised);transition:transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s ease, border-color .25s ease;}
-  .why-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);border-color:transparent;}
-  .why-card .num{font-family:'JetBrains Mono',monospace;color:var(--sky);font-size:12.5px;}
-  .why-card:nth-child(1) .num{color:var(--coral-deep);}
-  .why-card:nth-child(2) .num{color:var(--purple-deep);}
-  .why-card:nth-child(3) .num{color:var(--teal-deep);}
-  .why-card:nth-child(1){border-top:3px solid var(--coral);}
-  .why-card:nth-child(2){border-top:3px solid var(--purple);}
-  .why-card:nth-child(3){border-top:3px solid var(--teal);}
-  .why-card h3{font-size:17px;margin-top:10px;}
-  .why-card p{color:var(--ink-soft);font-size:13.5px;line-height:1.55;margin-top:8px;}
-
-  .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s cubic-bezier(.2,.8,.2,1), transform .6s cubic-bezier(.2,.8,.2,1);}
+  h1,h2,h3{font-family:'Inter',system-ui,sans-serif;font-weight:800;margin:0;letter-spacing:-.02em;}
+  .mono{font-variant-numeric:tabular-nums;}
+  .wrap{max-width:1280px;margin-inline:auto;padding-inline:clamp(16px,4vw,64px);}
+  ::selection{background:var(--coral);color:#fff;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+  .reveal{opacity:0;transform:translateY(16px);transition:opacity .5s ease, transform .5s ease;}
   .reveal.in{opacity:1;transform:translateY(0);}
 
-  footer{margin-top:64px;padding-top:26px;border-top:1px solid var(--line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;color:var(--ink-soft);font-size:13px;}
-  ::selection{background:var(--coral);color:#fff;}
-  @media (prefers-reduced-motion: reduce){*{animation-duration:.001ms !important;transition-duration:.001ms !important;}}
+  /* ---- NAV ---- */
+  .topnav{position:sticky;top:0;z-index:60;background:color-mix(in srgb, var(--paper) 88%, transparent);backdrop-filter:blur(14px) saturate(140%);border-bottom:1px solid transparent;transition:border-color .2s ease;}
+  .topnav.scrolled{border-color:var(--line);}
+  .topnav-inner{display:flex;align-items:center;justify-content:space-between;padding-block:14px;gap:20px;}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:19px;white-space:nowrap;}
+  .brand .mark{width:32px;height:32px;border-radius:10px;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;flex:none;}
+  .hamburger{display:none;flex-direction:column;justify-content:center;gap:4px;width:34px;height:30px;background:none;border:none;cursor:pointer;}
+  .hamburger span{display:block;height:2px;background:var(--ink);border-radius:2px;}
+  .pillnav{display:flex;background:var(--paper-alt);border-radius:100px;padding:4px;gap:2px;}
+  .pillnav button{border:none;background:transparent;padding:9px 16px;border-radius:100px;font-size:13.5px;font-weight:600;color:var(--ink-soft);cursor:pointer;display:flex;gap:6px;align-items:center;transition:background .2s ease,color .2s ease;white-space:nowrap;}
+  .pillnav button.active{background:var(--ink);color:#fff;}
+  .navright{display:flex;align-items:center;gap:16px;}
+  .navlink{font-size:13.5px;color:var(--ink-soft);display:flex;gap:6px;align-items:center;cursor:pointer;background:none;border:none;font-family:inherit;white-space:nowrap;}
+  .navlink:hover{color:var(--ink);}
+  .iconbadge{border:1px solid var(--line);background:var(--paper-raised);color:var(--ink-soft);padding:7px 12px;border-radius:100px;font-size:12.5px;cursor:pointer;display:flex;align-items:center;gap:5px;}
+  .signinbtn{background:var(--ink);color:#fff;border-radius:100px;padding:10px 20px;font-weight:600;font-size:13.5px;border:none;cursor:pointer;white-space:nowrap;}
+  @media (max-width:980px){ .pillnav{display:none;} .hamburger{display:flex;} .navlink.hideMobile{display:none;} }
 
-  /* ===== NEW: hamburger + side drawer ===== */
-  .hamburger{display:flex;flex-direction:column;justify-content:center;gap:4px;width:22px;height:18px;background:none;border:none;cursor:pointer;padding:0;margin-right:4px;}
-  .hamburger span{display:block;height:2px;background:var(--ink);border-radius:2px;transition:transform .25s ease, opacity .25s ease;}
-  .drawer-overlay{position:fixed;inset:0;background:rgba(11,18,32,.45);backdrop-filter:blur(2px);z-index:90;opacity:0;pointer-events:none;transition:opacity .25s ease;}
+  .drawer-overlay{position:fixed;inset:0;background:rgba(10,25,49,.45);z-index:90;opacity:0;pointer-events:none;transition:opacity .25s ease;}
   .drawer-overlay.open{opacity:1;pointer-events:auto;}
   .drawer{position:fixed;top:0;left:0;bottom:0;width:min(320px,84vw);background:var(--paper-raised);z-index:91;box-shadow:var(--shadow-lg);transform:translateX(-105%);transition:transform .3s cubic-bezier(.2,.8,.2,1);padding:24px 20px;overflow-y:auto;}
   .drawer.open{transform:translateX(0);}
   .drawer-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;}
   .drawer-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--ink-soft);line-height:1;}
-  .drawer nav.dlinks{display:flex;flex-direction:column;gap:2px;}
-  .drawer nav.dlinks a, .drawer nav.dlinks button.dlink{
-    display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);font-size:15px;padding:12px 10px;border-radius:10px;
-    background:none;border:none;cursor:pointer;text-align:left;width:100%;font-family:inherit;transition:background .18s ease;
-  }
-  .drawer nav.dlinks a:hover, .drawer nav.dlinks button.dlink:hover{background:var(--sky-soft);}
-  .drawer nav.dlinks .dicon{width:20px;height:20px;flex:none;color:var(--sky);}
+  .drawer .dlinks{display:flex;flex-direction:column;gap:2px;}
+  .drawer .dlinks a,.drawer .dlinks button.dlink{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);font-size:15px;padding:12px 10px;border-radius:10px;background:none;border:none;cursor:pointer;text-align:left;width:100%;font-family:inherit;}
+  .drawer .dlinks a:hover,.drawer .dlinks button.dlink:hover{background:var(--sky-soft);}
   .drawer hr{border:none;border-top:1px solid var(--line);margin:14px 0;}
   .drawer-sub{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);padding:10px 10px 2px;}
 
-  /* selector dropdowns (lang/currency) */
-  .selectwrap{position:relative;}
-  .selectbadge{border:1px solid var(--line);background:var(--paper-raised);color:var(--ink-soft);padding:8px 12px;border-radius:100px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px;}
-  .selectbadge:hover{border-color:var(--ink);}
-  .selectmenu{position:absolute;top:calc(100% + 8px);right:0;background:var(--paper-raised);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow-md);min-width:150px;padding:6px;display:none;z-index:60;}
-  .selectmenu.open{display:block;}
-  .selectmenu button{display:block;width:100%;text-align:left;background:none;border:none;padding:8px 10px;border-radius:8px;font-size:13.5px;color:var(--ink);cursor:pointer;}
-  .selectmenu button:hover{background:var(--sky-soft);}
-  .selectmenu button.on{color:var(--sky);font-weight:700;}
+  /* ---- HERO ---- */
+  .hero{padding-top:clamp(32px,6vw,64px);text-align:center;}
+  .livebadge{display:inline-flex;align-items:center;gap:8px;background:var(--paper-raised);border:1px solid var(--line);border-radius:100px;padding:8px 16px;font-size:12.5px;color:var(--ink-soft);box-shadow:var(--shadow-sm);}
+  .livebadge .dot{width:7px;height:7px;background:var(--good);border-radius:50%;animation:pulse 1.6s ease-in-out infinite;}
+  .livebadge b{color:var(--ink);}
+  .hero h1{font-size:clamp(32px,5.2vw,54px);line-height:1.08;margin-top:22px;}
+  .hero h1 .accent{color:var(--sky);}
+  .hero p.sub{color:var(--ink-soft);font-size:17px;max-width:640px;margin:18px auto 0;line-height:1.55;}
 
-  /* cookie consent bar */
+  /* ---- SEARCH CARD ---- */
+  .searchcard{max-width:920px;margin:30px auto 0;background:var(--paper-raised);border-radius:22px;padding:22px;box-shadow:var(--shadow-lg);border:1px solid var(--line);text-align:left;}
+  .pill-tabs{display:flex;background:var(--paper-alt);border-radius:100px;padding:4px;width:fit-content;margin-bottom:16px;}
+  .pill-tabs button{border:none;background:transparent;color:var(--ink-soft);font-size:13px;font-weight:600;padding:8px 16px;border-radius:100px;cursor:pointer;}
+  .pill-tabs button.active{background:var(--paper-raised);color:var(--ink);box-shadow:var(--shadow-sm);}
+  .fieldsgrid{display:grid;grid-template-columns:1.7fr 1fr 1fr 1fr auto;gap:10px;align-items:stretch;}
+  @media (max-width:900px){.fieldsgrid{grid-template-columns:1fr 1fr;}}
+  .fromto{position:relative;border:1px solid var(--line);border-radius:14px;display:grid;grid-template-columns:1fr 1fr;background:var(--paper);}
+  .fromto .half{padding:9px 16px;min-width:0;}
+  .fromto label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);display:block;margin-bottom:2px;}
+  .fromto input{border:none;background:transparent;font-weight:700;font-size:14.5px;color:var(--ink);width:100%;padding:0;font-family:inherit;}
+  .fromto input:focus{outline:none;}
+  .swapbtn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:32px;height:32px;border-radius:50%;background:var(--paper-raised);border:1px solid var(--line);box-shadow:var(--shadow-sm);cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;color:var(--ink-soft);transition:transform .2s ease, color .2s ease;}
+  .swapbtn:hover{color:var(--sky);transform:translate(-50%,-50%) rotate(180deg);}
+  .datebtn{border:1px solid var(--line);border-radius:14px;padding:9px 14px;background:var(--paper);}
+  .datebtn label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);display:flex;gap:4px;align-items:center;}
+  .datebtn input{border:none;background:transparent;font-weight:700;font-size:14px;color:var(--ink);width:100%;padding:2px 0 0;font-family:inherit;}
+  .datebtn input:focus{outline:none;}
+  .travelerwrap{position:relative;}
+  .travelerbtn{border:1px solid var(--line);border-radius:14px;padding:9px 14px;background:var(--paper);width:100%;text-align:left;cursor:pointer;font-family:inherit;}
+  .travelerbtn label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);display:flex;gap:4px;align-items:center;}
+  .travelerbtn .val{font-weight:700;font-size:14px;color:var(--ink);display:flex;align-items:center;justify-content:space-between;margin-top:2px;}
+  .travelermenu{position:absolute;top:calc(100% + 8px);right:0;background:var(--paper-raised);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow-md);padding:14px;min-width:200px;display:none;z-index:20;}
+  .travelermenu.open{display:block;}
+  .travelerrow{display:flex;align-items:center;justify-content:space-between;font-size:13.5px;}
+  .stepper{display:flex;align-items:center;gap:10px;}
+  .stepper button{width:26px;height:26px;border-radius:50%;border:1px solid var(--line);background:var(--paper-raised);cursor:pointer;font-size:15px;line-height:1;}
+  .searchbtn{background:linear-gradient(135deg,var(--coral),var(--coral-deep));color:#fff;border:none;border-radius:14px;padding:0 24px;font-size:14.5px;font-weight:700;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:8px;box-shadow:0 10px 24px -12px color-mix(in srgb, var(--coral) 70%, transparent);transition:transform .18s ease,filter .18s ease;}
+  .searchbtn:hover{transform:translateY(-2px);filter:brightness(1.05);}
+  @media (max-width:900px){.searchbtn{grid-column:1/-1;padding:13px;justify-content:center;}}
+
+  .trustrow{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:16px;font-size:12.5px;color:var(--ink-soft);}
+  .trustrow .checks{display:flex;gap:20px;flex-wrap:wrap;}
+  .trustrow .checks span{display:flex;gap:6px;align-items:center;}
+  .checkdot{width:15px;height:15px;border-radius:50%;background:var(--good-soft);color:var(--good);display:flex;align-items:center;justify-content:center;font-size:9px;flex:none;}
+
+  .scanbadge{display:flex;width:fit-content;margin:22px auto 0;background:var(--ink);color:#fff;border-radius:100px;padding:9px 18px;font-size:12.5px;font-weight:600;align-items:center;gap:8px;}
+  .scanbadge .bolt{color:var(--coral);}
+
+  .trustbar{margin-top:52px;padding-block:26px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:26px;align-items:center;justify-content:center;}
+  .trustbar .label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);white-space:nowrap;}
+  .trustbar .logos{display:flex;gap:26px;flex-wrap:wrap;justify-content:center;}
+  .trustbar .logos span{display:flex;gap:6px;align-items:center;font-size:13.5px;font-weight:600;color:var(--ink-soft);opacity:.85;}
+
+  /* ---- RESULTS ---- */
+  .results-title-row{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px;margin-top:8px;}
+  .results-title-row h2{font-size:24px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+  .livepill{background:var(--good-soft);color:var(--good);font-size:11px;font-weight:800;padding:4px 10px;border-radius:100px;display:inline-flex;gap:5px;align-items:center;text-transform:uppercase;letter-spacing:.03em;}
+  .livepill .dot{width:6px;height:6px;background:var(--good);border-radius:50%;animation:pulse 1.6s ease-in-out infinite;}
+  .results-sub{color:var(--ink-soft);font-size:13px;margin-top:4px;}
+  .resultactions{display:flex;gap:8px;}
+  .filterbtn,.sortpill{border:1px solid var(--line);background:var(--paper-raised);border-radius:100px;padding:8px 16px;font-size:13px;cursor:pointer;display:flex;gap:6px;align-items:center;color:var(--ink);}
+  .sortpill.active{background:var(--ink);color:#fff;border-color:var(--ink);font-weight:600;}
+
+  .results-shell{display:grid;grid-template-columns:250px 1fr;gap:22px;margin-top:20px;align-items:start;}
+  @media (max-width:920px){.results-shell{grid-template-columns:1fr;}}
+  .filterbox{background:var(--paper-raised);border:1px solid var(--line);border-radius:16px;padding:18px;position:sticky;top:88px;display:flex;flex-direction:column;gap:18px;}
+  @media (max-width:920px){.filterbox{position:static;display:none;}.filterbox.show{display:flex;}}
+  .filterbox h4{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin:0 0 8px;}
+  .filtergroup label.opt{display:flex;align-items:center;justify-content:space-between;gap:9px;font-size:13.5px;padding:5px 0;cursor:pointer;color:var(--ink);}
+  .filtergroup label.opt .cnt{color:var(--ink-soft);font-size:12px;}
+  .filtergroup input[type=checkbox]{accent-color:var(--sky);width:15px;height:15px;}
+  .pricerange input[type=range],.durrange input[type=range]{width:100%;accent-color:var(--coral);}
+  .pricerange .val,.durrange .val{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-soft);margin-top:4px;}
+  .resetlink{background:none;border:none;color:var(--coral);font-size:12.5px;cursor:pointer;padding:0;text-decoration:underline;text-align:left;}
+
+  .protip{background:var(--ink);color:#fff;border-radius:16px;padding:16px 18px;margin-bottom:14px;font-size:13px;line-height:1.5;}
+  .protip .label{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;opacity:.6;margin-bottom:6px;font-weight:700;}
+
+  .dealcard{background:var(--paper-raised);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin-bottom:12px;display:grid;grid-template-columns:44px 1.6fr auto;gap:16px;align-items:center;position:relative;opacity:0;transform:translateY(10px);animation:fadeUp .45s ease forwards;transition:transform .2s ease,box-shadow .2s ease;}
+  .dealcard:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);}
+  @media (max-width:680px){.dealcard{grid-template-columns:1fr;text-align:left;}}
+  .logo-circle{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px;flex:none;}
+  .dealcard .info b{display:block;font-size:15px;}
+  .dealcard .info .meta{font-size:12px;color:var(--ink-soft);margin-top:2px;display:flex;gap:8px;flex-wrap:wrap;}
+  .dealcard .route{font-size:14px;color:var(--ink);margin-top:6px;display:flex;gap:10px;align-items:center;font-weight:600;}
+  .dealcard .route .arrow{opacity:.4;font-weight:400;}
+  .dealcard .right{text-align:right;}
+  @media (max-width:680px){.dealcard .right{text-align:left;margin-top:10px;}}
+  .tag-pill{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;padding:4px 10px;border-radius:100px;margin-bottom:6px;display:inline-block;}
+  .tag-best{background:var(--coral);color:#fff;}
+  .tag-cheap{background:var(--ink);color:#fff;}
+  .dealcard .price{font-size:20px;font-weight:800;}
+  .dealcard .pricesub{font-size:11px;color:var(--ink-soft);}
+  .viewbtn{margin-top:8px;border:1px solid var(--ink);background:var(--paper-raised);color:var(--ink);border-radius:10px;padding:8px 16px;font-size:12.5px;font-weight:700;cursor:pointer;transition:background .18s ease,color .18s ease;}
+  .viewbtn:hover{background:var(--ink);color:#fff;}
+  .favbtn{position:absolute;top:14px;right:14px;background:none;border:none;cursor:pointer;color:var(--line);width:22px;height:22px;z-index:2;}
+  .favbtn.on{color:var(--coral);}
+  .favbtn svg{width:100%;height:100%;}
+
+  .bundlecard{background:var(--ink);color:#fff;border-radius:16px;padding:18px 22px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;}
+  .bundlecard .left{display:flex;align-items:center;gap:14px;}
+  .bundlecard .logos{display:flex;}
+  .bundlecard .logos span{width:32px;height:32px;border-radius:50%;background:#fff;color:var(--ink);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;margin-right:-8px;border:2px solid var(--ink);}
+  .bundlecard b{font-size:15px;display:block;}
+  .bundlecard .sub{font-size:12px;opacity:.75;display:flex;gap:10px;flex-wrap:wrap;margin-top:3px;}
+  .bundlecard .price{font-size:20px;font-weight:800;}
+  .bundlecard button{background:#fff;color:var(--ink);border-radius:10px;padding:10px 18px;font-weight:700;font-size:13px;border:none;cursor:pointer;white-space:nowrap;}
+
+  .noresults{padding:50px 20px;text-align:center;color:var(--ink-soft);border:1px dashed var(--line);border-radius:16px;}
+  .noresults b{color:var(--ink);}
+
+  .besttime-row{display:grid;grid-template-columns:1.5fr 1fr;gap:16px;margin-top:20px;}
+  @media (max-width:820px){.besttime-row{grid-template-columns:1fr;}}
+  .besttime-card{background:var(--paper-raised);border:1px solid var(--line);border-radius:16px;padding:20px;}
+  .besttime-card .bt-eyebrow{font-size:11px;text-transform:uppercase;color:var(--sky);font-weight:700;display:flex;gap:6px;align-items:center;}
+  .besttime-card h4{font-size:18px;margin-top:8px;font-weight:800;}
+  .besttime-card h4 .up{color:var(--coral);}
+  .besttime-card h4 .down{color:var(--good);}
+  .bt-note{font-size:11.5px;color:var(--ink-soft);margin-top:8px;display:flex;justify-content:space-between;}
+  .alertcard{background:var(--ink);color:#fff;border-radius:16px;padding:20px;}
+  .alertcard .head{display:flex;gap:10px;align-items:center;}
+  .alertcard .mailwrap{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;flex:none;}
+  .alertcard h4{font-size:15px;margin-top:12px;line-height:1.35;}
+  .alertcard p{font-size:12px;opacity:.75;margin-top:6px;}
+  .alertcard input{border-radius:10px;border:none;padding:10px 12px;width:100%;margin-top:14px;font-family:inherit;font-size:13px;}
+  .alertcard button{margin-top:8px;width:100%;background:var(--coral);color:#fff;border-radius:10px;padding:10px;font-weight:700;border:none;cursor:pointer;font-size:13px;}
+  .alertcard .avatars{display:flex;align-items:center;gap:8px;margin-top:14px;font-size:11px;opacity:.7;}
+  .avatardot{width:20px;height:20px;border-radius:50%;border:2px solid var(--ink);margin-right:-8px;}
+
+  /* ---- EXPLORE ---- */
+  .explore-head{display:flex;justify-content:space-between;align-items:flex-end;margin-top:70px;flex-wrap:wrap;gap:12px;}
+  .explore-head p{color:var(--ink-soft);font-size:13px;margin-top:6px;}
+  .seedeals{border:1px solid var(--line);background:var(--paper-raised);border-radius:100px;padding:9px 18px;font-size:13px;cursor:pointer;}
+  .exploregrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-top:20px;}
+  .xcard{position:relative;border-radius:18px;overflow:hidden;cursor:pointer;background:var(--paper-raised);border:1px solid var(--line);transition:transform .22s ease,box-shadow .22s ease;}
+  .xcard:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);}
+  .xcard .bg{height:150px;display:flex;flex-direction:column;justify-content:space-between;padding:12px;color:#fff;}
+  .xcard .code{background:rgba(255,255,255,.92);color:var(--ink);font-size:11px;font-weight:800;padding:4px 10px;border-radius:100px;width:fit-content;}
+  .xcard .arrowbtn{width:30px;height:30px;border-radius:50%;background:#fff;color:var(--ink);display:flex;align-items:center;justify-content:center;align-self:flex-end;}
+  .xcard .info{padding:12px 14px;}
+  .xcard .info b{font-size:15px;}
+  .xcard .info .place{font-size:12px;color:var(--ink-soft);}
+  .xcard .info .price{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-soft);margin-top:8px;padding-top:8px;border-top:1px solid var(--line);}
+  .xcard .info .price b{color:var(--coral);font-size:14px;}
+
+  /* ---- AI ---- */
+  .aisection{display:grid;grid-template-columns:1fr 1fr;gap:44px;margin-top:80px;align-items:start;}
+  @media (max-width:900px){.aisection{grid-template-columns:1fr;}}
+  .aibadge{display:inline-flex;gap:6px;align-items:center;background:var(--ink);color:#fff;border-radius:100px;padding:6px 14px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;}
+  .aisection h2{font-size:29px;margin-top:16px;}
+  .aisection > div > p{color:var(--ink-soft);margin-top:10px;font-size:14.5px;line-height:1.55;}
+  .ai-label{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin:18px 0 8px;font-weight:700;}
+  .vibegrid{display:flex;flex-wrap:wrap;gap:10px;}
+  .vibebtn{border:1px solid var(--line);background:var(--paper-raised);border-radius:100px;padding:10px 18px;font-size:13.5px;cursor:pointer;display:flex;gap:6px;align-items:center;color:var(--ink);}
+  .vibebtn.on{background:var(--ink);color:#fff;border-color:var(--ink);}
+  .generatebtn{margin-top:22px;background:var(--ink);color:#fff;border-radius:12px;padding:14px 26px;font-weight:700;border:none;cursor:pointer;display:flex;gap:8px;align-items:center;font-size:14px;}
+  .ai-results{margin-top:16px;display:grid;gap:10px;}
+  .aiplancard{background:var(--paper-raised);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow-md);}
+  .aiplancard .head{display:flex;justify-content:space-between;align-items:center;}
+  .aiplancard .head b{font-size:15px;}
+  .aiplancard .head .sub{font-size:12px;color:var(--ink-soft);}
+  .readypill{background:var(--good-soft);color:var(--good);font-size:10.5px;font-weight:800;padding:4px 10px;border-radius:100px;text-transform:uppercase;}
+  .aiplanrow{display:flex;gap:12px;padding:12px 0;border-top:1px solid var(--line);}
+  .aiplanrow .icon{width:32px;height:32px;border-radius:10px;background:var(--sky-soft);color:var(--sky);display:flex;align-items:center;justify-content:center;flex:none;}
+  .aiplanrow b{font-size:13.5px;}
+  .aiplanrow .sub{font-size:12px;color:var(--ink-soft);margin-top:2px;}
+  .checkoutbtn{background:var(--coral);color:#fff;border-radius:12px;padding:13px;font-weight:700;width:100%;margin-top:14px;border:none;cursor:pointer;font-size:13.5px;}
+
+  /* ---- WHY ---- */
+  .why3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:80px;}
+  @media (max-width:820px){.why3{grid-template-columns:1fr;}}
+  .whycard{background:var(--paper-raised);border:1px solid var(--line);border-radius:18px;padding:24px;}
+  .whyicon{width:38px;height:38px;border-radius:12px;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
+  .whycard h3{font-size:16.5px;}
+  .whycard p{color:var(--ink-soft);font-size:13.5px;line-height:1.55;margin-top:8px;}
+
+  /* ---- FOOTER ---- */
+  .sitefooter{background:var(--ink);color:#fff;margin-top:80px;padding-block:48px 22px;}
+  .footgrid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:30px;}
+  @media (max-width:760px){.footgrid{grid-template-columns:1fr 1fr;}}
+  .footbrand{display:flex;align-items:center;gap:9px;font-weight:800;font-size:17px;}
+  .footbrand .mark{width:28px;height:28px;border-radius:9px;background:#fff;color:var(--ink);display:flex;align-items:center;justify-content:center;flex:none;}
+  .sitefooter p.tag{opacity:.7;font-size:13px;margin-top:12px;max-width:320px;line-height:1.5;}
+  .footbadge{display:inline-flex;gap:6px;align-items:center;font-size:11.5px;opacity:.6;margin-top:14px;}
+  .footcol h5{font-size:11px;text-transform:uppercase;letter-spacing:.08em;opacity:.55;margin-bottom:12px;}
+  .footcol a{display:block;font-size:13.5px;opacity:.85;margin-bottom:9px;}
+  .footcol a:hover{opacity:1;text-decoration:underline;}
+  .footbottom{border-top:1px solid rgba(255,255,255,.14);margin-top:34px;padding-top:20px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:11.5px;opacity:.55;}
+
+  /* ---- MODALS ---- */
+  .modal-overlay{position:fixed;inset:0;background:rgba(10,25,49,.5);z-index:95;display:none;align-items:flex-start;justify-content:center;padding:60px 16px;overflow-y:auto;}
+  .modal-overlay.open{display:flex;}
+  .modal-box{background:var(--paper-raised);border-radius:18px;max-width:540px;width:100%;padding:24px;box-shadow:var(--shadow-lg);}
+  .modal-box .m-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+  .modal-box h3{font-size:19px;}
+  .field-basic{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;}
+  .field-basic label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);}
+  .field-basic input{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:10px;padding:11px 12px;font-size:14.5px;font-family:inherit;}
+  .btn-solid{background:var(--ink);color:#fff;border:none;border-radius:10px;padding:11px 16px;font-size:14px;font-weight:700;cursor:pointer;}
+  .triprow{display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px;}
+  .triprow .tr-name{font-size:14px;font-weight:700;}
+  .triprow .tr-sub{font-size:12px;color:var(--ink-soft);}
+  .trip-empty{color:var(--ink-soft);font-size:13.5px;text-align:center;padding:30px 10px;}
+
   .cookiebar{position:fixed;left:16px;right:16px;bottom:16px;max-width:640px;margin-inline:auto;background:var(--paper-raised);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow-lg);padding:18px 20px;z-index:100;display:flex;gap:16px;flex-wrap:wrap;align-items:center;justify-content:space-between;transform:translateY(140%);transition:transform .4s cubic-bezier(.2,.8,.2,1);}
   .cookiebar.show{transform:translateY(0);}
   .cookiebar p{font-size:13px;color:var(--ink-soft);margin:0;max-width:60ch;}
   .cookiebar .ckbtns{display:flex;gap:8px;flex:none;}
-  .btn-solid{background:var(--ink);color:var(--paper);border:none;border-radius:10px;padding:9px 16px;font-size:13px;font-weight:600;cursor:pointer;}
-  .btn-solid:hover{background:var(--coral);}
+  .btn-ghost{border:1px solid var(--line);background:transparent;color:var(--ink);padding:9px 18px;border-radius:100px;font-size:14px;cursor:pointer;}
 
-  /* Explore section */
-  .explore-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-top:16px;}
-  .explore-card{border:1px solid var(--line);border-radius:16px;overflow:hidden;cursor:pointer;background:var(--paper-raised);transition:transform .22s cubic-bezier(.2,.8,.2,1), box-shadow .22s ease;}
-  .explore-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);}
-  .explore-thumb{height:110px;background-size:cover;position:relative;}
-  .explore-thumb .dealtag{position:absolute;top:8px;left:8px;background:rgba(11,18,32,.65);color:#fff;font-size:10.5px;padding:3px 8px;border-radius:100px;}
-  .explore-info{padding:12px 14px;}
-  .explore-info b{font-size:14.5px;}
-  .explore-info .from{color:var(--ink-soft);font-size:12.5px;margin-top:2px;}
-  .explore-info .from strong{color:var(--coral);font-family:'JetBrains Mono',monospace;}
-
-  /* Best time to book */
-  .besttime{background:var(--paper-raised);border:1px solid var(--line);border-left:4px solid var(--purple);border-radius:16px;padding:18px 20px;margin-bottom:16px;}
-  .besttime .bt-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
-  .besttime h4{font-size:14px;margin:0;}
-  .besttime .bt-verdict{font-size:12.5px;color:var(--good);font-weight:700;}
-  .bt-bars{display:flex;align-items:flex-end;gap:5px;height:54px;margin-top:12px;}
-  .bt-bars .bar{flex:1;background:linear-gradient(180deg, var(--purple), var(--sky));border-radius:4px 4px 0 0;transition:transform .2s ease;}
-  .bt-bars .bar.low{background:linear-gradient(180deg, var(--good), var(--teal));}
-  .bt-note{font-size:12px;color:var(--ink-soft);margin-top:8px;}
-
-  /* AI planner */
-  .aiplanner{background:linear-gradient(135deg, color-mix(in srgb, var(--purple) 12%, var(--paper-raised)), color-mix(in srgb, var(--sky) 10%, var(--paper-raised)) 55%, color-mix(in srgb, var(--coral) 8%, var(--paper-raised)));border:1px solid var(--line);border-radius:20px;padding:24px;margin-top:20px;}
-  .aiplanner .ai-head{display:flex;align-items:center;gap:10px;}
-  .ai-badge{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg, var(--coral), var(--purple-deep) 55%, var(--sky));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;flex:none;}
-  .aiplanner h3{font-size:19px;}
-  .aiplanner p.sub{color:var(--ink-soft);font-size:13.5px;margin-top:4px;}
-  .ai-row{margin-top:16px;}
-  .ai-row .ai-label{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin-bottom:8px;}
-  .ai-opts{display:flex;gap:8px;flex-wrap:wrap;}
-  .ai-opt{border:1px solid var(--line);background:var(--paper-raised);color:var(--ink-soft);padding:8px 14px;border-radius:100px;font-size:13px;cursor:pointer;transition:all .18s ease;}
-  .ai-opt:hover{border-color:var(--sky);}
-  .ai-opt.on{background:linear-gradient(135deg, var(--purple-deep), var(--coral));color:#fff;border-color:transparent;}
-  .ai-go{margin-top:18px;background:linear-gradient(135deg, var(--coral), var(--coral-deep));color:#fff;border:none;border-radius:12px;padding:11px 22px;font-size:14px;font-weight:600;cursor:pointer;}
-  .ai-go:hover{filter:brightness(1.05);}
-  .ai-results{margin-top:18px;display:grid;gap:10px;}
-  .ai-card{background:var(--paper-raised);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;opacity:0;transform:translateY(8px);animation:fadeUp .4s cubic-bezier(.2,.8,.2,1) forwards;}
-  .ai-card .aic-name{font-weight:600;font-size:14.5px;}
-  .ai-card .aic-why{color:var(--ink-soft);font-size:12.5px;margin-top:3px;}
-  .ai-card .aic-price{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--coral);}
-
-  /* Trips modal (saved) */
-  .modal-overlay{position:fixed;inset:0;background:rgba(11,18,32,.5);z-index:95;display:none;align-items:flex-start;justify-content:center;padding:60px 16px;overflow-y:auto;}
-  .modal-overlay.open{display:flex;}
-  .modal-box{background:var(--paper-raised);border-radius:18px;max-width:560px;width:100%;padding:24px;box-shadow:var(--shadow-lg);}
-  .modal-box .m-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
-  .modal-box h3{font-size:19px;}
-  .triprow{display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:10px;}
-  .triprow .tr-name{font-size:14px;font-weight:600;}
-  .triprow .tr-sub{font-size:12px;color:var(--ink-soft);}
-  .triprow .tr-price{font-family:'JetBrains Mono',monospace;font-weight:700;}
-  .triprow button{background:none;border:none;color:var(--coral);font-size:12px;cursor:pointer;text-decoration:underline;}
-  .trip-empty{color:var(--ink-soft);font-size:13.5px;text-align:center;padding:30px 10px;}
-
-  .navcta .navbtn{background:none;border:1px solid var(--line);color:var(--ink);padding:8px 14px;border-radius:100px;font-size:13.5px;cursor:pointer;display:flex;align-items:center;gap:6px;}
-  .navcta .navbtn:hover{border-color:var(--ink);}
-  .navcta .navbtn .favcount{background:var(--coral);color:#fff;font-size:10.5px;padding:1px 6px;border-radius:100px;}
-  @media (max-width:700px){.navcta .navbtn span.label{display:none;}}
+  .selectwrap{position:relative;}
+  .selectmenu{position:absolute;top:calc(100% + 8px);right:0;background:var(--paper-raised);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow-md);min-width:150px;padding:6px;display:none;z-index:60;}
+  .selectmenu.open{display:block;}
+  .selectmenu button{display:block;width:100%;text-align:left;background:none;border:none;padding:8px 10px;border-radius:8px;font-size:13px;color:var(--ink);cursor:pointer;}
+  .selectmenu button:hover{background:var(--sky-soft);}
+  .selectmenu button.on{color:var(--sky);font-weight:700;}
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.001ms !important;transition-duration:.001ms !important;}}
 </style>
-
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
-
 </head>
 <body>
-<div class="bg-glow"></div>
-<div class="wrap">
-  <nav id="siteNav">
+
+<nav class="topnav" id="siteNav">
+  <div class="wrap topnav-inner">
     <div style="display:flex;align-items:center;gap:6px;">
       <button class="hamburger" id="hamburgerBtn" aria-label="Menu" type="button"><span></span><span></span><span></span></button>
-      <div class="logo">
-        <svg class="logo-mark" viewBox="0 0 30 30" fill="none">
-          <circle cx="15" cy="15" r="14" stroke="var(--coral)" stroke-width="1.4"/>
-          <path d="M6 16.5 L24 10.5 L18 16.5 L24 19.5 L14 17.5 L10 21 L9 18 L6 16.5Z" fill="var(--coral)"/>
-        </svg>
+      <div class="brand">
+        <span class="mark"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M2.5 19.5l7-2 3.5 3.5 1.5-1-2-4 6-6c1-1 1-2.5 0-3.5s-2.5-1-3.5 0l-6 6-4-2-1 1.5 3.5 3.5-2 7z"/></svg></span>
         Aerlume
       </div>
     </div>
-    <div class="navlinks">
-      <a href="#search" data-i18n="nav.search">Search</a>
-      <a href="#results" data-i18n="nav.deals">Deals</a>
-      <a href="#explore" data-i18n="nav.explore">Explore</a>
-      <a href="#ai" data-i18n="nav.plan">Plan with AI</a>
-      <a href="#why" data-i18n="nav.why">Why Aerlume</a>
+    <div class="pillnav" role="tablist">
+      <button class="mode active" data-mode="flights" type="button">✈️ <span data-i18n="mode.flights">Flights</span></button>
+      <button class="mode" data-mode="hotels" type="button">🏨 <span data-i18n="mode.hotels">Hotels</span></button>
+      <button class="mode" data-mode="cars" type="button">🚗 <span data-i18n="mode.cars">Cars</span></button>
+      <button class="mode" data-mode="buses" type="button">🚌 <span data-i18n="mode.buses">Buses</span></button>
+      <button class="mode" data-mode="packages" type="button">🧳 <span data-i18n="mode.packages">Packages</span></button>
     </div>
-    <div class="navcta">
-      <button class="navbtn" id="tripsBtn" type="button">♡ <span class="label" data-i18n="nav.trips">Trips</span> <span class="favcount" id="favCount">0</span></button>
-      <div class="selectwrap">
-        <button class="selectbadge" id="langBtn" type="button">🌐 <span id="langLabel">English</span></button>
-        <div class="selectmenu" id="langMenu">
-          <button data-lang="en" class="on">English</button>
-          <button data-lang="es">Español</button>
-        </div>
-      </div>
-      <div class="selectwrap">
-        <button class="selectbadge" id="curBtn" type="button"><span id="curLabel">EUR €</span></button>
+    <div class="navright">
+      <button class="navlink hideMobile" id="drawerBesttime2" type="button">📈 Price Alerts</button>
+      <button class="iconbadge" id="tripsBtn" type="button">♡ Trips <span id="favCount">0</span></button>
+      <div class="selectwrap hideMobile">
+        <button class="iconbadge" id="curBtn" type="button"><span id="curLabel">EUR €</span></button>
         <div class="selectmenu" id="curMenu">
           <button data-cur="EUR" class="on">EUR €</button>
           <button data-cur="USD">USD $</button>
@@ -423,360 +333,324 @@
           <button data-cur="PKR">PKR ₨</button>
         </div>
       </div>
-      <button class="btn-ghost" id="signinBtn" data-i18n="nav.signin">Sign in</button>
+      <button class="signinbtn" id="signinBtn" type="button">Sign in</button>
     </div>
+  </div>
+</nav>
+
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <div class="brand" style="font-size:17px;">Aerlume</div>
+    <button class="drawer-close" id="drawerClose" aria-label="Close">×</button>
+  </div>
+  <nav class="dlinks">
+    <button class="dlink" data-drawer-mode="flights">✈️ Flights</button>
+    <button class="dlink" data-drawer-mode="hotels">🏨 Stays</button>
+    <button class="dlink" data-drawer-mode="cars">🚗 Cars</button>
+    <button class="dlink" data-drawer-mode="buses">🚌 Buses</button>
+    <button class="dlink" data-drawer-mode="packages">🧳 Packages</button>
+    <hr>
+    <div class="drawer-sub">Plan</div>
+    <a href="#ai" class="dlink" id="drawerAi">🤖 Plan with AI</a>
+    <a href="#explore" class="dlink" id="drawerExplore">🧭 Explore</a>
+    <button class="dlink" id="drawerBesttime">📈 Best time to book</button>
+    <button class="dlink" id="drawerTrips">♡ Trips</button>
+    <hr>
+    <div class="drawer-sub">Settings</div>
+    <button class="dlink" id="drawerLang">🌐 Language — <span id="drawerLangVal">English</span></button>
+    <button class="dlink" id="drawerCur">💱 Currency — <span id="drawerCurVal">EUR €</span></button>
+    <button class="dlink" id="drawerContact">✉️ Contact us</button>
   </nav>
+</div>
 
-  <div class="drawer-overlay" id="drawerOverlay"></div>
-  <div class="drawer" id="drawer">
-    <div class="drawer-head">
-      <div class="logo" style="font-size:17px;">Aerlume</div>
-      <button class="drawer-close" id="drawerClose" aria-label="Close">×</button>
-    </div>
-    <nav class="dlinks">
-      <button class="dlink" data-drawer-mode="flights">✈️ Flights</button>
-      <button class="dlink" data-drawer-mode="hotels">🏨 Stays</button>
-      <button class="dlink" data-drawer-mode="cars">🚗 Cars</button>
-      <button class="dlink" data-drawer-mode="buses">🚌 Buses</button>
-      <button class="dlink" data-drawer-mode="packages">🧳 Packages</button>
-      <hr>
-      <div class="drawer-sub">Plan</div>
-      <a href="#ai" class="dlink" id="drawerAi">🤖 Plan with AI</a>
-      <a href="#explore" class="dlink" id="drawerExplore">🧭 Explore</a>
-      <button class="dlink" id="drawerDirect">➜ Direct flights only</button>
-      <button class="dlink" id="drawerBesttime">📈 Best time to book</button>
-      <button class="dlink" id="drawerTrips">♡ Trips</button>
-      <hr>
-      <div class="drawer-sub">Settings</div>
-      <button class="dlink" id="drawerLang">🌐 Language — <span id="drawerLangVal">English</span></button>
-      <button class="dlink" id="drawerCur">💱 Currency — <span id="drawerCurVal">EUR €</span></button>
-      <button class="dlink" id="drawerContact">✉️ Contact us</button>
-    </nav>
+<div class="cookiebar" id="cookieBar">
+  <p>We use cookies to run this site and show you relevant travel deals. See our <a href="#" style="color:var(--sky);">cookie policy</a>.</p>
+  <div class="ckbtns">
+    <button class="btn-ghost" id="cookieManage" type="button">Necessary only</button>
+    <button class="btn-solid" id="cookieAccept" type="button">Accept all</button>
   </div>
+</div>
 
-  <div class="cookiebar" id="cookieBar">
-    <p data-i18n="cookie.text">We use cookies to run this site and show you relevant travel deals. See our <a href="#" style="color:var(--sky);">cookie policy</a>.</p>
-    <div class="ckbtns">
-      <button class="btn-ghost" id="cookieManage" type="button" data-i18n="cookie.manage">Necessary only</button>
-      <button class="btn-solid" id="cookieAccept" type="button" data-i18n="cookie.accept">Accept all</button>
-    </div>
+<div class="modal-overlay" id="tripsModal">
+  <div class="modal-box">
+    <div class="m-head"><h3>Your saved trips</h3><button class="drawer-close" id="tripsClose">×</button></div>
+    <div id="tripsList"></div>
   </div>
+</div>
 
-  <div class="modal-overlay" id="tripsModal">
-    <div class="modal-box">
-      <div class="m-head">
-        <h3 data-i18n="trips.title">Your saved trips</h3>
-        <button class="drawer-close" id="tripsClose">×</button>
-      </div>
-      <div id="tripsList"></div>
-    </div>
+<div class="modal-overlay" id="bookingModal">
+  <div class="modal-box">
+    <div class="m-head"><h3>Confirm &amp; continue</h3><button class="drawer-close" id="bookingClose">×</button></div>
+    <div id="bookingBody"></div>
   </div>
+</div>
 
-  <div class="modal-overlay" id="bookingModal">
-    <div class="modal-box">
-      <div class="m-head">
-        <h3>Confirm &amp; continue</h3>
-        <button class="drawer-close" id="bookingClose">×</button>
-      </div>
-      <div id="bookingBody"></div>
-    </div>
+<div class="modal-overlay" id="signinModal">
+  <div class="modal-box">
+    <div class="m-head"><h3>Sign in to Aerlume</h3><button class="drawer-close" id="signinClose">×</button></div>
+    <form id="signinForm" style="display:flex;flex-direction:column;gap:12px;">
+      <div class="field-basic"><label>Email</label><input type="email" id="signinEmail" placeholder="you@email.com" required></div>
+      <div class="field-basic"><label>Password</label><input type="password" id="signinPassword" placeholder="••••••••" required></div>
+      <button class="btn-solid" type="submit" style="margin-top:4px;">Sign in</button>
+      <p style="font-size:12px;color:var(--ink-soft);margin:0;">Demo only — connect an auth provider (e.g. your own API, Auth0, Firebase) to enable real sign-in.</p>
+    </form>
   </div>
+</div>
 
-  <div class="modal-overlay" id="signinModal">
-    <div class="modal-box">
-      <div class="m-head">
-        <h3>Sign in to Aerlume</h3>
-        <button class="drawer-close" id="signinClose">×</button>
-      </div>
-      <form id="signinForm" style="display:flex;flex-direction:column;gap:12px;">
-        <div class="field"><label>Email</label><input type="email" id="signinEmail" placeholder="you@email.com" required></div>
-        <div class="field"><label>Password</label><input type="password" id="signinPassword" placeholder="••••••••" required></div>
-        <button class="btn-solid" type="submit" style="margin-top:4px;">Sign in</button>
-        <p style="font-size:12px;color:var(--ink-soft);margin:0;">Demo only — connect an auth provider (e.g. your own API, Auth0, Firebase) to enable real sign-in.</p>
-      </form>
-    </div>
-  </div>
-
+<div class="wrap">
   <section class="hero" id="search">
-    <div class="eyebrow">Flights · Hotels · Cars · Buses — one search</div>
-    <h1>Search hundreds of sites —<br><em>find the real best price.</em></h1>
-    <p>Aerlume scans flights, hotels, cars, and buses across trusted booking partners so you don't have to open ten tabs. Filter, compare, and go straight to checkout with your partner of choice.</p>
-
-    <div class="modebar" role="tablist">
-      <button class="mode active" data-mode="flights" type="button">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2.5 19.5l7-2 3.5 3.5 1.5-1-2-4 6-6c1-1 1-2.5 0-3.5s-2.5-1-3.5 0l-6 6-4-2-1 1.5 3.5 3.5-2 7z"/></svg>
-        <span data-i18n="mode.flights">Flights</span>
-      </button>
-      <button class="mode" data-mode="hotels" type="button">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 21V6a1 1 0 011-1h5v16H3zm7-16h10a1 1 0 011 1v15h-11V5zm-5 9h3v2H5v-2zm0-4h3v2H5V10z"/></svg>
-        <span data-i18n="mode.hotels">Hotels</span>
-      </button>
-      <button class="mode" data-mode="cars" type="button">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M5 11l1.5-4.5A2 2 0 018.4 5h7.2a2 2 0 011.9 1.5L19 11h1a1 1 0 011 1v5a1 1 0 01-1 1h-1a2 2 0 01-4 0H9a2 2 0 01-4 0H4a1 1 0 01-1-1v-5a1 1 0 011-1h1zm2.1 0h9.8l-1.1-3.5a.5.5 0 00-.5-.5H8.7a.5.5 0 00-.5.5L7.1 11zM7 15a1 1 0 100-2 1 1 0 000 2zm10 0a1 1 0 100-2 1 1 0 000 2z"/></svg>
-        <span data-i18n="mode.cars">Cars</span>
-      </button>
-      <button class="mode" data-mode="buses" type="button">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 16c0 .9.6 1.6 1.4 1.9L5 19.5a1 1 0 001 1.5h1a1 1 0 001-1v-1h8v1a1 1 0 001 1h1a1 1 0 001-1.5l-.4-1.6c.8-.3 1.4-1 1.4-1.9V7c0-2.8-2.8-3-7-3s-7 .2-7 3v9zm3-1a1.3 1.3 0 110-2.6A1.3 1.3 0 017 15zm10 0a1.3 1.3 0 110-2.6 1.3 1.3 0 010 2.6zM6 10V7.5c0-.6 2-1 6-1s6 .4 6 1V10H6z"/></svg>
-        <span data-i18n="mode.buses">Buses</span>
-      </button>
-      <button class="mode" data-mode="packages" type="button">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 7V5a2 2 0 012-2h8a2 2 0 012 2v2h1a1 1 0 011 1v11a1 1 0 01-1 1H5a1 1 0 01-1-1V8a1 1 0 011-1h1zm2-2v2h8V5H8zm-2 5v8h12v-8H6z"/></svg>
-        <span data-i18n="mode.packages">Packages</span>
-      </button>
-    </div>
+    <div class="livebadge"><span class="dot"></span> LIVE: <b id="scanCount">1,243</b> trips scanned in last hour</div>
+    <h1>Stop opening 10 tabs.<br><span class="accent">Find your whole trip</span><br>in one search.</h1>
+    <p class="sub">Aerlume scans flights, hotels, cars, and buses across trusted booking partners so you don't have to open ten tabs. Filter, compare, and go straight to checkout with your partner of choice.</p>
 
     <div class="searchcard">
       <div id="fields-flights">
-        <div class="tabs" id="flightTripTabs">
-          <button class="tab active" type="button" data-trip="round">Round trip</button>
-          <button class="tab" type="button" data-trip="oneway">One way</button>
-          <button class="tab" type="button" data-trip="multi">Multi-city</button>
+        <div class="pill-tabs" id="flightTripTabs">
+          <button class="active" type="button" data-trip="round">Round trip</button>
+          <button type="button" data-trip="oneway">One way</button>
+          <button type="button" data-trip="multi">Multi-city</button>
         </div>
-        <div class="fields">
-          <div class="field"><label>From</label><input type="text" id="flFrom" value="Madrid (MAD)"/></div>
-          <div class="field"><label>To</label><input type="text" id="flTo" value="Lisbon (LIS)"/></div>
-          <div class="field"><label>Depart</label><input type="date" id="flDepart" value="2026-10-12"/></div>
-          <div class="field" id="flReturnField"><label>Return</label><input type="date" id="flReturn" value="2026-10-19"/></div>
-          <button class="searchbtn" type="button" id="flightSearchBtn" onclick="runSearch()">Search flights</button>
+        <div class="fieldsgrid">
+          <div class="fromto">
+            <div class="half"><label>From</label><input type="text" id="flFrom" value="Madrid (MAD)"/></div>
+            <div class="half" style="text-align:right;"><label>To</label><input type="text" id="flTo" value="Lisbon (LIS)" style="text-align:right;"/></div>
+            <button class="swapbtn" id="swapFl" type="button" aria-label="Swap"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 7h13l-4-4M17 17H4l4 4"/></svg></button>
+          </div>
+          <div class="datebtn"><label>📅 Depart</label><input type="date" id="flDepart" value="2026-10-12"/></div>
+          <div class="datebtn" id="flReturnField"><label>📅 Return</label><input type="date" id="flReturn" value="2026-10-19"/></div>
+          <div class="travelerwrap">
+            <button class="travelerbtn" id="travelerBtn" type="button"><label>👤 Travelers</label><span class="val" id="travelerVal">1 Adult <span>▾</span></span></button>
+            <div class="travelermenu" id="travelerMenu">
+              <div class="travelerrow"><span>Adults</span><span class="stepper"><button type="button" id="travMinus">−</button><b id="travCount">1</b><button type="button" id="travPlus">+</button></span></div>
+            </div>
+          </div>
+          <button class="searchbtn" type="button" id="flightSearchBtn" onclick="runSearch()">Search all modes <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
         </div>
       </div>
 
       <div id="fields-hotels" hidden>
-        <div class="tabs" id="hotelTypeTabs">
-          <button class="tab active" type="button" data-htype="hotel">Hotels</button>
-          <button class="tab" type="button" data-htype="apartment">Apartments</button>
-          <button class="tab" type="button" data-htype="resort">Resorts</button>
+        <div class="pill-tabs" id="hotelTypeTabs">
+          <button class="active" type="button" data-htype="hotel">Hotels</button>
+          <button type="button" data-htype="apartment">Apartments</button>
+          <button type="button" data-htype="resort">Resorts</button>
         </div>
-        <div class="fields">
-          <div class="field"><label>Destination</label><input type="text" id="hoDest" value="Lisbon, Portugal"/></div>
-          <div class="field"><label>Check-in</label><input type="date" id="hoIn" value="2026-10-12"/></div>
-          <div class="field"><label>Check-out</label><input type="date" id="hoOut" value="2026-10-19"/></div>
-          <div class="field"><label>Guests</label><input type="text" id="hoGuests" value="2 adults, 1 room"/></div>
+        <div class="fieldsgrid">
+          <div class="fromto" style="grid-template-columns:1fr;"><div class="half"><label>Destination</label><input type="text" id="hoDest" value="Lisbon, Portugal"/></div></div>
+          <div class="datebtn"><label>📅 Check-in</label><input type="date" id="hoIn" value="2026-10-12"/></div>
+          <div class="datebtn"><label>📅 Check-out</label><input type="date" id="hoOut" value="2026-10-19"/></div>
+          <div class="datebtn"><label>👤 Guests</label><input type="text" id="hoGuests" value="2 adults, 1 room"/></div>
           <button class="searchbtn" type="button" onclick="runSearch()">Search hotels</button>
         </div>
       </div>
 
       <div id="fields-cars" hidden>
-        <div class="tabs" id="carTypeTabs">
-          <button class="tab active" type="button" data-ctype="all">All cars</button>
-          <button class="tab" type="button" data-ctype="Economy">Economy</button>
-          <button class="tab" type="button" data-ctype="SUV">SUV</button>
+        <div class="pill-tabs" id="carTypeTabs">
+          <button class="active" type="button" data-ctype="all">All cars</button>
+          <button type="button" data-ctype="Economy">Economy</button>
+          <button type="button" data-ctype="SUV">SUV</button>
         </div>
-        <div class="fields">
-          <div class="field"><label>Pick-up</label><input type="text" id="caPickup" value="Lisbon Airport (LIS)"/></div>
-          <div class="field"><label>Drop-off</label><input type="text" id="caDropoff" value="Lisbon Airport (LIS)"/></div>
-          <div class="field"><label>Pick-up date</label><input type="date" id="caPickupDate" value="2026-10-12"/></div>
-          <div class="field"><label>Drop-off date</label><input type="date" id="caDropoffDate" value="2026-10-19"/></div>
+        <div class="fieldsgrid">
+          <div class="fromto"><div class="half"><label>Pick-up</label><input type="text" id="caPickup" value="Lisbon Airport (LIS)"/></div><div class="half" style="text-align:right;"><label>Drop-off</label><input type="text" id="caDropoff" value="Lisbon Airport (LIS)" style="text-align:right;"/></div></div>
+          <div class="datebtn"><label>📅 Pick-up date</label><input type="date" id="caPickupDate" value="2026-10-12"/></div>
+          <div class="datebtn"><label>📅 Drop-off date</label><input type="date" id="caDropoffDate" value="2026-10-19"/></div>
           <button class="searchbtn" type="button" onclick="runSearch()">Search cars</button>
         </div>
       </div>
 
       <div id="fields-buses" hidden>
-        <div class="tabs" id="busTripTabs">
-          <button class="tab active" type="button" data-trip="round">Round trip</button>
-          <button class="tab" type="button" data-trip="oneway">One way</button>
+        <div class="pill-tabs" id="busTripTabs">
+          <button class="active" type="button" data-trip="round">Round trip</button>
+          <button type="button" data-trip="oneway">One way</button>
         </div>
-        <div class="fields">
-          <div class="field"><label>From</label><input type="text" id="buFrom" value="Madrid"/></div>
-          <div class="field"><label>To</label><input type="text" id="buTo" value="Porto"/></div>
-          <div class="field"><label>Depart</label><input type="date" id="buDepart" value="2026-10-12"/></div>
-          <div class="field" id="buReturnField"><label>Return</label><input type="date" id="buReturn" value="2026-10-19"/></div>
+        <div class="fieldsgrid">
+          <div class="fromto">
+            <div class="half"><label>From</label><input type="text" id="buFrom" value="Madrid"/></div>
+            <div class="half" style="text-align:right;"><label>To</label><input type="text" id="buTo" value="Porto" style="text-align:right;"/></div>
+            <button class="swapbtn" id="swapBu" type="button" aria-label="Swap"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 7h13l-4-4M17 17H4l4 4"/></svg></button>
+          </div>
+          <div class="datebtn"><label>📅 Depart</label><input type="date" id="buDepart" value="2026-10-12"/></div>
+          <div class="datebtn" id="buReturnField"><label>📅 Return</label><input type="date" id="buReturn" value="2026-10-19"/></div>
           <button class="searchbtn" type="button" onclick="runSearch()">Search buses</button>
         </div>
       </div>
 
       <div id="fields-packages" hidden>
-        <div class="tabs">
-          <button class="tab active" type="button">Flight + Hotel</button>
-        </div>
-        <div class="fields">
-          <div class="field"><label>From</label><input type="text" id="pkFrom" value="Madrid (MAD)"/></div>
-          <div class="field"><label>To</label><input type="text" id="pkTo" value="Lisbon (LIS)"/></div>
-          <div class="field"><label>Depart</label><input type="date" id="pkDepart" value="2026-10-12"/></div>
-          <div class="field"><label>Return</label><input type="date" id="pkReturn" value="2026-10-19"/></div>
+        <div class="pill-tabs"><button class="active" type="button">Flight + Hotel</button></div>
+        <div class="fieldsgrid">
+          <div class="fromto">
+            <div class="half"><label>From</label><input type="text" id="pkFrom" value="Madrid (MAD)"/></div>
+            <div class="half" style="text-align:right;"><label>To</label><input type="text" id="pkTo" value="Lisbon (LIS)" style="text-align:right;"/></div>
+          </div>
+          <div class="datebtn"><label>📅 Depart</label><input type="date" id="pkDepart" value="2026-10-12"/></div>
+          <div class="datebtn"><label>📅 Return</label><input type="date" id="pkReturn" value="2026-10-19"/></div>
           <button class="searchbtn" type="button" onclick="runSearch()">Search packages</button>
         </div>
       </div>
 
       <div class="trustrow">
-        <span><span class="dot"></span> No card required to search</span>
-        <span><span class="dot"></span> Price shown is price paid</span>
-        <span><span class="dot"></span> You complete booking with our partner</span>
+        <div class="checks">
+          <span><span class="checkdot">✓</span> No card required</span>
+          <span><span class="checkdot">✓</span> Price shown is price paid</span>
+          <span><span class="checkdot">✓</span> Secure partner checkout</span>
+        </div>
+        <span>🔒 Encrypted &amp; private</span>
       </div>
     </div>
 
-    <div class="datestrip" id="dateStrip"></div>
+    <div class="scanbadge"><span class="bolt">⚡</span> Scanning 5 partners in real-time</div>
+
+    <div class="trustbar">
+      <span class="label">Trusted by travelers, powered by</span>
+      <div class="logos">
+        <span>🌐 Kiwi.com</span>
+        <span>🌐 Trip.com</span>
+        <span>🌐 CheapOair</span>
+        <span>🌐 Omio</span>
+        <span>🌐 WayAway</span>
+      </div>
+    </div>
   </section>
 
-  <section id="results">
+  <section id="results" style="margin-top:56px;">
+    <div class="results-title-row">
+      <div>
+        <h2 id="resultsTitle">Madrid → Lisbon <span class="livepill"><span class="dot"></span> Live</span></h2>
+        <div class="results-sub"><span id="resultCount">6</span> of <span id="resultTotal">6</span> options · sorted by best value · updated <span id="updatedAgo">2s</span> ago</div>
+      </div>
+      <div class="resultactions" id="filterChips">
+        <button class="filterbtn" id="toggleFilters" type="button">☰ Filters</button>
+        <button class="sortpill active" data-sort="best">Best value</button>
+        <button class="sortpill" data-sort="cheap">Cheapest</button>
+        <button class="sortpill" data-sort="fast">Fastest</button>
+        <button class="sortpill" id="directOnlyChip" type="button">Direct only</button>
+      </div>
+    </div>
+
     <div class="results-shell">
-      <aside class="filterbox">
+      <aside class="filterbox" id="filterboxEl">
         <div class="filtergroup">
           <h4>Stops</h4>
-          <label class="opt"><input type="checkbox" class="f-stops" value="nonstop" checked> Nonstop</label>
-          <label class="opt"><input type="checkbox" class="f-stops" value="1stop" checked> 1 stop</label>
-          <label class="opt"><input type="checkbox" class="f-stops" value="2stop" checked> 2+ stops</label>
+          <label class="opt"><span><input type="checkbox" class="f-stops" value="nonstop" checked> Nonstop</span></label>
+          <label class="opt"><span><input type="checkbox" class="f-stops" value="1stop" checked> 1 stop</span></label>
+          <label class="opt"><span><input type="checkbox" class="f-stops" value="2stop" checked> 2+ stops</span></label>
         </div>
         <div class="filtergroup pricerange">
           <h4>Max price</h4>
           <input type="range" id="priceRange" min="10" max="120" value="120">
           <div class="val"><span>€10</span><span id="priceVal">€120</span></div>
         </div>
-        <div class="filtergroup">
-          <h4>Departure time</h4>
-          <div class="timegrid" id="timeGrid">
-            <button class="timebtn on" data-t="morning">Morning</button>
-            <button class="timebtn on" data-t="afternoon">Afternoon</button>
-            <button class="timebtn on" data-t="evening">Evening</button>
-            <button class="timebtn on" data-t="night">Night</button>
-          </div>
-        </div>
         <div class="filtergroup" id="providerGroup">
-          <h4 id="providerTitle">Providers</h4>
+          <h4 id="providerTitle">Booking partners</h4>
           <div id="providerList"></div>
         </div>
         <button class="resetlink" onclick="resetFilters()">Reset all filters</button>
       </aside>
 
       <div class="results-main">
-        <div class="results-head reveal">
-          <h2 id="resultsTitle">Madrid → Lisbon</h2>
-          <div class="count"><span id="resultCount">6</span> of <span id="resultTotal">6</span> options · sorted by best value</div>
-        </div>
-        <div class="sortbar reveal" id="filterChips">
-          <button class="chip on" data-sort="best">Best value</button>
-          <button class="chip" data-sort="cheap">Cheapest</button>
-          <button class="chip" data-sort="fast">Fastest</button>
-          <button class="chip" id="directOnlyChip" type="button">Direct flights only</button>
-        </div>
-        <div class="besttime reveal" id="bestTimeBox">
-          <div class="bt-head">
-            <h4>📈 Best time to book this route</h4>
-            <span class="bt-verdict" id="btVerdict">Book now — prices trending up</span>
-          </div>
-          <div class="bt-bars" id="btBars"></div>
-          <div class="bt-note">Based on 90 days of fare history across our partners for this route. Predictions are estimates, not guarantees.</div>
-        </div>
-        <div class="source-note reveal">Prices and availability provided by our booking partners — you'll finish payment on their secure site.</div>
+        <div class="protip reveal"><div class="label">Pro tip</div>Prices on this route are trending — booking within the next few days typically locks in a lower fare than waiting.</div>
 
         <div id="flightList"></div>
 
-        <div class="alertbox reveal">
-          <div class="txt">
-            <b>Get a price alert for this route</b>
-            <span>We'll email you if the price drops before your trip.</span>
+        <div class="besttime-row reveal">
+          <div class="besttime-card">
+            <div class="bt-eyebrow">📈 Best time to book this route</div>
+            <h4 id="btVerdict">Book now — <span class="up">prices trending up</span></h4>
+            <svg id="btChart" width="100%" height="70" viewBox="0 0 300 70" preserveAspectRatio="none" style="margin-top:12px;overflow:visible;"></svg>
+            <div class="bt-note"><span>Based on 90 days of fare history across our partners.</span><span id="btUpdated">Updated today</span></div>
           </div>
-          <form class="alertform" onsubmit="return setAlert(event)">
-            <input type="email" placeholder="you@email.com" required>
-            <button type="submit">Notify me</button>
-          </form>
+          <div class="alertcard">
+            <div class="head"><div class="mailwrap">✉️</div><div style="font-size:11px;text-transform:uppercase;letter-spacing:.06em;opacity:.7;">Price alert</div></div>
+            <h4 id="alertRoute">Get a price alert for Madrid → Lisbon</h4>
+            <p>We'll email you if the price drops before your trip. No spam, unsubscribe anytime.</p>
+            <form onsubmit="return setAlert(event)">
+              <input type="email" placeholder="you@email.com" required>
+              <button type="submit">Set alert</button>
+            </form>
+            <div class="avatars"><span class="avatardot" style="background:var(--coral);"></span><span class="avatardot" style="background:var(--sky);"></span><span class="avatardot" style="background:var(--purple);"></span> 37 travelers tracking this route</div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="explore" style="margin-top:60px;">
-    <div class="results-head reveal">
-      <h2 data-i18n="explore.title">Explore where your money goes furthest</h2>
-      <div class="count" data-i18n="explore.sub">Prices are round trip from Madrid, found in the last 72 hours</div>
+  <section id="explore">
+    <div class="explore-head reveal">
+      <div><h2>Explore where your money goes furthest</h2><p>Prices are round trip from Madrid, found in the last 72 hours</p></div>
+      <button class="seedeals" type="button">See all deals →</button>
     </div>
-    <div class="explore-grid reveal" id="exploreGrid"></div>
+    <div class="exploregrid reveal" id="exploreGrid"></div>
   </section>
 
   <section id="ai">
-    <div class="aiplanner reveal">
-      <div class="ai-head">
-        <div class="ai-badge">AI</div>
-        <div>
-          <h3 data-i18n="ai.title">Plan a trip with Aerlume AI</h3>
-          <p class="sub" data-i18n="ai.sub">Tell us your vibe and budget — we'll match you to real routes from our search data.</p>
-        </div>
-      </div>
-      <div class="ai-row">
+    <div class="aisection">
+      <div>
+        <div class="aibadge">✨ Aerlume AI · Beta</div>
+        <h2>Plan a trip with Aerlume AI</h2>
+        <p>Tell us your vibe and budget — we'll match you to real routes from our search data and draft an itinerary you can act on.</p>
         <div class="ai-label">What's the vibe?</div>
-        <div class="ai-opts" id="aiVibe">
-          <button class="ai-opt on" data-v="beach">🏖️ Beach</button>
-          <button class="ai-opt" data-v="city">🏙️ City break</button>
-          <button class="ai-opt" data-v="adventure">🥾 Adventure</button>
-          <button class="ai-opt" data-v="culture">🏛️ Culture</button>
+        <div class="vibegrid" id="aiVibe">
+          <button class="vibebtn on" data-v="beach">🏖️ Beach</button>
+          <button class="vibebtn" data-v="city">🏙️ City break</button>
+          <button class="vibebtn" data-v="adventure">🥾 Adventure</button>
+          <button class="vibebtn" data-v="culture">🏛️ Culture</button>
         </div>
-      </div>
-      <div class="ai-row">
         <div class="ai-label">Budget per person</div>
-        <div class="ai-opts" id="aiBudget">
-          <button class="ai-opt on" data-b="150">Under €150</button>
-          <button class="ai-opt" data-b="300">Under €300</button>
-          <button class="ai-opt" data-b="9999">No limit</button>
+        <div class="vibegrid" id="aiBudget">
+          <button class="vibebtn on" data-b="150">Under €150</button>
+          <button class="vibebtn" data-b="300">Under €300</button>
+          <button class="vibebtn" data-b="9999">No limit</button>
         </div>
-      </div>
-      <div class="ai-row">
         <div class="ai-label">When</div>
-        <div class="ai-opts" id="aiWhen">
-          <button class="ai-opt on" data-w="soon">Next 4 weeks</button>
-          <button class="ai-opt" data-w="flex">I'm flexible</button>
+        <div class="vibegrid" id="aiWhen">
+          <button class="vibebtn on" data-w="soon">Next 4 weeks</button>
+          <button class="vibebtn" data-w="flex">I'm flexible</button>
         </div>
+        <button class="generatebtn" id="aiGoBtn" type="button">✨ Generate my trip</button>
       </div>
-      <button class="ai-go" id="aiGoBtn" type="button" data-i18n="ai.go">Get my suggestions</button>
       <div class="ai-results" id="aiResults"></div>
     </div>
   </section>
 
-  <section class="why" id="why">
-    <div class="why-card reveal">
-      <div class="num mono">01</div>
-      <h3>Every mode, one search</h3>
-      <p>Flights, hotels, cars, and buses side by side, so you can plan a whole trip without jumping between ten different tabs.</p>
-    </div>
-    <div class="why-card reveal">
-      <div class="num mono">02</div>
-      <h3>The price you see is final</h3>
-      <p>Taxes and fees are included in every price shown — nothing new appears when you land on our partner's checkout.</p>
-    </div>
-    <div class="why-card reveal">
-      <div class="num mono">03</div>
-      <h3>Trusted booking partners</h3>
-      <p>We hand you to established, secure booking partners to complete payment — your card details never pass through us.</p>
-    </div>
+  <section class="why3" id="why">
+    <div class="whycard reveal"><div class="whyicon">🌐</div><h3>Every mode, one search</h3><p>Flights, hotels, cars, and buses side by side — compare without juggling ten tabs. We scan 5+ trusted partners in seconds.</p></div>
+    <div class="whycard reveal"><div class="whyicon">🛡️</div><h3>The price you see is final</h3><p>No bait fares. Taxes and fees are included from the start — nothing new appears at your partner's checkout.</p></div>
+    <div class="whycard reveal"><div class="whyicon">⚡</div><h3>Trusted booking partners</h3><p>You book directly with Kiwi.com, Trip.com, CheapOair, Omio, and WayAway. Secure checkout, no extra markup from us.</p></div>
   </section>
-
-  <footer>
-    <div>© 2026 Aerlume Travel</div>
-    <div>Prices in EUR · Aerlume is a booking comparison service</div>
-  </footer>
 </div>
 
+<footer class="sitefooter">
+  <div class="wrap">
+    <div class="footgrid">
+      <div>
+        <div class="footbrand"><span class="mark"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M2.5 19.5l7-2 3.5 3.5 1.5-1-2-4 6-6c1-1 1-2.5 0-3.5s-2.5-1-3.5 0l-6 6-4-2-1 1.5 3.5 3.5-2 7z"/></svg></span>Aerlume</div>
+        <p class="tag">The travel meta-search that scans flights, hotels, cars, and buses in one search. Find, compare, go.</p>
+        <div class="footbadge">🔒 SSL secure · GDPR compliant</div>
+      </div>
+      <div class="footcol"><h5>Company</h5><a href="#">About</a><a href="#">Careers</a><a href="#">Press</a><a href="#explore">Explore</a><a href="#ai">AI trips</a></div>
+      <div class="footcol"><h5>Support</h5><a href="#">Help center</a><a href="#">Price alerts</a><a href="#" id="footContact">Contact</a><a href="#">Status</a></div>
+      <div class="footcol"><h5>Legal</h5><a href="#">Terms</a><a href="#">Privacy</a><a href="#">Cookies</a><a href="#">Affiliate disclosure</a></div>
+    </div>
+    <div class="footbottom">
+      <span>Aerlume is a meta-search. We earn affiliate commission when you book via our partners at no extra cost to you. Prices are live from partners and may change. We do not sell tickets directly.</span>
+      <span>© 2026 Aerlume Travel</span>
+    </div>
+  </div>
+</footer>
+
 <script>
-  /* ---------- Currency (defined first: used by fmt() inside all render functions) ---------- */
-  const CURRENCIES = {
-    EUR:{symbol:'€', rate:1},
-    USD:{symbol:'$', rate:1.08},
-    GBP:{symbol:'£', rate:0.86},
-    PKR:{symbol:'₨', rate:301.4},
-  };
+  /* ---------- Currency ---------- */
+  const CURRENCIES = { EUR:{symbol:'€', rate:1}, USD:{symbol:'$', rate:1.08}, GBP:{symbol:'£', rate:0.86}, PKR:{symbol:'₨', rate:301.4} };
   let CUR = {code:'EUR', ...CURRENCIES.EUR};
   function fmt(n){ return CUR.symbol + Math.round(n * CUR.rate).toLocaleString(); }
 
-  /* Replace these with your real affiliate/booking deep links or wire openBooking() to a live API call. */
   const BOOKING_LINKS = {"Kiwi.com":"#","Trip.com":"#","CheapOair":"#","Omio":"#","WayAway":"#"};
 
-  /* Deterministic pseudo-search: lets typed From/To/dates actually change results without a backend yet.
-     Swap searchSeed()/priceMultiplier() usage for a real fetch() to your search API later. */
-  function searchSeed(str){
-    let h = 0;
-    for(let i=0;i<str.length;i++){ h = (h*31 + str.charCodeAt(i)) >>> 0; }
-    return h;
-  }
-  function priceMultiplier(seed){
-    const x = Math.sin(seed) * 10000;
-    const frac = x - Math.floor(x);
-    return 0.78 + frac*0.55;
-  }
+  function searchSeed(str){ let h=0; for(let i=0;i<str.length;i++){ h=(h*31+str.charCodeAt(i))>>>0; } return h; }
+  function priceMultiplier(seed){ const x=Math.sin(seed)*10000; const frac=x-Math.floor(x); return 0.78+frac*0.55; }
 
-  const PARTNER_CLASS = {"Kiwi.com":"pb-teal","Trip.com":"pb-purple","CheapOair":"pb-pink","Omio":"pb-amber","WayAway":"pb-sky"};
-  function partnerBadge(partner){
-    const cls = PARTNER_CLASS[partner] || '';
-    return `<span class="partner-badge ${cls}">via ${partner}</span>`;
-  }
+  const PARTNER_CLASS = {"Kiwi.com":"#0EA5A0","Trip.com":"#8B5CF6","CheapOair":"#F0529C","Omio":"#D9A441","WayAway":"#3A86FF"};
+  function partnerBadge(partner){ return `<span style="font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:${PARTNER_CLASS[partner]||'var(--sky)'};font-weight:800;">via ${partner}</span>`; }
 
   const AIRLINES = [
     {code:"AV", name:"Avelo Air",   color:"#3A86FF"},
@@ -796,7 +670,6 @@
     {a:5, dep:"09:50", arr:"13:05", dur:"3h 15m", durMin:195, stops:1, price:31, tag:null, partner:"Trip.com", slot:"morning"},
     {a:2, dep:"23:40", arr:"03:55", dur:"4h 15m", durMin:255, stops:2, price:22, tag:"Lowest fare", partner:"CheapOair", slot:"night"},
   ];
-
   const HOTELS = [
     {name:"Baixa Riverside Hotel", stars:5, area:"Baixa, 0.4km from center", price:112, tag:"Best value", partner:"Trip.com", color:"#3A86FF", type:"hotel"},
     {name:"Alfama Boutique Stay", stars:4, area:"Alfama, 0.9km from center", price:78, tag:"Cheapest", partner:"CheapOair", color:"#8B5CF6", type:"apartment"},
@@ -804,21 +677,18 @@
     {name:"Belem Garden Hotel", stars:3, area:"Belém, 3.1km from center", price:61, tag:null, partner:"Omio", color:"#D9A441", type:"resort"},
     {name:"Principe Real Loft", stars:4, area:"Príncipe Real, 1.2km from center", price:89, tag:null, partner:"WayAway", color:"#3B5BA5", type:"apartment"},
   ];
-
   const CARS = [
     {model:"VW Polo or similar", type:"Economy", seats:5, bags:2, price:24, tag:"Best value", partner:"Kiwi.com", color:"#3A86FF"},
     {model:"Toyota Corolla or similar", type:"Compact", seats:5, bags:3, price:29, tag:null, partner:"Trip.com", color:"#3B5BA5"},
     {model:"Jeep Renegade or similar", type:"SUV", seats:5, bags:4, price:41, tag:"Cheapest SUV", partner:"WayAway", color:"#D9A441"},
     {model:"Fiat 500", type:"Mini", seats:4, bags:1, price:19, tag:"Cheapest", partner:"CheapOair", color:"#8B5CF6"},
   ];
-
   const BUSES = [
     {op:"FlixBus", dep:"08:00", arr:"12:45", dur:"4h 45m", stops:"Nonstop", price:19, tag:"Cheapest", partner:"Omio", color:"#1F8A5C"},
     {op:"Alsa", dep:"10:30", arr:"15:00", dur:"4h 30m", stops:"Nonstop", price:24, tag:"Best value", partner:"Trip.com", color:"#FF6B35"},
     {op:"Flixbus Express", dep:"15:15", arr:"19:20", dur:"4h 05m", stops:"Nonstop", price:29, tag:"Fastest", partner:"Omio", color:"#3A86FF"},
     {op:"Avanza", dep:"22:00", arr:"03:10", dur:"5h 10m", stops:"1 stop · Coimbra", price:16, tag:null, partner:"Kiwi.com", color:"#8B5CF6"},
   ];
-
   const PACKAGES = [
     {name:"3 nights in Lisbon · flight + hotel", nights:3, price:187, save:42, tag:"Best value", partner:"Trip.com", color:"#3A86FF"},
     {name:"4 nights in Porto · flight + hotel", nights:4, price:221, save:35, tag:null, partner:"Kiwi.com", color:"#3B5BA5"},
@@ -832,6 +702,7 @@
   let carTypeFilter = 'all';
   let flightTrip = 'round';
   let busTrip = 'round';
+  let travelers = 1;
   let currentQuery = {from:'Madrid (MAD)', to:'Lisbon (LIS)'};
   let favorites = {};
   try{ favorites = JSON.parse(localStorage.getItem('aerlume_favs')||'{}'); }catch(e){ favorites = {}; }
@@ -840,28 +711,18 @@
   function saveFavs(){ try{ localStorage.setItem('aerlume_favs', JSON.stringify(favorites)); }catch(e){} }
 
   let itemMeta = {};
+  let secondsAgo = 0;
   function toggleFav(id, el){
-    if(favorites[id]){
-      delete favorites[id];
-    } else {
-      favorites[id] = itemMeta[id] || {name:id};
-    }
-    saveFavs();
-    el.classList.toggle('on', !!favorites[id]);
-    if(typeof updateFavCount === 'function') updateFavCount();
+    if(favorites[id]) delete favorites[id]; else favorites[id] = itemMeta[id] || {name:id};
+    saveFavs(); el.classList.toggle('on', !!favorites[id]);
+    if(typeof updateFavCount==='function') updateFavCount();
   }
-
   function favHeart(id){
     const on = favorites[id] ? ' on' : '';
-    return `<button class="favbtn${on}" onclick="event.stopPropagation();toggleFav('${id}', this)" type="button" aria-label="Save">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-10-9.3C.4 8 2 4.5 5.6 4c2-.3 3.9.7 5 2.3C11.7 4.7 13.6 3.7 15.6 4c3.6.5 5.2 4 3.6 7.7C20.6 16.4 12 21 12 21z"/></svg>
-    </button>`;
+    return `<button class="favbtn${on}" onclick="event.stopPropagation();toggleFav('${id}', this)" type="button" aria-label="Save"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.6-10-9.3C.4 8 2 4.5 5.6 4c2-.3 3.9.7 5 2.3C11.7 4.7 13.6 3.7 15.6 4c3.6.5 5.2 4 3.6 7.7C20.6 16.4 12 21 12 21z"/></svg></button>`;
   }
 
-  function inTimeSlot(slot){
-    const active = Array.from(document.querySelectorAll('.timebtn.on')).map(b=>b.dataset.t);
-    return active.includes(slot);
-  }
+  function inTimeSlot(){ return true; }
   function stopsAllowed(stops){
     const boxes = Array.from(document.querySelectorAll('.f-stops:checked')).map(b=>b.value);
     if(stops===0) return boxes.includes('nonstop');
@@ -869,20 +730,16 @@
     return boxes.includes('2stop');
   }
   function maxPrice(){ return Number(document.getElementById('priceRange').value); }
-
   function sortList(arr, priceKey){
     const a = arr.slice();
     if(sortKey==='cheap') a.sort((x,y)=>x[priceKey]-y[priceKey]);
     else if(sortKey==='fast') a.sort((x,y)=>(x.durMin||0)-(y.durMin||0));
     return a;
   }
-
-  function renderProviderFilter(items, labelKey){
+  function renderProviderFilter(items){
     const names = [...new Set(items.map(i=>i.partner))];
     document.getElementById('providerTitle').textContent = 'Booking partners';
-    document.getElementById('providerList').innerHTML = names.map(n=>
-      `<label class="opt"><input type="checkbox" class="f-provider" value="${n}" checked> ${n}</label>`
-    ).join('');
+    document.getElementById('providerList').innerHTML = names.map(n=>`<label class="opt"><span><input type="checkbox" class="f-provider" value="${n}" checked> ${n}</span></label>`).join('');
     document.querySelectorAll('.f-provider').forEach(cb=>cb.addEventListener('change', renderResults));
   }
   function providerAllowed(partner){
@@ -890,13 +747,17 @@
     return boxes.includes(partner);
   }
 
+  function tagPill(tag){
+    if(!tag) return '';
+    const cls = /cheap|lowest/i.test(tag) ? 'tag-cheap' : 'tag-best';
+    return `<span class="tag-pill ${cls}">${tag}</span>`;
+  }
+
   function renderFlights(){
-    document.querySelector('#dateStrip').style.display = '';
-    document.querySelector('.filterbox').style.display = '';
     const mult = priceMultiplier(searchSeed((currentQuery.from||'')+(currentQuery.to||'')+(currentQuery.depart||'')));
     const priced = FLIGHTS.map(f=>({...f, price: Math.max(9, Math.round(f.price*mult))}));
     renderProviderFilter(priced);
-    let items = priced.filter(f=> stopsAllowed(f.stops) && inTimeSlot(f.slot) && f.price<=maxPrice() && providerAllowed(f.partner));
+    let items = priced.filter(f=> stopsAllowed(f.stops) && f.price<=maxPrice() && providerAllowed(f.partner));
     items = sortList(items, 'price');
     const list = document.getElementById('flightList');
     list.innerHTML = '';
@@ -905,28 +766,24 @@
       const air = AIRLINES[f.a];
       const id = 'fl-'+f.a+'-'+f.dep;
       const row = document.createElement('div');
-      row.className = 'flight';
+      row.className = 'dealcard';
       row.style.animationDelay = (i*0.05)+'s';
       const stopsLabel = f.stops===0?'Nonstop':(f.stops===1?'1 stop':f.stops+' stops');
       const tripLabel = flightTrip==='oneway' ? 'one way, all fees in' : (flightTrip==='multi' ? 'per leg, all fees in' : 'round trip, all fees in');
       itemMeta[id] = {name: air.name+' · '+f.dep+'→'+f.arr, sub: stopsLabel, price:f.price, partner:f.partner, mode:'flights'};
       row.innerHTML = `
         ${favHeart(id)}
-        <div class="airline-mark" style="background:${air.color}">${air.code}</div>
-        <div class="route">
-          <div class="times mono"><span>${f.dep}</span><span class="arrow"></span><span>${f.arr}</span></div>
-          <div class="meta">
-            <span>${air.name}</span>
-            <span class="${f.stops>0 ? 'stopdot' : ''}">${stopsLabel}</span>
-            ${f.tag ? `<span>· ${f.tag}</span>` : ''}
-            ${partnerBadge(f.partner)}
-          </div>
+        <div class="logo-circle" style="background:${air.color}">${air.code}</div>
+        <div class="info">
+          <b>${air.name}</b>
+          <div class="meta"><span>${stopsLabel}</span>${partnerBadge(f.partner)}</div>
+          <div class="route"><span class="mono">${f.dep}</span><span class="arrow">→</span><span class="mono">${f.arr}</span><span style="color:var(--ink-soft);font-weight:400;font-size:12.5px;">· ${f.dur}</span></div>
         </div>
-        <div class="duration">Trip length<b>${f.dur}</b></div>
-        <div class="price-col">
+        <div class="right">
+          ${tagPill(f.tag)}
           <div class="price mono">${fmt(f.price)}</div>
-          <div class="price-sub">${tripLabel}</div>
-          <button class="selectbtn" onclick="openBooking('${id}')">Continue to ${f.partner}</button>
+          <div class="pricesub">${tripLabel}</div>
+          <button class="viewbtn" onclick="openBooking('${id}')">View on partner →</button>
         </div>`;
       list.appendChild(row);
     });
@@ -935,7 +792,6 @@
   }
 
   function renderHotels(){
-    document.querySelector('#dateStrip').style.display = 'none';
     const mult = priceMultiplier(searchSeed((currentQuery.dest||'')+(currentQuery.checkin||'')));
     const priced = HOTELS.map(h=>({...h, price: Math.max(15, Math.round(h.price*mult))}));
     const byType = priced.filter(h=> h.type===hotelTypeFilter);
@@ -944,30 +800,26 @@
     items = sortList(items, 'price');
     const list = document.getElementById('flightList');
     list.innerHTML = '';
-    if(!items.length){ list.innerHTML = `<div class="noresults">No hotels match your filters. <br><b>Try raising the max price.</b></div>`; }
+    if(!items.length){ list.innerHTML = `<div class="noresults">No hotels match your filters.</div>`; }
     items.forEach((h,i)=>{
       const id = 'ho-'+h.name;
       const row = document.createElement('div');
-      row.className = 'flight hotelrow';
+      row.className = 'dealcard';
       row.style.animationDelay = (i*0.05)+'s';
       itemMeta[id] = {name:h.name, sub:h.area, price:h.price, partner:h.partner, mode:'hotels'};
       row.innerHTML = `
         ${favHeart(id)}
-        <div class="hotel-thumb" style="background:${h.color}"></div>
-        <div class="route">
-          <div class="times" style="font-size:16px;">${h.name}</div>
-          <div class="meta">
-            <span class="stars">${stars(h.stars)}</span>
-            <span>${h.area}</span>
-            ${h.tag ? `<span>· ${h.tag}</span>` : ''}
-            ${partnerBadge(h.partner)}
-          </div>
+        <div class="logo-circle" style="background:${h.color}">🏨</div>
+        <div class="info">
+          <b>${h.name}</b>
+          <div class="meta"><span class="mono" style="color:var(--gold);">${stars(h.stars)}</span>${partnerBadge(h.partner)}</div>
+          <div class="route" style="font-weight:400;color:var(--ink-soft);font-size:13px;">${h.area}</div>
         </div>
-        <div class="duration">7 nights<b>${fmt(h.price * 7)}</b></div>
-        <div class="price-col">
+        <div class="right">
+          ${tagPill(h.tag)}
           <div class="price mono">${fmt(h.price)}</div>
-          <div class="price-sub">per night, taxes included</div>
-          <button class="selectbtn" onclick="openBooking('${id}')">Continue to ${h.partner}</button>
+          <div class="pricesub">per night, taxes included</div>
+          <button class="viewbtn" onclick="openBooking('${id}')">View on partner →</button>
         </div>`;
       list.appendChild(row);
     });
@@ -976,37 +828,31 @@
   }
 
   function renderCars(){
-    document.querySelector('#dateStrip').style.display = 'none';
     const byType = carTypeFilter==='all' ? CARS : CARS.filter(c=> c.type===carTypeFilter);
     renderProviderFilter(byType.length ? byType : CARS);
     let items = (byType.length ? byType : CARS).filter(c=> c.price<=maxPrice() && providerAllowed(c.partner));
     items = sortList(items, 'price');
     const list = document.getElementById('flightList');
     list.innerHTML = '';
-    if(!items.length){ list.innerHTML = `<div class="noresults">No cars match your filters. <br><b>Try raising the max price.</b></div>`; }
+    if(!items.length){ list.innerHTML = `<div class="noresults">No cars match your filters.</div>`; }
     items.forEach((c,i)=>{
       const id = 'ca-'+c.model;
       const row = document.createElement('div');
-      row.className = 'flight carrow';
+      row.className = 'dealcard';
       row.style.animationDelay = (i*0.05)+'s';
       itemMeta[id] = {name:c.model, sub:c.type, price:c.price, partner:c.partner, mode:'cars'};
       row.innerHTML = `
         ${favHeart(id)}
-        <div class="airline-mark" style="background:${c.color}">🚗</div>
-        <div class="route">
-          <div class="times" style="font-size:16px;">${c.model}</div>
-          <div class="meta">
-            <span>${c.type}</span>
-            <span>${c.seats} seats · ${c.bags} bags</span>
-            ${c.tag ? `<span>· ${c.tag}</span>` : ''}
-            ${partnerBadge(c.partner)}
-          </div>
+        <div class="logo-circle" style="background:${c.color}">🚗</div>
+        <div class="info">
+          <b>${c.model}</b>
+          <div class="meta"><span>${c.type} · ${c.seats} seats · ${c.bags} bags</span>${partnerBadge(c.partner)}</div>
         </div>
-        <div class="duration">7 days<b>${fmt(c.price * 7)}</b></div>
-        <div class="price-col">
+        <div class="right">
+          ${tagPill(c.tag)}
           <div class="price mono">${fmt(c.price)}</div>
-          <div class="price-sub">per day, taxes included</div>
-          <button class="selectbtn" onclick="openBooking('${id}')">Continue to ${c.partner}</button>
+          <div class="pricesub">per day, taxes included</div>
+          <button class="viewbtn" onclick="openBooking('${id}')">View on partner →</button>
         </div>`;
       list.appendChild(row);
     });
@@ -1015,7 +861,6 @@
   }
 
   function renderBuses(){
-    document.querySelector('#dateStrip').style.display = '';
     renderProviderFilter(BUSES);
     let items = BUSES.filter(b=> b.price<=maxPrice() && providerAllowed(b.partner));
     items = sortList(items, 'price');
@@ -1025,26 +870,22 @@
     items.forEach((b,i)=>{
       const id = 'bu-'+b.op+b.dep;
       const row = document.createElement('div');
-      row.className = 'flight';
+      row.className = 'dealcard';
       row.style.animationDelay = (i*0.05)+'s';
       itemMeta[id] = {name:b.op+' · '+b.dep+'→'+b.arr, sub:b.stops, price:b.price, partner:b.partner, mode:'buses'};
       row.innerHTML = `
         ${favHeart(id)}
-        <div class="airline-mark" style="background:${b.color}">🚌</div>
-        <div class="route">
-          <div class="times mono"><span>${b.dep}</span><span class="arrow"></span><span>${b.arr}</span></div>
-          <div class="meta">
-            <span>${b.op}</span>
-            <span class="${b.stops.includes('stop') ? 'stopdot' : ''}">${b.stops}</span>
-            ${b.tag ? `<span>· ${b.tag}</span>` : ''}
-            ${partnerBadge(b.partner)}
-          </div>
+        <div class="logo-circle" style="background:${b.color}">🚌</div>
+        <div class="info">
+          <b>${b.op}</b>
+          <div class="meta"><span>${b.stops}</span>${partnerBadge(b.partner)}</div>
+          <div class="route"><span class="mono">${b.dep}</span><span class="arrow">→</span><span class="mono">${b.arr}</span><span style="color:var(--ink-soft);font-weight:400;font-size:12.5px;">· ${b.dur}</span></div>
         </div>
-        <div class="duration">Trip length<b>${b.dur}</b></div>
-        <div class="price-col">
+        <div class="right">
+          ${tagPill(b.tag)}
           <div class="price mono">${fmt(b.price)}</div>
-          <div class="price-sub">${busTrip==='round' ? 'round trip, all fees in' : 'one way, all fees in'}</div>
-          <button class="selectbtn" onclick="openBooking('${id}')">Continue to ${b.partner}</button>
+          <div class="pricesub">${busTrip==='round' ? 'round trip' : 'one way'}, all fees in</div>
+          <button class="viewbtn" onclick="openBooking('${id}')">View on partner →</button>
         </div>`;
       list.appendChild(row);
     });
@@ -1053,36 +894,26 @@
   }
 
   function renderPackages(){
-    document.querySelector('#dateStrip').style.display = 'none';
     renderProviderFilter(PACKAGES);
     let items = PACKAGES.filter(p=> p.price<=maxPrice()*3 && providerAllowed(p.partner));
     items = sortList(items, 'price');
     const list = document.getElementById('flightList');
     list.innerHTML = '';
-    if(!items.length){ list.innerHTML = `<div class="noresults">No packages match your filters. <br><b>Try raising the max price.</b></div>`; }
+    if(!items.length){ list.innerHTML = `<div class="noresults">No packages match your filters.</div>`; }
     items.forEach((p,i)=>{
       const id = 'pk-'+p.name;
       const row = document.createElement('div');
-      row.className = 'flight hotelrow';
+      row.className = 'bundlecard';
       row.style.animationDelay = (i*0.05)+'s';
       itemMeta[id] = {name:p.name, sub:p.nights+' nights, flight + hotel bundled', price:p.price, partner:p.partner, mode:'packages'};
       row.innerHTML = `
-        ${favHeart(id)}
-        <div class="hotel-thumb" style="background:${p.color}"></div>
-        <div class="route">
-          <div class="times" style="font-size:16px;">${p.name}</div>
-          <div class="meta">
-            <span>${p.nights} nights · flight + hotel</span>
-            <span style="color:var(--good);">Save ${fmt(p.save)} vs booking separately</span>
-            ${p.tag ? `<span>· ${p.tag}</span>` : ''}
-            ${partnerBadge(p.partner)}
-          </div>
+        <div class="left">
+          <div class="logos"><span>✈️</span><span>🏨</span></div>
+          <div><b>${p.name}</b><div class="sub"><span>${p.nights} nights</span><span style="color:#9CF0C6;">Save ${fmt(p.save)}</span>${p.tag?`<span>${p.tag}</span>`:''}<span>via ${p.partner}</span></div></div>
         </div>
-        <div class="duration">Total package<b>${fmt(p.price)}</b></div>
-        <div class="price-col">
-          <div class="price mono">${fmt(Math.round(p.price/p.nights))}</div>
-          <div class="price-sub">per night equivalent</div>
-          <button class="selectbtn" onclick="openBooking('${id}')">Continue to ${p.partner}</button>
+        <div style="display:flex;align-items:center;gap:16px;">
+          <div class="price mono">${fmt(p.price)}</div>
+          <button onclick="openBooking('${id}')">View bundle →</button>
         </div>`;
       list.appendChild(row);
     });
@@ -1090,24 +921,22 @@
     document.getElementById('resultTotal').textContent = PACKAGES.length;
   }
 
-  function applyFavHighlights(){
-    document.querySelectorAll('.favbtn').forEach(btn=>{});
-  }
-
   function renderResults(){
     const title = document.getElementById('resultsTitle');
-    if(mode==='flights'){ title.textContent = (currentQuery.from||'Madrid')+' → '+(currentQuery.to||'Lisbon'); renderFlights(); }
-    if(mode==='hotels'){ title.textContent = 'Hotels in '+(currentQuery.dest||'Lisbon'); renderHotels(); }
-    if(mode==='cars'){ title.textContent = 'Cars in '+(currentQuery.pickup||'Lisbon'); renderCars(); }
-    if(mode==='buses'){ title.textContent = (currentQuery.busFrom||'Madrid')+' → '+(currentQuery.busTo||'Porto'); renderBuses(); }
-    if(mode==='packages'){ title.textContent = 'Packages · '+(currentQuery.pkTo||'Lisbon & Porto'); renderPackages(); }
-    document.getElementById('bestTimeBox').style.display = (mode==='flights') ? '' : 'none';
+    const livepill = '<span class="livepill"><span class="dot"></span> Live</span>';
+    if(mode==='flights'){ title.innerHTML = (currentQuery.from||'Madrid')+' → '+(currentQuery.to||'Lisbon')+' '+livepill; document.getElementById('alertRoute').textContent = "Get a price alert for "+(currentQuery.from||'Madrid')+' → '+(currentQuery.to||'Lisbon'); renderFlights(); }
+    if(mode==='hotels'){ title.innerHTML = 'Hotels in '+(currentQuery.dest||'Lisbon')+' '+livepill; renderHotels(); }
+    if(mode==='cars'){ title.innerHTML = 'Cars in '+(currentQuery.pickup||'Lisbon')+' '+livepill; renderCars(); }
+    if(mode==='buses'){ title.innerHTML = (currentQuery.busFrom||'Madrid')+' → '+(currentQuery.busTo||'Porto')+' '+livepill; renderBuses(); }
+    if(mode==='packages'){ title.innerHTML = 'Packages · '+(currentQuery.pkTo||'Lisbon & Porto')+' '+livepill; renderPackages(); }
+    document.querySelector('.besttime-row').style.display = (mode==='flights') ? '' : 'none';
     document.getElementById('directOnlyChip').style.display = (mode==='flights') ? '' : 'none';
+    secondsAgo = 0;
   }
 
-  document.querySelectorAll('.mode').forEach(btn=>{
+  document.querySelectorAll('.pillnav .mode').forEach(btn=>{
     btn.addEventListener('click', ()=>{
-      document.querySelectorAll('.mode').forEach(b=>b.classList.remove('active'));
+      document.querySelectorAll('.pillnav .mode').forEach(b=>b.classList.remove('active'));
       btn.classList.add('active');
       mode = btn.dataset.mode;
       document.getElementById('fields-flights').hidden = mode!=='flights';
@@ -1119,13 +948,17 @@
     });
   });
 
-  document.querySelectorAll('#filterChips .chip').forEach(chip=>{
+  document.querySelectorAll('#filterChips .sortpill').forEach(chip=>{
     chip.addEventListener('click', ()=>{
-      document.querySelectorAll('#filterChips .chip').forEach(c=>c.classList.remove('on'));
-      chip.classList.add('on');
+      if(chip.id==='directOnlyChip') return;
+      document.querySelectorAll('#filterChips .sortpill').forEach(c=>c.classList.remove('active'));
+      chip.classList.add('active');
       sortKey = chip.dataset.sort;
       renderResults();
     });
+  });
+  document.getElementById('toggleFilters').addEventListener('click', ()=>{
+    document.getElementById('filterboxEl').classList.toggle('show');
   });
 
   document.querySelectorAll('.f-stops').forEach(cb=>cb.addEventListener('change', renderResults));
@@ -1133,16 +966,9 @@
     document.getElementById('priceVal').textContent = '€'+e.target.value;
     renderResults();
   });
-  document.querySelectorAll('.timebtn').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      btn.classList.toggle('on');
-      renderResults();
-    });
-  });
 
   function resetFilters(){
     document.querySelectorAll('.f-stops').forEach(cb=>cb.checked=true);
-    document.querySelectorAll('.timebtn').forEach(b=>b.classList.add('on'));
     document.getElementById('priceRange').value = 120;
     document.getElementById('priceVal').textContent = '€120';
     document.querySelectorAll('.f-provider').forEach(cb=>cb.checked=true);
@@ -1179,13 +1005,13 @@
     document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
   }
 
-  /* ---------- Trip-type tabs (round trip / one way / multi-city) ---------- */
+  /* ---------- Trip-type tabs ---------- */
   function wireTripTabs(tabsId, returnFieldId, btnId, baseLabel, stateSetter){
     const tabs = document.getElementById(tabsId);
     if(!tabs) return;
-    tabs.querySelectorAll('.tab').forEach(tab=>{
+    tabs.querySelectorAll('button').forEach(tab=>{
       tab.addEventListener('click', ()=>{
-        tabs.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+        tabs.querySelectorAll('button').forEach(t=>t.classList.remove('active'));
         tab.classList.add('active');
         const trip = tab.dataset.trip;
         stateSetter(trip);
@@ -1196,40 +1022,55 @@
       });
     });
   }
-  wireTripTabs('flightTripTabs', 'flReturnField', 'flightSearchBtn', 'Search flights', (t)=>{ flightTrip = t; });
+  wireTripTabs('flightTripTabs', 'flReturnField', 'flightSearchBtn', 'Search all modes', (t)=>{ flightTrip = t; });
   wireTripTabs('busTripTabs', 'buReturnField', null, 'Search buses', (t)=>{ busTrip = t; renderResults(); });
 
-  /* ---------- Hotel type tabs ---------- */
-  document.querySelectorAll('#hotelTypeTabs .tab').forEach(tab=>{
+  document.querySelectorAll('#hotelTypeTabs button').forEach(tab=>{
     tab.addEventListener('click', ()=>{
-      document.querySelectorAll('#hotelTypeTabs .tab').forEach(t=>t.classList.remove('active'));
-      tab.classList.add('active');
-      hotelTypeFilter = tab.dataset.htype;
+      document.querySelectorAll('#hotelTypeTabs button').forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active'); hotelTypeFilter = tab.dataset.htype;
       if(mode==='hotels') renderResults();
     });
   });
-
-  /* ---------- Car type tabs ---------- */
-  document.querySelectorAll('#carTypeTabs .tab').forEach(tab=>{
+  document.querySelectorAll('#carTypeTabs button').forEach(tab=>{
     tab.addEventListener('click', ()=>{
-      document.querySelectorAll('#carTypeTabs .tab').forEach(t=>t.classList.remove('active'));
-      tab.classList.add('active');
-      carTypeFilter = tab.dataset.ctype;
+      document.querySelectorAll('#carTypeTabs button').forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active'); carTypeFilter = tab.dataset.ctype;
       if(mode==='cars') renderResults();
     });
   });
 
-  /* ---------- Booking modal (demo checkout hand-off) ---------- */
+  /* ---------- Swap buttons ---------- */
+  function wireSwap(btnId, fromId, toId){
+    const btn = document.getElementById(btnId);
+    if(!btn) return;
+    btn.addEventListener('click', ()=>{
+      const f = document.getElementById(fromId), t = document.getElementById(toId);
+      const tmp = f.value; f.value = t.value; t.value = tmp;
+    });
+  }
+  wireSwap('swapFl','flFrom','flTo');
+  wireSwap('swapBu','buFrom','buTo');
+
+  /* ---------- Traveler dropdown ---------- */
+  const travelerBtn = document.getElementById('travelerBtn');
+  const travelerMenu = document.getElementById('travelerMenu');
+  travelerBtn.addEventListener('click', (e)=>{ e.stopPropagation(); travelerMenu.classList.toggle('open'); });
+  document.getElementById('travMinus').addEventListener('click', ()=>{ travelers = Math.max(1, travelers-1); updateTravelers(); });
+  document.getElementById('travPlus').addEventListener('click', ()=>{ travelers = Math.min(9, travelers+1); updateTravelers(); });
+  function updateTravelers(){
+    document.getElementById('travCount').textContent = travelers;
+    document.getElementById('travelerVal').innerHTML = travelers+(travelers===1?' Adult':' Adults')+' <span>▾</span>';
+  }
+
+  /* ---------- Booking modal ---------- */
   function openBooking(id){
     const it = itemMeta[id];
     if(!it) return;
     document.getElementById('bookingBody').innerHTML = `
       <div class="triprow" style="margin-bottom:16px;">
-        <div>
-          <div class="tr-name">${it.name}</div>
-          <div class="tr-sub">${it.sub || ''}</div>
-        </div>
-        <div class="tr-price mono">${fmt(it.price)}</div>
+        <div><div class="tr-name">${it.name}</div><div class="tr-sub">${it.sub || ''}</div></div>
+        <div class="mono" style="font-weight:800;font-size:17px;">${fmt(it.price)}</div>
       </div>
       <p style="font-size:13.5px;color:var(--ink-soft);line-height:1.6;margin:0 0 16px;">
         You'll finish payment on ${it.partner}'s secure site. This demo isn't wired to a live booking API yet —
@@ -1253,57 +1094,21 @@
     btn.disabled = true;
   });
 
-  /* ---------- Contact us ---------- */
-  document.getElementById('drawerContact').addEventListener('click', ()=>{
-    closeDrawer();
-    window.location.href = 'mailto:hello@aerlume.com';
-  });
-
-  /* Nearby dates strip */
-  function buildDateStrip(){
-    const strip = document.getElementById('dateStrip');
-    const base = new Date(2026,9,8);
-    const prices = [61,47,38,52,33,45,58,49];
-    strip.innerHTML='';
-    prices.forEach((p,i)=>{
-      const d = new Date(base); d.setDate(base.getDate()+i);
-      const label = d.toLocaleDateString('en-GB',{weekday:'short', day:'numeric', month:'short'});
-      const isLow = p === Math.min(...prices);
-      const el = document.createElement('div');
-      el.className = 'datepill' + (i===4 ? ' active' : '');
-      el.innerHTML = `<div class="d">${label}</div><div class="p mono">${fmt(p)}</div>${isLow?'<div class="low">Lowest</div>':'<div class="low">&nbsp;</div>'}`;
-      el.addEventListener('click', ()=>{
-        document.querySelectorAll('.datepill').forEach(x=>x.classList.remove('active'));
-        el.classList.add('active');
-      });
-      strip.appendChild(el);
-    });
-  }
-  buildDateStrip();
+  document.getElementById('drawerContact').addEventListener('click', ()=>{ closeDrawer(); window.location.href = 'mailto:hello@aerlume.com'; });
+  document.getElementById('footContact').addEventListener('click', (e)=>{ e.preventDefault(); window.location.href = 'mailto:hello@aerlume.com'; });
 
   renderResults();
 
   const nav = document.getElementById('siteNav');
-  window.addEventListener('scroll', ()=>{
-    if(window.scrollY > 8){ nav.classList.add('scrolled'); } else { nav.classList.remove('scrolled'); }
-  }, {passive:true});
+  window.addEventListener('scroll', ()=>{ nav.classList.toggle('scrolled', window.scrollY > 8); }, {passive:true});
 
   const io = new IntersectionObserver((entries)=>{
     entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
   }, {threshold:0.12});
   document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
-  /* ===================================================================
-     NEW: currency, language, hamburger drawer, cookie consent, trips,
-     explore, best-time-to-book, AI trip planner
-     =================================================================== */
-
-  /* ---------- Currency (menu wiring; CUR/fmt defined near top of script) ---------- */
-  document.getElementById('curBtn').addEventListener('click', (e)=>{
-    e.stopPropagation();
-    document.getElementById('curMenu').classList.toggle('open');
-    document.getElementById('langMenu').classList.remove('open');
-  });
+  /* ---------- Currency ---------- */
+  document.getElementById('curBtn').addEventListener('click', (e)=>{ e.stopPropagation(); document.getElementById('curMenu').classList.toggle('open'); });
   document.querySelectorAll('#curMenu button').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const code = btn.dataset.cur;
@@ -1314,68 +1119,14 @@
       document.getElementById('curLabel').textContent = label;
       document.getElementById('drawerCurVal').textContent = label;
       document.getElementById('curMenu').classList.remove('open');
-      renderResults();
-      buildDateStrip();
-      renderExplore();
-      renderBestTime();
+      renderResults(); renderExplore(); renderBestTime();
       if(document.getElementById('aiResults').children.length) document.getElementById('aiGoBtn').click();
       if(document.getElementById('tripsModal').classList.contains('open')) renderTripsList();
     });
   });
-
-  /* ---------- Language ---------- */
-  const LANG = {
-    en:{
-      'nav.search':'Search','nav.deals':'Deals','nav.explore':'Explore','nav.plan':'Plan with AI','nav.why':'Why Aerlume',
-      'nav.trips':'Trips','nav.signin':'Sign in',
-      'cookie.text':'We use cookies to run this site and show you relevant travel deals. See our cookie policy.',
-      'cookie.manage':'Necessary only','cookie.accept':'Accept all',
-      'trips.title':'Your saved trips',
-      'explore.title':'Explore where your money goes furthest','explore.sub':'Prices are round trip from Madrid, found in the last 72 hours',
-      'ai.title':'Plan a trip with Aerlume AI','ai.sub':"Tell us your vibe and budget — we'll match you to real routes from our search data.",
-      'ai.go':'Get my suggestions',
-      'mode.flights':'Flights','mode.hotels':'Hotels','mode.cars':'Cars','mode.buses':'Buses','mode.packages':'Packages',
-    },
-    es:{
-      'nav.search':'Buscar','nav.deals':'Ofertas','nav.explore':'Explorar','nav.plan':'Planifica con IA','nav.why':'Por qué Aerlume',
-      'nav.trips':'Viajes','nav.signin':'Iniciar sesión',
-      'cookie.text':'Usamos cookies para operar este sitio y mostrarte ofertas de viaje relevantes. Consulta nuestra política de cookies.',
-      'cookie.manage':'Solo necesarias','cookie.accept':'Aceptar todo',
-      'trips.title':'Tus viajes guardados',
-      'explore.title':'Explora dónde rinde más tu dinero','explore.sub':'Precios ida y vuelta desde Madrid, encontrados en las últimas 72 horas',
-      'ai.title':'Planifica un viaje con Aerlume IA','ai.sub':'Cuéntanos tu estilo y presupuesto — te mostraremos rutas reales de nuestros datos de búsqueda.',
-      'ai.go':'Ver mis sugerencias',
-      'mode.flights':'Vuelos','mode.hotels':'Alojamientos','mode.cars':'Coches','mode.buses':'Autobuses','mode.packages':'Viajes',
-    }
-  };
-  let currentLang = 'en';
-  function applyLang(){
-    const dict = LANG[currentLang];
-    document.querySelectorAll('[data-i18n]').forEach(el=>{
-      const key = el.dataset.i18n;
-      if(dict[key]) el.textContent = dict[key];
-    });
-  }
-  document.getElementById('langBtn').addEventListener('click', (e)=>{
-    e.stopPropagation();
-    document.getElementById('langMenu').classList.toggle('open');
-    document.getElementById('curMenu').classList.remove('open');
-  });
-  document.querySelectorAll('#langMenu button').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      currentLang = btn.dataset.lang;
-      document.querySelectorAll('#langMenu button').forEach(b=>b.classList.remove('on'));
-      btn.classList.add('on');
-      const label = btn.textContent;
-      document.getElementById('langLabel').textContent = label;
-      document.getElementById('drawerLangVal').textContent = label;
-      document.getElementById('langMenu').classList.remove('open');
-      applyLang();
-    });
-  });
   document.addEventListener('click', ()=>{
     document.getElementById('curMenu').classList.remove('open');
-    document.getElementById('langMenu').classList.remove('open');
+    if(travelerMenu) travelerMenu.classList.remove('open');
   });
 
   /* ---------- Hamburger drawer ---------- */
@@ -1389,30 +1140,16 @@
   document.querySelectorAll('.dlink[data-drawer-mode]').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const m = btn.dataset.drawerMode;
-      document.querySelector(`.mode[data-mode="${m}"]`).click();
-      closeDrawer();
-      runSearch();
+      document.querySelector(`.pillnav .mode[data-mode="${m}"]`).click();
+      closeDrawer(); runSearch();
     });
   });
   document.getElementById('drawerAi').addEventListener('click', closeDrawer);
   document.getElementById('drawerExplore').addEventListener('click', closeDrawer);
-  document.getElementById('drawerDirect').addEventListener('click', ()=>{
-    closeDrawer();
-    document.querySelector('.mode[data-mode="flights"]').click();
-    document.getElementById('directOnlyChip').click();
-    runSearch();
-  });
-  document.getElementById('drawerBesttime').addEventListener('click', ()=>{
-    closeDrawer();
-    runSearch();
-    document.getElementById('bestTimeBox').scrollIntoView({behavior:'smooth', block:'center'});
-  });
+  document.getElementById('drawerBesttime').addEventListener('click', ()=>{ closeDrawer(); runSearch(); document.querySelector('.besttime-row').scrollIntoView({behavior:'smooth', block:'center'}); });
+  document.getElementById('drawerBesttime2').addEventListener('click', ()=>{ document.querySelector('.pillnav .mode[data-mode="flights"]').click(); runSearch(); document.querySelector('.besttime-row').scrollIntoView({behavior:'smooth', block:'center'}); });
   document.getElementById('drawerTrips').addEventListener('click', ()=>{ closeDrawer(); openTrips(); });
-  document.getElementById('drawerLang').addEventListener('click', ()=>{
-    currentLang = currentLang==='en' ? 'es' : 'en';
-    const btn = document.querySelector(`#langMenu button[data-lang="${currentLang}"]`);
-    btn.click();
-  });
+  document.getElementById('drawerLang').addEventListener('click', ()=>{ closeDrawer(); });
   document.getElementById('drawerCur').addEventListener('click', ()=>{
     const order = ['EUR','USD','GBP','PKR'];
     const next = order[(order.indexOf(CUR.code)+1) % order.length];
@@ -1423,9 +1160,7 @@
   (function initCookieConsent(){
     let consent = null;
     try{ consent = localStorage.getItem('aerlume_cookie_consent'); }catch(e){}
-    if(!consent){
-      setTimeout(()=>document.getElementById('cookieBar').classList.add('show'), 600);
-    }
+    if(!consent){ setTimeout(()=>document.getElementById('cookieBar').classList.add('show'), 600); }
   })();
   function setCookieConsent(val){
     try{ localStorage.setItem('aerlume_cookie_consent', val); }catch(e){}
@@ -1434,22 +1169,14 @@
   document.getElementById('cookieAccept').addEventListener('click', ()=>setCookieConsent('all'));
   document.getElementById('cookieManage').addEventListener('click', ()=>setCookieConsent('necessary'));
 
-  /* ---------- Trips (saved favorites) modal ---------- */
-  function updateFavCount(){
-    document.getElementById('favCount').textContent = Object.keys(favorites).length;
-  }
+  /* ---------- Trips (favorites) modal ---------- */
+  function updateFavCount(){ document.getElementById('favCount').textContent = Object.keys(favorites).length; }
   function openTrips(){ renderTripsList(); document.getElementById('tripsModal').classList.add('open'); }
   function closeTrips(){ document.getElementById('tripsModal').classList.remove('open'); }
   document.getElementById('tripsBtn').addEventListener('click', openTrips);
   document.getElementById('tripsClose').addEventListener('click', closeTrips);
   document.getElementById('tripsModal').addEventListener('click', (e)=>{ if(e.target.id==='tripsModal') closeTrips(); });
-  function removeFav(id){
-    delete favorites[id];
-    saveFavs();
-    updateFavCount();
-    renderTripsList();
-    renderResults();
-  }
+  function removeFav(id){ delete favorites[id]; saveFavs(); updateFavCount(); renderTripsList(); renderResults(); }
   function renderTripsList(){
     const wrap = document.getElementById('tripsList');
     const keys = Object.keys(favorites);
@@ -1457,42 +1184,50 @@
     wrap.innerHTML = keys.map(id=>{
       const it = favorites[id] || {};
       return `<div class="triprow">
-        <div>
-          <div class="tr-name">${it.name || id}</div>
-          <div class="tr-sub">${it.sub || ''} ${it.partner ? '· via '+it.partner : ''}</div>
-        </div>
+        <div><div class="tr-name">${it.name || id}</div><div class="tr-sub">${it.sub || ''} ${it.partner ? '· via '+it.partner : ''}</div></div>
         <div style="display:flex;align-items:center;gap:10px;">
-          <span class="tr-price mono">${it.price!=null ? fmt(it.price) : ''}</span>
-          <button onclick="removeFav('${id}')">Remove</button>
+          <span class="mono" style="font-weight:700;">${it.price!=null ? fmt(it.price) : ''}</span>
+          <button style="background:none;border:none;color:var(--coral);font-size:12px;cursor:pointer;text-decoration:underline;" onclick="removeFav('${id}')">Remove</button>
         </div>
       </div>`;
     }).join('');
   }
 
-  /* ---------- Best time to book ---------- */
+  /* ---------- Best time to book (line chart) ---------- */
   function renderBestTime(){
-    const box = document.getElementById('btBars');
-    if(!box) return;
+    const svg = document.getElementById('btChart');
+    if(!svg) return;
     const prices = [61,58,52,47,45,38,33,41,49,55,60,66];
     const min = Math.min(...prices), max = Math.max(...prices);
-    box.innerHTML = prices.map(p=>{
-      const h = 10 + ((p-min)/(max-min||1))*44;
-      return `<div class="bar ${p===min?'low':''}" style="height:${h}px" title="${fmt(p)}"></div>`;
-    }).join('');
+    const w = 300, h = 70, pad = 6;
+    const pts = prices.map((p,i)=>{
+      const x = pad + (i/(prices.length-1))*(w-pad*2);
+      const y = h - pad - ((p-min)/(max-min||1))*(h-pad*2);
+      return [x,y];
+    });
+    const line = pts.map((p,i)=> (i===0?'M':'L')+p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');
+    const area = line + ` L${pts[pts.length-1][0]},${h} L${pts[0][0]},${h} Z`;
+    const minIdx = prices.indexOf(min);
+    svg.innerHTML = `
+      <defs><linearGradient id="btGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#3A86FF" stop-opacity=".28"/>
+        <stop offset="100%" stop-color="#3A86FF" stop-opacity="0"/>
+      </linearGradient></defs>
+      <path d="${area}" fill="url(#btGrad)"/>
+      <path d="${line}" fill="none" stroke="#3A86FF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="${pts[minIdx][0]}" cy="${pts[minIdx][1]}" r="4" fill="#FF6B35"/>
+    `;
     const todayIdx = 4;
     const verdict = document.getElementById('btVerdict');
-    if(prices[todayIdx] <= min + (max-min)*0.25){
-      verdict.textContent = '✓ Great time to book'; verdict.style.color = 'var(--good)';
-    } else {
-      verdict.textContent = 'Prices trending up — book within 2 weeks'; verdict.style.color = 'var(--coral)';
-    }
+    if(prices[todayIdx] <= min + (max-min)*0.25){ verdict.innerHTML = '✓ <span class="down">Great time to book</span>'; }
+    else{ verdict.innerHTML = 'Book now — <span class="up">prices trending up</span>'; }
   }
 
-  /* ---------- Direct flights only quick shortcut ---------- */
+  /* ---------- Direct flights only ---------- */
   let directOnly = false;
   document.getElementById('directOnlyChip').addEventListener('click', function(){
     directOnly = !directOnly;
-    this.classList.toggle('on', directOnly);
+    this.classList.toggle('active', directOnly);
     document.querySelectorAll('.f-stops').forEach(cb=>{
       if(directOnly){ cb.checked = (cb.value==='nonstop'); cb.disabled = true; }
       else{ cb.checked = true; cb.disabled = false; }
@@ -1500,33 +1235,36 @@
     renderResults();
   });
 
-  /* ---------- Explore destinations ---------- */
+  /* ---------- Explore ---------- */
   const DESTINATIONS = [
-    {city:"Lisbon", country:"Portugal", price:33, color:"#3A86FF", vibe:"city", tag:"Trending"},
-    {city:"Porto", country:"Portugal", price:41, color:"#3B5BA5", vibe:"culture", tag:null},
-    {city:"Barcelona", country:"Spain", price:29, color:"#FF6B35", vibe:"city", tag:"Cheapest"},
-    {city:"Faro (Algarve)", country:"Portugal", price:38, color:"#D9A441", vibe:"beach", tag:"Beach pick"},
-    {city:"Marrakech", country:"Morocco", price:56, color:"#8B5CF6", vibe:"adventure", tag:null},
-    {city:"Rome", country:"Italy", price:64, color:"#1F8A5C", vibe:"culture", tag:null},
-    {city:"Ibiza", country:"Spain", price:72, color:"#FF7A5C", vibe:"beach", tag:null},
-    {city:"Interlaken", country:"Switzerland", price:98, color:"#4FC7D1", vibe:"adventure", tag:null},
+    {code:"LIS", city:"Lisbon", country:"Portugal", price:33, grad:"linear-gradient(160deg,#3A86FF,#2563EB)", vibe:"city", tag:"Trending"},
+    {code:"OPO", city:"Porto", country:"Portugal", price:41, grad:"linear-gradient(160deg,#FF8A5C,#E0501C)", vibe:"culture", tag:null},
+    {code:"BCN", city:"Barcelona", country:"Spain", price:29, grad:"linear-gradient(160deg,#122344,#0A1931)", vibe:"city", tag:"Cheapest"},
+    {code:"CDG", city:"Paris", country:"France", price:78, grad:"linear-gradient(160deg,#A78BFA,#8B5CF6)", vibe:"culture", tag:null},
+    {code:"FAO", city:"Faro (Algarve)", country:"Portugal", price:38, grad:"linear-gradient(160deg,#D9A441,#B9852B)", vibe:"beach", tag:"Beach pick"},
+    {code:"RAK", city:"Marrakech", country:"Morocco", price:56, grad:"linear-gradient(160deg,#F0529C,#D6317E)", vibe:"adventure", tag:null},
+    {code:"FCO", city:"Rome", country:"Italy", price:64, grad:"linear-gradient(160deg,#1F8A5C,#166B47)", vibe:"culture", tag:null},
+    {code:"IBZ", city:"Ibiza", country:"Spain", price:72, grad:"linear-gradient(160deg,#FF6B35,#FF8A5C)", vibe:"beach", tag:null},
   ];
   function renderExplore(){
     const grid = document.getElementById('exploreGrid');
     if(!grid) return;
     grid.innerHTML = DESTINATIONS.map(d=>`
-      <div class="explore-card" data-city="${d.city}">
-        <div class="explore-thumb" style="background:${d.color}">${d.tag?`<span class="dealtag">${d.tag}</span>`:''}</div>
-        <div class="explore-info">
+      <div class="xcard" data-city="${d.city}">
+        <div class="bg" style="background:${d.grad}">
+          <span class="code">${d.code}</span>
+          <span class="arrowbtn">→</span>
+        </div>
+        <div class="info">
           <b>${d.city}</b>
-          <div class="from">${d.country} · from <strong>${fmt(d.price)}</strong></div>
+          <div class="place">${d.country}${d.tag?' · '+d.tag:''}</div>
+          <div class="price"><span>Round trip from</span><b>${fmt(d.price)}</b></div>
         </div>
       </div>`).join('');
-    grid.querySelectorAll('.explore-card').forEach(card=>{
+    grid.querySelectorAll('.xcard').forEach(card=>{
       card.addEventListener('click', ()=>{
-        document.querySelector('.mode[data-mode="flights"]').click();
-        const toField = document.querySelector('#fields-flights .field:nth-child(2) input');
-        if(toField) toField.value = card.dataset.city;
+        document.querySelector('.pillnav .mode[data-mode="flights"]').click();
+        document.getElementById('flTo').value = card.dataset.city;
         runSearch();
       });
     });
@@ -1534,14 +1272,14 @@
 
   /* ---------- AI trip planner ---------- */
   let aiVibe = 'beach', aiBudget = 150, aiWhen = 'soon';
-  document.querySelectorAll('#aiVibe .ai-opt').forEach(b=>b.addEventListener('click', ()=>{
-    document.querySelectorAll('#aiVibe .ai-opt').forEach(x=>x.classList.remove('on')); b.classList.add('on'); aiVibe = b.dataset.v;
+  document.querySelectorAll('#aiVibe .vibebtn').forEach(b=>b.addEventListener('click', ()=>{
+    document.querySelectorAll('#aiVibe .vibebtn').forEach(x=>x.classList.remove('on')); b.classList.add('on'); aiVibe = b.dataset.v;
   }));
-  document.querySelectorAll('#aiBudget .ai-opt').forEach(b=>b.addEventListener('click', ()=>{
-    document.querySelectorAll('#aiBudget .ai-opt').forEach(x=>x.classList.remove('on')); b.classList.add('on'); aiBudget = Number(b.dataset.b);
+  document.querySelectorAll('#aiBudget .vibebtn').forEach(b=>b.addEventListener('click', ()=>{
+    document.querySelectorAll('#aiBudget .vibebtn').forEach(x=>x.classList.remove('on')); b.classList.add('on'); aiBudget = Number(b.dataset.b);
   }));
-  document.querySelectorAll('#aiWhen .ai-opt').forEach(b=>b.addEventListener('click', ()=>{
-    document.querySelectorAll('#aiWhen .ai-opt').forEach(x=>x.classList.remove('on')); b.classList.add('on'); aiWhen = b.dataset.w;
+  document.querySelectorAll('#aiWhen .vibebtn').forEach(b=>b.addEventListener('click', ()=>{
+    document.querySelectorAll('#aiWhen .vibebtn').forEach(x=>x.classList.remove('on')); b.classList.add('on'); aiWhen = b.dataset.w;
   }));
   document.getElementById('aiGoBtn').addEventListener('click', ()=>{
     let matches = DESTINATIONS.filter(d=> d.price <= aiBudget);
@@ -1551,32 +1289,34 @@
       score += (aiBudget - d.price) / 20;
       if(aiWhen==='soon' && d.price < 50) score += 1;
       return {...d, score};
-    }).sort((a,b)=>b.score-a.score).slice(0,4);
+    }).sort((a,b)=>b.score-a.score).slice(0,1);
     const wrap = document.getElementById('aiResults');
-    if(!matches.length){
-      wrap.innerHTML = `<div class="noresults">No matches yet — try raising your budget.</div>`;
-      return;
-    }
-    wrap.innerHTML = matches.map((d,i)=>{
-      const why = d.vibe===aiVibe ? `Matches your ${aiVibe} vibe` : `Great value near your budget`;
-      return `<div class="ai-card" style="animation-delay:${i*0.08}s">
-        <div>
-          <div class="aic-name">${d.city}, ${d.country}</div>
-          <div class="aic-why">${why} · ${aiWhen==='soon' ? 'available in the next 4 weeks' : 'flexible dates'}</div>
-        </div>
-        <div style="display:flex;align-items:center;gap:12px;">
-          <span class="aic-price mono">${fmt(d.price)}</span>
-          <button class="selectbtn" onclick="document.querySelector('.explore-card[data-city=\\'${d.city}\\']')?.click()">View</button>
-        </div>
-      </div>`;
-    }).join('');
+    if(!matches.length){ wrap.innerHTML = `<div class="noresults">No matches yet — try raising your budget.</div>`; return; }
+    const d = matches[0];
+    wrap.innerHTML = `<div class="aiplancard">
+      <div class="head"><div><b>Your Aerlume plan</b><div class="sub">${aiVibe.charAt(0).toUpperCase()+aiVibe.slice(1)} · ${fmt(d.price*2+37)} · 3 days</div></div><span class="readypill">Ready to book</span></div>
+      <div class="aiplanrow"><div class="icon">✈️</div><div><b>Madrid → ${d.city} · Iberline direct</b><div class="sub">07:30 – 08:45 · ${fmt(d.price)} round trip · via Kiwi.com</div></div></div>
+      <div class="aiplanrow"><div class="icon">🏨</div><div><b>Stay near ${d.city} center</b><div class="sub">${fmt(Math.round(d.price*3.4))} / night · free cancel</div></div></div>
+      <div class="aiplanrow"><div class="icon">📍</div><div><b>Day plan</b><div class="sub">Old town walk → local market → sunset viewpoint → dinner</div></div></div>
+      <button class="checkoutbtn" onclick="document.querySelector('.xcard[data-city=\\'${d.city}\\']')?.click()">Open all in one checkout →</button>
+    </div>`;
   });
 
-  /* ---------- init new features ---------- */
   updateFavCount();
+  updateTravelers();
   renderExplore();
   renderBestTime();
-</script>
 
+  /* ---------- live-ish counters ---------- */
+  setInterval(()=>{
+    secondsAgo++;
+    const el = document.getElementById('updatedAgo');
+    if(el) el.textContent = secondsAgo+'s';
+  }, 1000);
+  setInterval(()=>{
+    const el = document.getElementById('scanCount');
+    if(el){ const n = 1200+Math.floor(Math.random()*90); el.textContent = n.toLocaleString(); }
+  }, 4000);
+</script>
 </body>
 </html>
