@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aerlume</title>
+<meta name="theme-color" content="#0A1931">
+<meta name="description" content="Compare flights, hotels, cars, and buses across trusted travel partners in one search.">
+<title>Aerlume — One search for your whole trip</title>
 <style>
   :root{
     --ink:#0A1931;
@@ -320,7 +322,244 @@
   .selectmenu button{display:block;width:100%;text-align:left;background:none;border:none;padding:8px 10px;border-radius:8px;font-size:13px;color:var(--ink);cursor:pointer;}
   .selectmenu button:hover{background:var(--sky-soft);}
   .selectmenu button.on{color:var(--sky);font-weight:700;}
-  @media (prefers-reduced-motion: reduce){*{animation-duration:.001ms !important;transition-duration:.001ms !important;}}
+  /* ---- PREMIUM RESPONSIVE REFINEMENT ---- */
+  body{
+    min-width:320px;
+    background:
+      radial-gradient(circle at 8% 4%, color-mix(in srgb,var(--coral) 8%,transparent) 0, transparent 24rem),
+      radial-gradient(circle at 92% 14%, color-mix(in srgb,var(--sky) 10%,transparent) 0, transparent 28rem),
+      var(--paper);
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  button,input,a{touch-action:manipulation;}
+  button:focus-visible,input:focus-visible,a:focus-visible{
+    outline:3px solid color-mix(in srgb,var(--sky) 32%,transparent);
+    outline-offset:3px;
+  }
+  .wrap{max-width:1400px;}
+  .topnav{box-shadow:0 1px 0 transparent;}
+  .topnav.scrolled{
+    background:color-mix(in srgb,var(--paper) 94%,transparent);
+    box-shadow:0 12px 32px -28px rgba(10,25,49,.55);
+  }
+  .topnav-inner{min-height:68px;padding-block:11px;}
+  .brand{letter-spacing:-.03em;}
+  .brand .mark{
+    background:linear-gradient(145deg,#142b4f,#07152b);
+    box-shadow:0 8px 18px -10px rgba(10,25,49,.9);
+    transform:rotate(-3deg);
+  }
+  .pillnav{border:1px solid color-mix(in srgb,var(--line) 75%,transparent);}
+  .pillnav button,.signinbtn,.iconbadge{min-height:40px;}
+  .signinbtn,.pillnav button.active{box-shadow:0 8px 22px -14px rgba(10,25,49,.85);}
+  .hero{position:relative;padding-top:clamp(48px,7vw,92px);}
+  .hero::before{
+    content:"";
+    position:absolute;
+    z-index:-1;
+    width:min(62vw,720px);
+    aspect-ratio:1;
+    top:-32%;
+    left:50%;
+    transform:translateX(-50%);
+    border-radius:50%;
+    background:radial-gradient(circle,color-mix(in srgb,var(--sky) 10%,transparent),transparent 68%);
+    pointer-events:none;
+  }
+  .livebadge{
+    border-color:color-mix(in srgb,var(--good) 22%,var(--line));
+    box-shadow:0 10px 28px -22px rgba(10,25,49,.5);
+    letter-spacing:.01em;
+  }
+  .hero h1{
+    max-width:900px;
+    margin-inline:auto;
+    font-size:clamp(42px,5.3vw,74px);
+    line-height:1.01;
+    letter-spacing:-.055em;
+  }
+  .hero h1 .accent{
+    background:linear-gradient(100deg,var(--sky),color-mix(in srgb,var(--sky) 56%,var(--purple)));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .hero p.sub{font-size:clamp(15px,1.45vw,18px);max-width:690px;}
+  .searchcard{
+    max-width:1180px;
+    margin-top:38px;
+    padding:26px;
+    border-radius:28px;
+    border-color:color-mix(in srgb,var(--line) 72%,transparent);
+    box-shadow:0 30px 70px -36px rgba(10,25,49,.48),0 2px 0 rgba(255,255,255,.6) inset;
+  }
+  .fieldsgrid{gap:12px;}
+  .fromto,.datebtn,.travelerbtn{min-height:58px;border-radius:16px;}
+  .fromto,.datebtn,.travelerbtn{transition:border-color .18s ease,box-shadow .18s ease,background .18s ease;}
+  .fromto:focus-within,.travelerbtn:hover{border-color:var(--sky);box-shadow:0 0 0 3px var(--sky-soft);}
+  .searchbtn{min-height:58px;border-radius:16px;padding-inline:28px;box-shadow:0 16px 30px -18px var(--coral);}
+  .scanbadge{box-shadow:0 12px 26px -18px rgba(10,25,49,.8);}
+  .trustbar{max-width:1180px;margin-inline:auto;}
+  #results{scroll-margin-top:90px;}
+  .results-title-row h2{font-size:clamp(24px,2.4vw,34px);letter-spacing:-.035em;}
+  .results-shell{grid-template-columns:270px minmax(0,1fr);gap:28px;}
+  .filterbox,.dealcard,.besttime-card,.whycard,.xcard{
+    border-color:color-mix(in srgb,var(--line) 78%,transparent);
+  }
+  .filterbox{border-radius:20px;padding:22px;}
+  .dealcard{
+    grid-template-columns:52px minmax(0,1fr) auto;
+    min-height:142px;
+    padding:22px 24px;
+    border-radius:20px;
+    gap:20px;
+  }
+  .logo-circle{width:52px;height:52px;box-shadow:0 12px 22px -16px rgba(10,25,49,.72);}
+  .dealcard .info b{font-size:16px;}
+  .dealcard .route{font-size:15px;margin-top:10px;}
+  .dealcard .price{font-size:24px;letter-spacing:-.035em;}
+  .viewbtn{min-height:40px;border-radius:12px;}
+  .protip{border-radius:20px;padding:18px 22px;background:linear-gradient(120deg,var(--ink),#16345f);}
+  .besttime-card,.alertcard{border-radius:20px;padding:24px;}
+  .explore-head h2{font-size:clamp(25px,3vw,38px);letter-spacing:-.04em;}
+  .exploregrid{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;}
+  .xcard{border-radius:22px;}
+  .xcard .bg{height:190px;position:relative;isolation:isolate;overflow:hidden;}
+  .xcard .bg::before,.xcard .bg::after{
+    content:"";position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.3);z-index:-1;
+  }
+  .xcard .bg::before{width:150px;height:150px;right:-45px;top:-48px;background:rgba(255,255,255,.08);}
+  .xcard .bg::after{width:90px;height:90px;left:-28px;bottom:-38px;background:rgba(255,255,255,.06);}
+  .xcard .info{padding:16px 17px;}
+  .xcard .info b{font-size:17px;}
+  .why3{gap:20px;}
+  .whycard{position:relative;overflow:hidden;border-radius:22px;padding:30px;}
+  .whycard::before{
+    display:flex;align-items:center;justify-content:center;width:42px;height:42px;margin-bottom:22px;
+    border-radius:14px;background:var(--ink);color:#fff;font-size:12px;font-weight:800;letter-spacing:.08em;
+  }
+  .whycard:nth-child(1)::before{content:"01";}
+  .whycard:nth-child(2)::before{content:"02";}
+  .whycard:nth-child(3)::before{content:"03";}
+  .whycard h3{font-size:19px;}
+  .whycard p{font-size:14px;}
+  .sitefooter{border-radius:32px 32px 0 0;padding-top:60px;}
+
+  @media (max-width:1150px){
+    .searchcard{max-width:940px;}
+    .exploregrid{grid-template-columns:repeat(3,minmax(0,1fr));}
+  }
+  @media (max-width:980px){
+    .topnav-inner{min-height:62px;}
+    .results-shell{grid-template-columns:1fr;}
+    .filterbox{position:static;}
+    .exploregrid{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .hero{padding-top:48px;}
+  }
+  @media (max-width:700px){
+    .wrap{padding-inline:16px;}
+    .topnav .wrap{padding-inline:12px;}
+    .topnav-inner{gap:8px;}
+    .navright{gap:7px;}
+    .iconbadge{padding:7px 10px;}
+    .signinbtn{padding:9px 14px;}
+    .hero{padding-top:34px;}
+    .hero::before{width:120vw;top:-18%;}
+    .hero h1{font-size:clamp(36px,11vw,52px);line-height:1.03;}
+    .hero p.sub{font-size:15px;line-height:1.6;max-width:38ch;}
+    .searchcard{margin-top:28px;padding:16px;border-radius:22px;}
+    .pill-tabs{max-width:100%;overflow-x:auto;scrollbar-width:none;}
+    .pill-tabs::-webkit-scrollbar{display:none;}
+    .pill-tabs button{white-space:nowrap;}
+    .fieldsgrid{grid-template-columns:1fr;}
+    .fromto{grid-column:1/-1;}
+    .searchbtn{grid-column:1/-1;min-height:52px;}
+    .trustrow{display:block;margin-top:14px;}
+    .trustrow .checks{display:grid;grid-template-columns:1fr;gap:8px;}
+    .trustrow>span{display:none;}
+    .scanbadge{margin-top:18px;}
+    .trustbar{margin-top:34px;padding-block:22px;gap:16px;}
+    .trustbar .logos{display:grid;grid-template-columns:repeat(3,auto);gap:12px 20px;}
+    #results{margin-top:42px!important;}
+    .results-title-row{display:block;}
+    .results-title-row h2{font-size:26px;line-height:1.15;}
+    .resultactions{
+      margin:16px -16px 0;padding:0 16px 6px;overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none;
+    }
+    .resultactions::-webkit-scrollbar{display:none;}
+    .filterbtn,.sortpill{flex:none;min-height:40px;}
+    .results-shell{margin-top:14px;gap:16px;}
+    .filterbox{padding:18px;border-radius:18px;}
+    .protip{padding:16px 18px;}
+    .dealcard{
+      grid-template-columns:46px minmax(0,1fr);
+      min-height:0;padding:18px;border-radius:18px;gap:14px;
+    }
+    .logo-circle{width:46px;height:46px;}
+    .dealcard .right{
+      grid-column:1/-1;text-align:left;margin-top:2px;padding-top:15px;border-top:1px solid var(--line);
+      display:grid;grid-template-columns:1fr auto;align-items:center;gap:2px 12px;
+    }
+    .dealcard .right .tag-pill{grid-column:1/-1;width:fit-content;margin-bottom:4px;}
+    .dealcard .pricesub{grid-column:1/2;}
+    .dealcard .viewbtn{grid-column:2/3;grid-row:2/4;margin:0;}
+    .favbtn{top:12px;right:12px;}
+    .besttime-row{gap:12px;}
+    .besttime-card,.alertcard{padding:20px;}
+    .explore-head{margin-top:58px;align-items:flex-start;}
+    .explore-head .seedeals{display:none;}
+    .exploregrid{gap:12px;}
+    .xcard .bg{height:130px;}
+    .xcard .info{padding:13px;}
+    .xcard .info b{font-size:15px;}
+    .why3{margin-top:58px;gap:12px;}
+    .whycard{padding:22px;}
+    .whycard::before{margin-bottom:16px;}
+    .sitefooter{margin-top:60px;border-radius:24px 24px 0 0;padding-top:42px;}
+    .modal-overlay{align-items:flex-end;padding:12px;}
+    .modal-box{border-radius:22px;padding:20px;max-height:90vh;overflow:auto;}
+    .dp-popup{
+      position:fixed!important;left:12px!important;right:12px!important;bottom:12px!important;top:auto!important;
+      width:auto;max-height:88vh;overflow:auto;border-radius:22px;padding:14px;
+    }
+    .dp-months{grid-template-columns:1fr;}
+    .dp-month:nth-child(2){display:none;}
+    .cookiebar{
+      left:10px;right:10px;bottom:10px;padding:16px;border-radius:20px;gap:12px;
+    }
+    .cookiebar p{max-width:none;}
+    .cookiebar .ckbtns{width:100%;}
+    .cookiebar .ckbtns button{flex:1;min-height:42px;}
+  }
+  @media (max-width:480px){
+    .brand{font-size:17px;}
+    .brand .mark{width:30px;height:30px;}
+    #tripsBtn{font-size:0;min-width:38px;justify-content:center;padding-inline:8px;}
+    #tripsBtn::before{content:"♥";font-size:14px;}
+    #favCount{font-size:11px;}
+    .signinbtn{font-size:12.5px;padding-inline:13px;}
+    .livebadge{font-size:11px;padding:7px 11px;}
+    .hero h1 br:first-of-type{display:none;}
+    .hero p.sub{margin-top:15px;}
+    .fromto .half{padding-inline:10px;}
+    .fromto .half:first-child{padding-right:20px;}
+    .fromto .half:last-child{padding-left:20px;}
+    .trustbar .logos{grid-template-columns:repeat(2,auto);}
+    .exploregrid{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .xcard .bg{height:112px;}
+    .footgrid{grid-template-columns:1fr;gap:24px;}
+    .footcol h5{margin-top:0;}
+    .footbottom{display:block;}
+    .footbottom span{display:block;margin-top:10px;}
+  }
+  @media (max-width:360px){
+    .signinbtn{display:none;}
+    .hero h1{font-size:34px;}
+    .exploregrid{grid-template-columns:1fr;}
+    .xcard .bg{height:150px;}
+  }
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.001ms !important;transition-duration:.001ms !important;scroll-behavior:auto!important;}}
 </style>
 </head>
 <body>
@@ -328,7 +567,7 @@
 <nav class="topnav" id="siteNav">
   <div class="wrap topnav-inner">
     <div style="display:flex;align-items:center;gap:6px;">
-      <button class="hamburger" id="hamburgerBtn" aria-label="Menu" type="button"><span></span><span></span><span></span></button>
+      <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-controls="drawer" aria-expanded="false" type="button"><span></span><span></span><span></span></button>
       <div class="brand">
         <span class="mark"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M2.5 19.5l7-2 3.5 3.5 1.5-1-2-4 6-6c1-1 1-2.5 0-3.5s-2.5-1-3.5 0l-6 6-4-2-1 1.5 3.5 3.5-2 7z"/></svg></span>
         Aerlume
@@ -358,7 +597,7 @@
 </nav>
 
 <div class="drawer-overlay" id="drawerOverlay"></div>
-<div class="drawer" id="drawer">
+<div class="drawer" id="drawer" aria-hidden="true">
   <div class="drawer-head">
     <div class="brand" style="font-size:17px;">Aerlume</div>
     <button class="drawer-close" id="drawerClose" aria-label="Close">×</button>
@@ -674,7 +913,7 @@
   let favorites = {};
   try{ favorites = JSON.parse(localStorage.getItem('aerlume_favs')||'{}'); }catch(e){ favorites = {}; }
 
-  function stars(n){ return '*'.repeat(n) + '-'.repeat(5-n); }
+  function stars(n){ return '★'.repeat(n); }
   function saveFavs(){ try{ localStorage.setItem('aerlume_favs', JSON.stringify(favorites)); }catch(e){} }
 
   let itemMeta = {};
@@ -703,11 +942,20 @@
     else if(sortKey==='fast') a.sort((x,y)=>(x.durMin||0)-(y.durMin||0));
     return a;
   }
+  const providerSelections = {};
   function renderProviderFilter(items){
     const names = [...new Set(items.map(i=>i.partner))];
+    const existing = Array.from(document.querySelectorAll('.f-provider'));
+    if(existing.length && existing.every(input=>names.includes(input.value))){
+      providerSelections[mode] = new Set(existing.filter(input=>input.checked).map(input=>input.value));
+    }
+    const selected = providerSelections[mode] || new Set(names);
     document.getElementById('providerTitle').textContent = 'Booking partners';
-    document.getElementById('providerList').innerHTML = names.map(n=>`<label class="opt"><span><input type="checkbox" class="f-provider" value="${n}" checked> ${n}</span></label>`).join('');
-    document.querySelectorAll('.f-provider').forEach(cb=>cb.addEventListener('change', renderResults));
+    document.getElementById('providerList').innerHTML = names.map(n=>`<label class="opt"><span><input type="checkbox" class="f-provider" value="${n}" ${selected.has(n)?'checked':''}> ${n}</span></label>`).join('');
+    document.querySelectorAll('.f-provider').forEach(cb=>cb.addEventListener('change', ()=>{
+      providerSelections[mode] = new Set(Array.from(document.querySelectorAll('.f-provider:checked')).map(input=>input.value));
+      renderResults();
+    }));
   }
   function providerAllowed(partner){
     const boxes = Array.from(document.querySelectorAll('.f-provider:checked')).map(b=>b.value);
@@ -908,7 +1156,7 @@
     document.querySelectorAll('.f-stops').forEach(cb=>cb.checked=true);
     document.getElementById('priceRange').value = 120;
     document.getElementById('priceVal').textContent = '€120';
-    document.querySelectorAll('.f-provider').forEach(cb=>cb.checked=true);
+    delete providerSelections[mode];
     renderResults();
   }
 
@@ -1066,9 +1314,18 @@
   /* ---------- Hamburger drawer ---------- */
   const drawer = document.getElementById('drawer');
   const drawerOverlay = document.getElementById('drawerOverlay');
-  function openDrawer(){ drawer.classList.add('open'); drawerOverlay.classList.add('open'); }
-  function closeDrawer(){ drawer.classList.remove('open'); drawerOverlay.classList.remove('open'); }
-  document.getElementById('hamburgerBtn').addEventListener('click', openDrawer);
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  function openDrawer(){
+    drawer.classList.add('open'); drawerOverlay.classList.add('open');
+    drawer.setAttribute('aria-hidden','false'); hamburgerBtn.setAttribute('aria-expanded','true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDrawer(){
+    drawer.classList.remove('open'); drawerOverlay.classList.remove('open');
+    drawer.setAttribute('aria-hidden','true'); hamburgerBtn.setAttribute('aria-expanded','false');
+    document.body.style.overflow = '';
+  }
+  hamburgerBtn.addEventListener('click', openDrawer);
   document.getElementById('drawerClose').addEventListener('click', closeDrawer);
   drawerOverlay.addEventListener('click', closeDrawer);
   document.querySelectorAll('.dlink[data-drawer-mode]').forEach(btn=>{
@@ -1375,9 +1632,18 @@
     }
 
     document.querySelectorAll('.dp-trigger').forEach(trigger=>{
+      trigger.setAttribute('role','button');
+      trigger.setAttribute('tabindex','0');
       trigger.addEventListener('click', (e)=>{
         e.stopPropagation();
         openPicker(trigger.dataset.pair);
+      });
+      trigger.addEventListener('keydown', (e)=>{
+        if(e.key==='Enter' || e.key===' '){
+          e.preventDefault();
+          e.stopPropagation();
+          openPicker(trigger.dataset.pair);
+        }
       });
     });
     Object.values(PAIR_CONFIG).forEach(cfg=>{
