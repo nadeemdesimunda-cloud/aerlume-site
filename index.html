@@ -152,7 +152,7 @@
   .dp-footer .dp-hint{font-size:12px;color:var(--ink-soft);}
   .dp-applybtn{background:var(--sky);color:#fff;border:none;border-radius:100px;padding:9px 22px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;}
   .dp-applybtn:hover{background:var(--coral);}
-  .travelerwrap{position:relative;min-width:0;overflow:hidden;}
+  .travelerwrap{position:relative;min-width:0;}
   .travelerbtn{border:1px solid var(--line);border-radius:14px;padding:9px 14px;background:var(--paper);width:100%;text-align:left;cursor:pointer;font-family:inherit;}
   .travelerbtn label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);display:flex;gap:4px;align-items:center;}
   .travelerbtn .val{font-weight:700;font-size:14px;color:var(--ink);display:flex;align-items:center;justify-content:space-between;margin-top:2px;}
@@ -168,7 +168,8 @@
   .trustrow{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:16px;font-size:12.5px;color:var(--ink-soft);}
   .trustrow .checks{display:flex;gap:20px;flex-wrap:wrap;}
   .trustrow .checks span{display:flex;gap:6px;align-items:center;}
-  .checkdot{width:15px;height:15px;border-radius:50%;background:var(--good-soft);color:var(--good);display:flex;align-items:center;justify-content:center;font-size:9px;flex:none;}
+  .checkdot{width:15px;height:15px;border-radius:50%;background:var(--good-soft);color:var(--good);display:flex;align-items:center;justify-content:center;flex:none;}
+  .checkdot svg{width:9px;height:9px;}
 
   .scanbadge{display:flex;width:fit-content;margin:22px auto 0;background:var(--ink);color:#fff;border-radius:100px;padding:9px 18px;font-size:12.5px;font-weight:600;align-items:center;gap:8px;}
   .scanbadge .bolt{color:var(--coral);}
@@ -532,9 +533,9 @@
 
       <div class="trustrow">
         <div class="checks">
-          <span><span class="checkdot">OK</span> No card required</span>
-          <span><span class="checkdot">OK</span> Price shown is price paid</span>
-          <span><span class="checkdot">OK</span> Secure partner checkout</span>
+          <span><span class="checkdot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l6 6L20 6"/></svg></span> No card required</span>
+          <span><span class="checkdot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l6 6L20 6"/></svg></span> Price shown is price paid</span>
+          <span><span class="checkdot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l6 6L20 6"/></svg></span> Secure partner checkout</span>
         </div>
         <span> Encrypted &amp; private</span>
       </div>
