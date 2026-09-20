@@ -5,7 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0A1931">
 <meta name="description" content="Compare flights, hotels, cars, and buses across trusted travel partners in one search.">
-<title>Aerlume — One search for your whole trip</title>
+<link rel="canonical" href="https://mintravo.com/">
+<meta property="og:site_name" content="Mintravo">
+<meta property="og:title" content="Mintravo — One search for your whole trip">
+<meta property="og:description" content="Compare flights, hotels, cars, and buses across trusted travel partners in one search.">
+<meta property="og:url" content="https://mintravo.com/">
+<meta property="og:type" content="website">
+<title>Mintravo — One search for your whole trip</title>
 <style>
   :root{
     --ink:#0A1931;
@@ -570,7 +576,7 @@
       <button class="hamburger" id="hamburgerBtn" aria-label="Open menu" aria-controls="drawer" aria-expanded="false" type="button"><span></span><span></span><span></span></button>
       <div class="brand">
         <span class="mark"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M2.5 19.5l7-2 3.5 3.5 1.5-1-2-4 6-6c1-1 1-2.5 0-3.5s-2.5-1-3.5 0l-6 6-4-2-1 1.5 3.5 3.5-2 7z"/></svg></span>
-        Aerlume
+        Mintravo
       </div>
     </div>
     <div class="pillnav" role="tablist">
@@ -599,7 +605,7 @@
 <div class="drawer-overlay" id="drawerOverlay"></div>
 <div class="drawer" id="drawer" aria-hidden="true">
   <div class="drawer-head">
-    <div class="brand" style="font-size:17px;">Aerlume</div>
+    <div class="brand" style="font-size:17px;">Mintravo</div>
     <button class="drawer-close" id="drawerClose" aria-label="Close">×</button>
   </div>
   <nav class="dlinks">
@@ -644,7 +650,7 @@
 
 <div class="modal-overlay" id="signinModal">
   <div class="modal-box">
-    <div class="m-head"><h3>Sign in to Aerlume</h3><button class="drawer-close" id="signinClose">×</button></div>
+    <div class="m-head"><h3>Sign in to Mintravo</h3><button class="drawer-close" id="signinClose">×</button></div>
     <form id="signinForm" style="display:flex;flex-direction:column;gap:12px;">
       <div class="field-basic"><label>Email</label><input type="email" id="signinEmail" placeholder="you@email.com" required></div>
       <div class="field-basic"><label>Password</label><input type="password" id="signinPassword" placeholder="••••••••" required></div>
@@ -658,7 +664,7 @@
   <section class="hero" id="search">
     <div class="livebadge"><span class="dot"></span> LIVE: <b id="scanCount">1,243</b> trips scanned in last hour</div>
     <h1>Stop opening 10 tabs.<br><span class="accent">Find your whole trip</span><br>in one search.</h1>
-    <p class="sub">Aerlume scans flights, hotels, cars, and buses across trusted booking partners so you don't have to open ten tabs. Filter, compare, and go straight to checkout with your partner of choice.</p>
+    <p class="sub">Mintravo scans flights, hotels, cars, and buses across trusted booking partners so you don't have to open ten tabs. Filter, compare, and go straight to checkout with your partner of choice.</p>
 
     <div class="searchcard">
       <div id="fields-flights">
@@ -836,7 +842,7 @@
   <div class="wrap">
     <div class="footgrid">
       <div>
-        <div class="footbrand"><span class="mark"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M2.5 19.5l7-2 3.5 3.5 1.5-1-2-4 6-6c1-1 1-2.5 0-3.5s-2.5-1-3.5 0l-6 6-4-2-1 1.5 3.5 3.5-2 7z"/></svg></span>Aerlume</div>
+        <div class="footbrand"><span class="mark"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M2.5 19.5l7-2 3.5 3.5 1.5-1-2-4 6-6c1-1 1-2.5 0-3.5s-2.5-1-3.5 0l-6 6-4-2-1 1.5 3.5 3.5-2 7z"/></svg></span>Mintravo</div>
         <p class="tag">The travel meta-search that scans flights, hotels, cars, and buses in one search. Find, compare, go.</p>
         <div class="footbadge"> SSL secure · GDPR compliant</div>
       </div>
@@ -845,8 +851,8 @@
       <div class="footcol"><h5>Legal</h5><a href="#">Terms</a><a href="#">Privacy</a><a href="#">Cookies</a><a href="#">Affiliate disclosure</a></div>
     </div>
     <div class="footbottom">
-      <span>Aerlume is a meta-search. We earn affiliate commission when you book via our partners at no extra cost to you. Prices are live from partners and may change. We do not sell tickets directly.</span>
-      <span>© 2026 Aerlume Travel</span>
+      <span>Mintravo is a meta-search. We earn affiliate commission when you book via our partners at no extra cost to you. Prices are live from partners and may change. We do not sell tickets directly.</span>
+      <span>© 2026 Mintravo Travel</span>
     </div>
   </div>
 </footer>
@@ -911,10 +917,10 @@
   let travelers = 1;
   let currentQuery = {from:'Madrid (MAD)', to:'Lisbon (LIS)'};
   let favorites = {};
-  try{ favorites = JSON.parse(localStorage.getItem('aerlume_favs')||'{}'); }catch(e){ favorites = {}; }
+  try{ favorites = JSON.parse(localStorage.getItem('mintravo_favs')||localStorage.getItem('aerlume_favs')||'{}'); }catch(e){ favorites = {}; }
 
   function stars(n){ return '★'.repeat(n); }
-  function saveFavs(){ try{ localStorage.setItem('aerlume_favs', JSON.stringify(favorites)); }catch(e){} }
+  function saveFavs(){ try{ localStorage.setItem('mintravo_favs', JSON.stringify(favorites)); }catch(e){} }
 
   let itemMeta = {};
   let secondsAgo = 0;
@@ -1277,8 +1283,8 @@
     btn.disabled = true;
   });
 
-  document.getElementById('drawerContact').addEventListener('click', ()=>{ closeDrawer(); window.location.href = 'mailto:hello@aerlume.com'; });
-  document.getElementById('footContact').addEventListener('click', (e)=>{ e.preventDefault(); window.location.href = 'mailto:hello@aerlume.com'; });
+  document.getElementById('drawerContact').addEventListener('click', ()=>{ closeDrawer(); window.location.href = 'mailto:hello@mintravo.com'; });
+  document.getElementById('footContact').addEventListener('click', (e)=>{ e.preventDefault(); window.location.href = 'mailto:hello@mintravo.com'; });
 
   renderResults();
 
@@ -1349,11 +1355,11 @@
   /* ---------- Cookie consent ---------- */
   (function initCookieConsent(){
     let consent = null;
-    try{ consent = localStorage.getItem('aerlume_cookie_consent'); }catch(e){}
+    try{ consent = localStorage.getItem('mintravo_cookie_consent')||localStorage.getItem('aerlume_cookie_consent'); }catch(e){}
     if(!consent){ setTimeout(()=>document.getElementById('cookieBar').classList.add('show'), 600); }
   })();
   function setCookieConsent(val){
-    try{ localStorage.setItem('aerlume_cookie_consent', val); }catch(e){}
+    try{ localStorage.setItem('mintravo_cookie_consent', val); }catch(e){}
     document.getElementById('cookieBar').classList.remove('show');
   }
   document.getElementById('cookieAccept').addEventListener('click', ()=>setCookieConsent('all'));
