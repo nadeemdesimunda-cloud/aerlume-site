@@ -6,15 +6,15 @@
 <title>Aerlume</title>
 <style>
   :root{
-    --ink:#0B1220;
-    --ink-soft:#3C4A5C;
-    --paper:#F7F5EF;
+    --ink:#0A1931;
+    --ink-soft:#4A5A78;
+    --paper:#FFF8F0;
     --paper-raised:#FFFFFF;
-    --line:#E3DFD3;
-    --coral:#FF5A3C;
-    --coral-deep:#E14526;
-    --sky:#1F8A94;
-    --sky-soft:#DFF0EF;
+    --line:#EAE2D6;
+    --coral:#FF6B35;
+    --coral-deep:#E0501C;
+    --sky:#3A86FF;
+    --sky-soft:#E8F0FF;
     --gold:#D9A441;
     --good:#1F8A5C;
     --purple:#8B5CF6;
@@ -28,15 +28,15 @@
     --teal-soft:#DFF5F1;
     --amber:#F5A623;
     --amber-soft:#FDF0DB;
-    --shadow-sm:0 2px 8px -4px rgba(11,18,32,.12);
-    --shadow-md:0 14px 34px -18px rgba(11,18,32,.28);
-    --shadow-lg:0 24px 60px -24px rgba(11,18,32,.38);
+    --shadow-sm:0 2px 8px -4px rgba(10,25,49,.12);
+    --shadow-md:0 14px 34px -18px rgba(10,25,49,.28);
+    --shadow-lg:0 24px 60px -24px rgba(10,25,49,.38);
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --ink:#F3F1EA; --ink-soft:#B7C0CC; --paper:#0B1220; --paper-raised:#121B29;
-      --line:#233047; --coral:#FF7A5C; --coral-deep:#FF6B4A; --sky:#4FC7D1;
-      --sky-soft:#122A2C; --gold:#E8BC66; --good:#3FCB8E;
+      --ink:#FFF8F0; --ink-soft:#C3CCDE; --paper:#0A1931; --paper-raised:#122344;
+      --line:#233047; --coral:#FF8A5C; --coral-deep:#FF6B35; --sky:#7AA5FF;
+      --sky-soft:#132a4f; --gold:#E8BC66; --good:#3FCB8E;
       --purple:#A78BFA; --purple-deep:#8B5CF6; --purple-soft:#241C42;
       --pink:#F776B4; --pink-deep:#F0529C; --pink-soft:#3B1730;
       --teal:#3FD1CB; --teal-deep:#1FB0AA; --teal-soft:#0F2E2C;
@@ -45,9 +45,9 @@
     }
   }
   :root[data-theme="dark"]{
-    --ink:#F3F1EA; --ink-soft:#B7C0CC; --paper:#0B1220; --paper-raised:#121B29;
-    --line:#233047; --coral:#FF7A5C; --coral-deep:#FF6B4A; --sky:#4FC7D1;
-    --sky-soft:#122A2C; --gold:#E8BC66; --good:#3FCB8E;
+    --ink:#FFF8F0; --ink-soft:#C3CCDE; --paper:#0A1931; --paper-raised:#122344;
+    --line:#233047; --coral:#FF8A5C; --coral-deep:#FF6B35; --sky:#7AA5FF;
+    --sky-soft:#132a4f; --gold:#E8BC66; --good:#3FCB8E;
     --purple:#A78BFA; --purple-deep:#8B5CF6; --purple-soft:#241C42;
     --pink:#F776B4; --pink-deep:#F0529C; --pink-soft:#3B1730;
     --teal:#3FD1CB; --teal-deep:#1FB0AA; --teal-soft:#0F2E2C;
@@ -779,8 +779,8 @@
   }
 
   const AIRLINES = [
-    {code:"AV", name:"Avelo Air",   color:"#1F8A94"},
-    {code:"NR", name:"Norvia",      color:"#FF5A3C"},
+    {code:"AV", name:"Avelo Air",   color:"#3A86FF"},
+    {code:"NR", name:"Norvia",      color:"#FF6B35"},
     {code:"BX", name:"Blue Crane",  color:"#3B5BA5"},
     {code:"TW", name:"Tarnova Wings",color:"#8B5CF6"},
     {code:"SK", name:"Skyharbor",   color:"#D9A441"},
@@ -798,15 +798,15 @@
   ];
 
   const HOTELS = [
-    {name:"Baixa Riverside Hotel", stars:5, area:"Baixa, 0.4km from center", price:112, tag:"Best value", partner:"Trip.com", color:"#1F8A94", type:"hotel"},
+    {name:"Baixa Riverside Hotel", stars:5, area:"Baixa, 0.4km from center", price:112, tag:"Best value", partner:"Trip.com", color:"#3A86FF", type:"hotel"},
     {name:"Alfama Boutique Stay", stars:4, area:"Alfama, 0.9km from center", price:78, tag:"Cheapest", partner:"CheapOair", color:"#8B5CF6", type:"apartment"},
-    {name:"Chiado Design Suites", stars:4, area:"Chiado, 0.2km from center", price:96, tag:null, partner:"Kiwi.com", color:"#FF5A3C", type:"hotel"},
+    {name:"Chiado Design Suites", stars:4, area:"Chiado, 0.2km from center", price:96, tag:null, partner:"Kiwi.com", color:"#FF6B35", type:"hotel"},
     {name:"Belem Garden Hotel", stars:3, area:"Belém, 3.1km from center", price:61, tag:null, partner:"Omio", color:"#D9A441", type:"resort"},
     {name:"Principe Real Loft", stars:4, area:"Príncipe Real, 1.2km from center", price:89, tag:null, partner:"WayAway", color:"#3B5BA5", type:"apartment"},
   ];
 
   const CARS = [
-    {model:"VW Polo or similar", type:"Economy", seats:5, bags:2, price:24, tag:"Best value", partner:"Kiwi.com", color:"#1F8A94"},
+    {model:"VW Polo or similar", type:"Economy", seats:5, bags:2, price:24, tag:"Best value", partner:"Kiwi.com", color:"#3A86FF"},
     {model:"Toyota Corolla or similar", type:"Compact", seats:5, bags:3, price:29, tag:null, partner:"Trip.com", color:"#3B5BA5"},
     {model:"Jeep Renegade or similar", type:"SUV", seats:5, bags:4, price:41, tag:"Cheapest SUV", partner:"WayAway", color:"#D9A441"},
     {model:"Fiat 500", type:"Mini", seats:4, bags:1, price:19, tag:"Cheapest", partner:"CheapOair", color:"#8B5CF6"},
@@ -814,13 +814,13 @@
 
   const BUSES = [
     {op:"FlixBus", dep:"08:00", arr:"12:45", dur:"4h 45m", stops:"Nonstop", price:19, tag:"Cheapest", partner:"Omio", color:"#1F8A5C"},
-    {op:"Alsa", dep:"10:30", arr:"15:00", dur:"4h 30m", stops:"Nonstop", price:24, tag:"Best value", partner:"Trip.com", color:"#FF5A3C"},
-    {op:"Flixbus Express", dep:"15:15", arr:"19:20", dur:"4h 05m", stops:"Nonstop", price:29, tag:"Fastest", partner:"Omio", color:"#1F8A94"},
+    {op:"Alsa", dep:"10:30", arr:"15:00", dur:"4h 30m", stops:"Nonstop", price:24, tag:"Best value", partner:"Trip.com", color:"#FF6B35"},
+    {op:"Flixbus Express", dep:"15:15", arr:"19:20", dur:"4h 05m", stops:"Nonstop", price:29, tag:"Fastest", partner:"Omio", color:"#3A86FF"},
     {op:"Avanza", dep:"22:00", arr:"03:10", dur:"5h 10m", stops:"1 stop · Coimbra", price:16, tag:null, partner:"Kiwi.com", color:"#8B5CF6"},
   ];
 
   const PACKAGES = [
-    {name:"3 nights in Lisbon · flight + hotel", nights:3, price:187, save:42, tag:"Best value", partner:"Trip.com", color:"#1F8A94"},
+    {name:"3 nights in Lisbon · flight + hotel", nights:3, price:187, save:42, tag:"Best value", partner:"Trip.com", color:"#3A86FF"},
     {name:"4 nights in Porto · flight + hotel", nights:4, price:221, save:35, tag:null, partner:"Kiwi.com", color:"#3B5BA5"},
     {name:"5 nights in Lisbon · flight + hotel", nights:5, price:268, save:58, tag:"Cheapest per night", partner:"CheapOair", color:"#8B5CF6"},
     {name:"Weekend in Barcelona · flight + hotel", nights:2, price:149, save:27, tag:"Fastest booking", partner:"WayAway", color:"#D9A441"},
@@ -1502,9 +1502,9 @@
 
   /* ---------- Explore destinations ---------- */
   const DESTINATIONS = [
-    {city:"Lisbon", country:"Portugal", price:33, color:"#1F8A94", vibe:"city", tag:"Trending"},
+    {city:"Lisbon", country:"Portugal", price:33, color:"#3A86FF", vibe:"city", tag:"Trending"},
     {city:"Porto", country:"Portugal", price:41, color:"#3B5BA5", vibe:"culture", tag:null},
-    {city:"Barcelona", country:"Spain", price:29, color:"#FF5A3C", vibe:"city", tag:"Cheapest"},
+    {city:"Barcelona", country:"Spain", price:29, color:"#FF6B35", vibe:"city", tag:"Cheapest"},
     {city:"Faro (Algarve)", country:"Portugal", price:38, color:"#D9A441", vibe:"beach", tag:"Beach pick"},
     {city:"Marrakech", country:"Morocco", price:56, color:"#8B5CF6", vibe:"adventure", tag:null},
     {city:"Rome", country:"Italy", price:64, color:"#1F8A5C", vibe:"culture", tag:null},
