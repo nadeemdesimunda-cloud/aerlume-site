@@ -94,24 +94,65 @@
   .hero p.sub{color:var(--ink-soft);font-size:17px;max-width:640px;margin:18px auto 0;line-height:1.55;}
 
   /* ---- SEARCH CARD ---- */
-  .searchcard{max-width:920px;margin:30px auto 0;background:var(--paper-raised);border-radius:22px;padding:22px;box-shadow:var(--shadow-lg);border:1px solid var(--line);text-align:left;}
+  .searchcard{max-width:1100px;margin:30px auto 0;background:var(--paper-raised);border-radius:22px;padding:22px;box-shadow:var(--shadow-lg);border:1px solid var(--line);text-align:left;}
   .pill-tabs{display:flex;background:var(--paper-alt);border-radius:100px;padding:4px;width:fit-content;margin-bottom:16px;}
   .pill-tabs button{border:none;background:transparent;color:var(--ink-soft);font-size:13px;font-weight:600;padding:8px 16px;border-radius:100px;cursor:pointer;}
   .pill-tabs button.active{background:var(--paper-raised);color:var(--ink);box-shadow:var(--shadow-sm);}
-  .fieldsgrid{display:grid;grid-template-columns:1.7fr 1fr 1fr 1fr auto;gap:10px;align-items:stretch;}
+  .fieldsgrid{display:grid;grid-template-columns:minmax(280px,2.4fr) minmax(150px,1fr) minmax(150px,1fr) minmax(140px,0.9fr) auto;gap:10px;align-items:stretch;}
+  @media (max-width:1150px){.fieldsgrid{grid-template-columns:minmax(280px,1fr) minmax(150px,1fr) minmax(150px,1fr);}}
   @media (max-width:900px){.fieldsgrid{grid-template-columns:1fr 1fr;}}
-  .fromto{position:relative;border:1px solid var(--line);border-radius:14px;display:grid;grid-template-columns:1fr 1fr;background:var(--paper);}
-  .fromto .half{padding:9px 16px;min-width:0;}
+  .fromto{position:relative;border:1px solid var(--line);border-radius:14px;display:grid;grid-template-columns:1fr 1fr;background:var(--paper);min-width:0;}
+  .fromto .half{padding:9px 12px;min-width:0;overflow:hidden;}
+  .fromto .half:first-child{padding-right:24px;}
+  .fromto .half:last-child{padding-left:24px;}
   .fromto label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);display:block;margin-bottom:2px;}
-  .fromto input{border:none;background:transparent;font-weight:700;font-size:14.5px;color:var(--ink);width:100%;padding:0;font-family:inherit;}
+  .fromto input{border:none;background:transparent;font-weight:700;font-size:13px;color:var(--ink);width:100%;padding:0;font-family:inherit;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .fromto input:focus{outline:none;}
   .swapbtn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:32px;height:32px;border-radius:50%;background:var(--paper-raised);border:1px solid var(--line);box-shadow:var(--shadow-sm);cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;color:var(--ink-soft);transition:transform .2s ease, color .2s ease;}
   .swapbtn:hover{color:var(--sky);transform:translate(-50%,-50%) rotate(180deg);}
-  .datebtn{border:1px solid var(--line);border-radius:14px;padding:9px 14px;background:var(--paper);}
-  .datebtn label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);display:flex;gap:4px;align-items:center;}
-  .datebtn input{border:none;background:transparent;font-weight:700;font-size:14px;color:var(--ink);width:100%;padding:2px 0 0;font-family:inherit;}
+  .datebtn{border:1px solid var(--line);border-radius:14px;padding:11px 14px;background:var(--paper);min-width:0;overflow:hidden;transition:border-color .15s ease,box-shadow .15s ease;}
+  .datebtn:hover{border-color:var(--sky);}
+  .datebtn:focus-within{border-color:var(--sky);box-shadow:0 0 0 3px var(--sky-soft);}
+  .datebtn label{font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);display:flex;gap:4px;align-items:center;}
+  .datebtn input{border:none;background:transparent;font-weight:700;font-size:14.5px;color:var(--ink);width:100%;min-width:0;padding:3px 0 0;font-family:inherit;cursor:pointer;}
   .datebtn input:focus{outline:none;}
-  .travelerwrap{position:relative;}
+  .datebtn input::-webkit-calendar-picker-indicator{cursor:pointer;opacity:.55;transform:scale(1.35);margin-left:6px;border-radius:6px;transition:opacity .15s ease,background .15s ease;}
+  .datebtn input::-webkit-calendar-picker-indicator:hover{opacity:1;background:var(--sky-soft);}
+  .dp-trigger{cursor:pointer;position:relative;}
+  .dp-trigger.dp-open{border-color:var(--sky);box-shadow:0 0 0 3px var(--sky-soft);}
+  .dp-display{display:block;font-weight:700;font-size:14.5px;color:var(--ink);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+  /* ---- CUSTOM DATE-RANGE PICKER ---- */
+  .dp-popup{position:absolute;z-index:60;background:var(--paper-raised);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow-lg);padding:16px;display:none;width:min(640px,94vw);}
+  .dp-popup.dp-show{display:block;}
+  .dp-modetabs{display:flex;background:var(--paper-alt);border-radius:100px;padding:4px;width:fit-content;margin-bottom:14px;}
+  .dp-modetabs button{border:none;background:transparent;color:var(--ink-soft);font-size:12.5px;font-weight:600;padding:7px 14px;border-radius:100px;cursor:pointer;font-family:inherit;}
+  .dp-modetabs button.active{background:var(--ink);color:var(--paper);}
+  .dp-flexnote{font-size:13px;color:var(--ink-soft);padding:30px 10px;text-align:center;}
+  .dp-months{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+  @media (max-width:620px){.dp-months{grid-template-columns:1fr;}.dp-popup{width:94vw;}}
+  .dp-monthhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;}
+  .dp-monthhead b{font-size:13.5px;color:var(--ink);font-weight:700;}
+  .dp-navbtn{border:1px solid var(--line);background:var(--paper);border-radius:8px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink-soft);}
+  .dp-navbtn:hover{border-color:var(--sky);color:var(--sky);}
+  .dp-navbtn.dp-invisible{visibility:hidden;}
+  .dp-weekrow{display:grid;grid-template-columns:repeat(7,1fr);margin-bottom:4px;}
+  .dp-weekrow span{font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);text-align:center;padding:4px 0;}
+  .dp-daysgrid{display:grid;grid-template-columns:repeat(7,1fr);row-gap:2px;}
+  .dp-day{position:relative;text-align:center;padding:0;height:34px;display:flex;align-items:center;justify-content:center;}
+  .dp-day button{border:none;background:transparent;width:30px;height:30px;border-radius:50%;font-size:12.5px;font-weight:600;color:var(--ink);cursor:pointer;font-family:inherit;position:relative;z-index:2;}
+  .dp-day button:hover:not(:disabled){border:1px solid var(--sky);}
+  .dp-day button:disabled{color:var(--line);cursor:default;}
+  .dp-day.dp-inrange{background:var(--sky-soft);}
+  .dp-day.dp-inrange:first-child,.dp-day.dp-rangestart{border-radius:50% 0 0 50%;}
+  .dp-day.dp-rangeend{border-radius:0 50% 50% 0;}
+  .dp-day.dp-rangestart button,.dp-day.dp-rangeend button{background:var(--sky);color:#fff;}
+  .dp-day.dp-today button{box-shadow:inset 0 0 0 1px var(--sky);}
+  .dp-footer{display:flex;align-items:center;justify-content:space-between;margin-top:14px;padding-top:14px;border-top:1px solid var(--line);}
+  .dp-footer .dp-hint{font-size:12px;color:var(--ink-soft);}
+  .dp-applybtn{background:var(--sky);color:#fff;border:none;border-radius:100px;padding:9px 22px;font-weight:700;font-size:13px;cursor:pointer;font-family:inherit;}
+  .dp-applybtn:hover{background:var(--coral);}
+  .travelerwrap{position:relative;min-width:0;overflow:hidden;}
   .travelerbtn{border:1px solid var(--line);border-radius:14px;padding:9px 14px;background:var(--paper);width:100%;text-align:left;cursor:pointer;font-family:inherit;}
   .travelerbtn label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-soft);display:flex;gap:4px;align-items:center;}
   .travelerbtn .val{font-weight:700;font-size:14px;color:var(--ink);display:flex;align-items:center;justify-content:space-between;margin-top:2px;}
@@ -179,8 +220,9 @@
   .dealcard .pricesub{font-size:11px;color:var(--ink-soft);}
   .viewbtn{margin-top:8px;border:1px solid var(--ink);background:var(--paper-raised);color:var(--ink);border-radius:10px;padding:8px 16px;font-size:12.5px;font-weight:700;cursor:pointer;transition:background .18s ease,color .18s ease;}
   .viewbtn:hover{background:var(--ink);color:#fff;}
-  .favbtn{position:absolute;top:14px;right:14px;background:none;border:none;cursor:pointer;color:var(--line);width:22px;height:22px;z-index:2;}
-  .favbtn.on{color:var(--coral);}
+  .favbtn{position:absolute;top:-10px;right:14px;background:var(--paper-raised);border:1px solid var(--line);border-radius:50%;cursor:pointer;color:var(--ink-soft);width:26px;height:26px;padding:5px;z-index:3;box-shadow:var(--shadow-sm);transition:color .15s ease,border-color .15s ease;}
+  .favbtn:hover{color:var(--coral);border-color:var(--coral);}
+  .favbtn.on{color:var(--coral);border-color:var(--coral);}
   .favbtn svg{width:100%;height:100%;}
 
   .bundlecard{background:var(--ink);color:#fff;border-radius:16px;padding:18px 22px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;}
@@ -315,15 +357,15 @@
       </div>
     </div>
     <div class="pillnav" role="tablist">
-      <button class="mode active" data-mode="flights" type="button">✈️ <span data-i18n="mode.flights">Flights</span></button>
-      <button class="mode" data-mode="hotels" type="button">🏨 <span data-i18n="mode.hotels">Hotels</span></button>
-      <button class="mode" data-mode="cars" type="button">🚗 <span data-i18n="mode.cars">Cars</span></button>
-      <button class="mode" data-mode="buses" type="button">🚌 <span data-i18n="mode.buses">Buses</span></button>
-      <button class="mode" data-mode="packages" type="button">🧳 <span data-i18n="mode.packages">Packages</span></button>
+      <button class="mode active" data-mode="flights" type="button"> <span data-i18n="mode.flights">Flights</span></button>
+      <button class="mode" data-mode="hotels" type="button"> <span data-i18n="mode.hotels">Hotels</span></button>
+      <button class="mode" data-mode="cars" type="button"> <span data-i18n="mode.cars">Cars</span></button>
+      <button class="mode" data-mode="buses" type="button"> <span data-i18n="mode.buses">Buses</span></button>
+      <button class="mode" data-mode="packages" type="button"> <span data-i18n="mode.packages">Packages</span></button>
     </div>
     <div class="navright">
-      <button class="navlink hideMobile" id="drawerBesttime2" type="button">📈 Price Alerts</button>
-      <button class="iconbadge" id="tripsBtn" type="button">♡ Trips <span id="favCount">0</span></button>
+      <button class="navlink hideMobile" id="drawerBesttime2" type="button"> Price Alerts</button>
+      <button class="iconbadge" id="tripsBtn" type="button"> Trips <span id="favCount">0</span></button>
       <div class="selectwrap hideMobile">
         <button class="iconbadge" id="curBtn" type="button"><span id="curLabel">EUR €</span></button>
         <div class="selectmenu" id="curMenu">
@@ -345,22 +387,22 @@
     <button class="drawer-close" id="drawerClose" aria-label="Close">×</button>
   </div>
   <nav class="dlinks">
-    <button class="dlink" data-drawer-mode="flights">✈️ Flights</button>
-    <button class="dlink" data-drawer-mode="hotels">🏨 Stays</button>
-    <button class="dlink" data-drawer-mode="cars">🚗 Cars</button>
-    <button class="dlink" data-drawer-mode="buses">🚌 Buses</button>
-    <button class="dlink" data-drawer-mode="packages">🧳 Packages</button>
+    <button class="dlink" data-drawer-mode="flights"> Flights</button>
+    <button class="dlink" data-drawer-mode="hotels"> Stays</button>
+    <button class="dlink" data-drawer-mode="cars"> Cars</button>
+    <button class="dlink" data-drawer-mode="buses"> Buses</button>
+    <button class="dlink" data-drawer-mode="packages"> Packages</button>
     <hr>
     <div class="drawer-sub">Plan</div>
-    <a href="#ai" class="dlink" id="drawerAi">🤖 Plan with AI</a>
-    <a href="#explore" class="dlink" id="drawerExplore">🧭 Explore</a>
-    <button class="dlink" id="drawerBesttime">📈 Best time to book</button>
-    <button class="dlink" id="drawerTrips">♡ Trips</button>
+    <a href="#ai" class="dlink" id="drawerAi"> Plan with AI</a>
+    <a href="#explore" class="dlink" id="drawerExplore"> Explore</a>
+    <button class="dlink" id="drawerBesttime"> Best time to book</button>
+    <button class="dlink" id="drawerTrips"> Trips</button>
     <hr>
     <div class="drawer-sub">Settings</div>
-    <button class="dlink" id="drawerLang">🌐 Language — <span id="drawerLangVal">English</span></button>
-    <button class="dlink" id="drawerCur">💱 Currency — <span id="drawerCurVal">EUR €</span></button>
-    <button class="dlink" id="drawerContact">✉️ Contact us</button>
+    <button class="dlink" id="drawerLang"> Language — <span id="drawerLangVal">English</span></button>
+    <button class="dlink" id="drawerCur"> Currency — <span id="drawerCurVal">EUR €</span></button>
+    <button class="dlink" id="drawerContact"> Contact us</button>
   </nav>
 </div>
 
@@ -417,10 +459,10 @@
             <div class="half" style="text-align:right;"><label>To</label><input type="text" id="flTo" value="Lisbon (LIS)" style="text-align:right;"/></div>
             <button class="swapbtn" id="swapFl" type="button" aria-label="Swap"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 7h13l-4-4M17 17H4l4 4"/></svg></button>
           </div>
-          <div class="datebtn"><label>📅 Depart</label><input type="date" id="flDepart" value="2026-10-12"/></div>
-          <div class="datebtn" id="flReturnField"><label>📅 Return</label><input type="date" id="flReturn" value="2026-10-19"/></div>
+          <div class="datebtn dp-trigger" data-pair="fl" data-role="start"><label> Depart</label><span class="dp-display" id="flDepart_disp"></span><input type="hidden" id="flDepart" value="2026-10-12"/></div>
+          <div class="datebtn dp-trigger" id="flReturnField" data-pair="fl" data-role="end"><label> Return</label><span class="dp-display" id="flReturn_disp"></span><input type="hidden" id="flReturn" value="2026-10-19"/></div>
           <div class="travelerwrap">
-            <button class="travelerbtn" id="travelerBtn" type="button"><label>👤 Travelers</label><span class="val" id="travelerVal">1 Adult <span>▾</span></span></button>
+            <button class="travelerbtn" id="travelerBtn" type="button"><label> Travelers</label><span class="val" id="travelerVal">1 Adult <span>▾</span></span></button>
             <div class="travelermenu" id="travelerMenu">
               <div class="travelerrow"><span>Adults</span><span class="stepper"><button type="button" id="travMinus">−</button><b id="travCount">1</b><button type="button" id="travPlus">+</button></span></div>
             </div>
@@ -437,9 +479,9 @@
         </div>
         <div class="fieldsgrid">
           <div class="fromto" style="grid-template-columns:1fr;"><div class="half"><label>Destination</label><input type="text" id="hoDest" value="Lisbon, Portugal"/></div></div>
-          <div class="datebtn"><label>📅 Check-in</label><input type="date" id="hoIn" value="2026-10-12"/></div>
-          <div class="datebtn"><label>📅 Check-out</label><input type="date" id="hoOut" value="2026-10-19"/></div>
-          <div class="datebtn"><label>👤 Guests</label><input type="text" id="hoGuests" value="2 adults, 1 room"/></div>
+          <div class="datebtn dp-trigger" data-pair="ho" data-role="start"><label> Check-in</label><span class="dp-display" id="hoIn_disp"></span><input type="hidden" id="hoIn" value="2026-10-12"/></div>
+          <div class="datebtn dp-trigger" data-pair="ho" data-role="end"><label> Check-out</label><span class="dp-display" id="hoOut_disp"></span><input type="hidden" id="hoOut" value="2026-10-19"/></div>
+          <div class="datebtn"><label> Guests</label><input type="text" id="hoGuests" value="2 adults, 1 room"/></div>
           <button class="searchbtn" type="button" onclick="runSearch()">Search hotels</button>
         </div>
       </div>
@@ -452,8 +494,8 @@
         </div>
         <div class="fieldsgrid">
           <div class="fromto"><div class="half"><label>Pick-up</label><input type="text" id="caPickup" value="Lisbon Airport (LIS)"/></div><div class="half" style="text-align:right;"><label>Drop-off</label><input type="text" id="caDropoff" value="Lisbon Airport (LIS)" style="text-align:right;"/></div></div>
-          <div class="datebtn"><label>📅 Pick-up date</label><input type="date" id="caPickupDate" value="2026-10-12"/></div>
-          <div class="datebtn"><label>📅 Drop-off date</label><input type="date" id="caDropoffDate" value="2026-10-19"/></div>
+          <div class="datebtn dp-trigger" data-pair="ca" data-role="start"><label> Pick-up date</label><span class="dp-display" id="caPickupDate_disp"></span><input type="hidden" id="caPickupDate" value="2026-10-12"/></div>
+          <div class="datebtn dp-trigger" data-pair="ca" data-role="end"><label> Drop-off date</label><span class="dp-display" id="caDropoffDate_disp"></span><input type="hidden" id="caDropoffDate" value="2026-10-19"/></div>
           <button class="searchbtn" type="button" onclick="runSearch()">Search cars</button>
         </div>
       </div>
@@ -469,8 +511,8 @@
             <div class="half" style="text-align:right;"><label>To</label><input type="text" id="buTo" value="Porto" style="text-align:right;"/></div>
             <button class="swapbtn" id="swapBu" type="button" aria-label="Swap"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 7h13l-4-4M17 17H4l4 4"/></svg></button>
           </div>
-          <div class="datebtn"><label>📅 Depart</label><input type="date" id="buDepart" value="2026-10-12"/></div>
-          <div class="datebtn" id="buReturnField"><label>📅 Return</label><input type="date" id="buReturn" value="2026-10-19"/></div>
+          <div class="datebtn dp-trigger" data-pair="bu" data-role="start"><label> Depart</label><span class="dp-display" id="buDepart_disp"></span><input type="hidden" id="buDepart" value="2026-10-12"/></div>
+          <div class="datebtn dp-trigger" id="buReturnField" data-pair="bu" data-role="end"><label> Return</label><span class="dp-display" id="buReturn_disp"></span><input type="hidden" id="buReturn" value="2026-10-19"/></div>
           <button class="searchbtn" type="button" onclick="runSearch()">Search buses</button>
         </div>
       </div>
@@ -482,32 +524,32 @@
             <div class="half"><label>From</label><input type="text" id="pkFrom" value="Madrid (MAD)"/></div>
             <div class="half" style="text-align:right;"><label>To</label><input type="text" id="pkTo" value="Lisbon (LIS)" style="text-align:right;"/></div>
           </div>
-          <div class="datebtn"><label>📅 Depart</label><input type="date" id="pkDepart" value="2026-10-12"/></div>
-          <div class="datebtn"><label>📅 Return</label><input type="date" id="pkReturn" value="2026-10-19"/></div>
+          <div class="datebtn dp-trigger" data-pair="pk" data-role="start"><label> Depart</label><span class="dp-display" id="pkDepart_disp"></span><input type="hidden" id="pkDepart" value="2026-10-12"/></div>
+          <div class="datebtn dp-trigger" data-pair="pk" data-role="end"><label> Return</label><span class="dp-display" id="pkReturn_disp"></span><input type="hidden" id="pkReturn" value="2026-10-19"/></div>
           <button class="searchbtn" type="button" onclick="runSearch()">Search packages</button>
         </div>
       </div>
 
       <div class="trustrow">
         <div class="checks">
-          <span><span class="checkdot">✓</span> No card required</span>
-          <span><span class="checkdot">✓</span> Price shown is price paid</span>
-          <span><span class="checkdot">✓</span> Secure partner checkout</span>
+          <span><span class="checkdot">OK</span> No card required</span>
+          <span><span class="checkdot">OK</span> Price shown is price paid</span>
+          <span><span class="checkdot">OK</span> Secure partner checkout</span>
         </div>
-        <span>🔒 Encrypted &amp; private</span>
+        <span> Encrypted &amp; private</span>
       </div>
     </div>
 
-    <div class="scanbadge"><span class="bolt">⚡</span> Scanning 5 partners in real-time</div>
+    <div class="scanbadge">Scanning 5 partners in real-time</div>
 
     <div class="trustbar">
       <span class="label">Trusted by travelers, powered by</span>
       <div class="logos">
-        <span>🌐 Kiwi.com</span>
-        <span>🌐 Trip.com</span>
-        <span>🌐 CheapOair</span>
-        <span>🌐 Omio</span>
-        <span>🌐 WayAway</span>
+        <span> Kiwi.com</span>
+        <span> Trip.com</span>
+        <span> CheapOair</span>
+        <span> Omio</span>
+        <span> WayAway</span>
       </div>
     </div>
   </section>
@@ -519,7 +561,7 @@
         <div class="results-sub"><span id="resultCount">6</span> of <span id="resultTotal">6</span> options · sorted by best value · updated <span id="updatedAgo">2s</span> ago</div>
       </div>
       <div class="resultactions" id="filterChips">
-        <button class="filterbtn" id="toggleFilters" type="button">☰ Filters</button>
+        <button class="filterbtn" id="toggleFilters" type="button"> Filters</button>
         <button class="sortpill active" data-sort="best">Best value</button>
         <button class="sortpill" data-sort="cheap">Cheapest</button>
         <button class="sortpill" data-sort="fast">Fastest</button>
@@ -554,13 +596,13 @@
 
         <div class="besttime-row reveal">
           <div class="besttime-card">
-            <div class="bt-eyebrow">📈 Best time to book this route</div>
+            <div class="bt-eyebrow"> Best time to book this route</div>
             <h4 id="btVerdict">Book now — <span class="up">prices trending up</span></h4>
             <svg id="btChart" width="100%" height="70" viewBox="0 0 300 70" preserveAspectRatio="none" style="margin-top:12px;overflow:visible;"></svg>
             <div class="bt-note"><span>Based on 90 days of fare history across our partners.</span><span id="btUpdated">Updated today</span></div>
           </div>
           <div class="alertcard">
-            <div class="head"><div class="mailwrap">✉️</div><div style="font-size:11px;text-transform:uppercase;letter-spacing:.06em;opacity:.7;">Price alert</div></div>
+            <div class="head"><div style="font-size:11px;text-transform:uppercase;letter-spacing:.06em;opacity:.7;">Price alert</div></div>
             <h4 id="alertRoute">Get a price alert for Madrid → Lisbon</h4>
             <p>We'll email you if the price drops before your trip. No spam, unsubscribe anytime.</p>
             <form onsubmit="return setAlert(event)">
@@ -585,15 +627,15 @@
   <section id="ai">
     <div class="aisection">
       <div>
-        <div class="aibadge">✨ Aerlume AI · Beta</div>
+        <div class="aibadge"> Aerlume AI · Beta</div>
         <h2>Plan a trip with Aerlume AI</h2>
         <p>Tell us your vibe and budget — we'll match you to real routes from our search data and draft an itinerary you can act on.</p>
         <div class="ai-label">What's the vibe?</div>
         <div class="vibegrid" id="aiVibe">
-          <button class="vibebtn on" data-v="beach">🏖️ Beach</button>
-          <button class="vibebtn" data-v="city">🏙️ City break</button>
-          <button class="vibebtn" data-v="adventure">🥾 Adventure</button>
-          <button class="vibebtn" data-v="culture">🏛️ Culture</button>
+          <button class="vibebtn on" data-v="beach"> Beach</button>
+          <button class="vibebtn" data-v="city"> City break</button>
+          <button class="vibebtn" data-v="adventure"> Adventure</button>
+          <button class="vibebtn" data-v="culture"> Culture</button>
         </div>
         <div class="ai-label">Budget per person</div>
         <div class="vibegrid" id="aiBudget">
@@ -606,16 +648,16 @@
           <button class="vibebtn on" data-w="soon">Next 4 weeks</button>
           <button class="vibebtn" data-w="flex">I'm flexible</button>
         </div>
-        <button class="generatebtn" id="aiGoBtn" type="button">✨ Generate my trip</button>
+        <button class="generatebtn" id="aiGoBtn" type="button"> Generate my trip</button>
       </div>
       <div class="ai-results" id="aiResults"></div>
     </div>
   </section>
 
   <section class="why3" id="why">
-    <div class="whycard reveal"><div class="whyicon">🌐</div><h3>Every mode, one search</h3><p>Flights, hotels, cars, and buses side by side — compare without juggling ten tabs. We scan 5+ trusted partners in seconds.</p></div>
-    <div class="whycard reveal"><div class="whyicon">🛡️</div><h3>The price you see is final</h3><p>No bait fares. Taxes and fees are included from the start — nothing new appears at your partner's checkout.</p></div>
-    <div class="whycard reveal"><div class="whyicon">⚡</div><h3>Trusted booking partners</h3><p>You book directly with Kiwi.com, Trip.com, CheapOair, Omio, and WayAway. Secure checkout, no extra markup from us.</p></div>
+    <div class="whycard reveal"><h3>Every mode, one search</h3><p>Flights, hotels, cars, and buses side by side — compare without juggling ten tabs. We scan 5+ trusted partners in seconds.</p></div>
+    <div class="whycard reveal"><h3>The price you see is final</h3><p>No bait fares. Taxes and fees are included from the start — nothing new appears at your partner's checkout.</p></div>
+    <div class="whycard reveal"><h3>Trusted booking partners</h3><p>You book directly with Kiwi.com, Trip.com, CheapOair, Omio, and WayAway. Secure checkout, no extra markup from us.</p></div>
   </section>
 </div>
 
@@ -625,7 +667,7 @@
       <div>
         <div class="footbrand"><span class="mark"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M2.5 19.5l7-2 3.5 3.5 1.5-1-2-4 6-6c1-1 1-2.5 0-3.5s-2.5-1-3.5 0l-6 6-4-2-1 1.5 3.5 3.5-2 7z"/></svg></span>Aerlume</div>
         <p class="tag">The travel meta-search that scans flights, hotels, cars, and buses in one search. Find, compare, go.</p>
-        <div class="footbadge">🔒 SSL secure · GDPR compliant</div>
+        <div class="footbadge"> SSL secure · GDPR compliant</div>
       </div>
       <div class="footcol"><h5>Company</h5><a href="#">About</a><a href="#">Careers</a><a href="#">Press</a><a href="#explore">Explore</a><a href="#ai">AI trips</a></div>
       <div class="footcol"><h5>Support</h5><a href="#">Help center</a><a href="#">Price alerts</a><a href="#" id="footContact">Contact</a><a href="#">Status</a></div>
@@ -653,12 +695,12 @@
   function partnerBadge(partner){ return `<span style="font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:${PARTNER_CLASS[partner]||'var(--sky)'};font-weight:800;">via ${partner}</span>`; }
 
   const AIRLINES = [
-    {code:"AV", name:"Avelo Air",   color:"#3A86FF"},
-    {code:"NR", name:"Norvia",      color:"#FF6B35"},
-    {code:"BX", name:"Blue Crane",  color:"#3B5BA5"},
+    {code:"AV", name:"Avelo Air", color:"#3A86FF"},
+    {code:"NR", name:"Norvia", color:"#FF6B35"},
+    {code:"BX", name:"Blue Crane", color:"#3B5BA5"},
     {code:"TW", name:"Tarnova Wings",color:"#8B5CF6"},
-    {code:"SK", name:"Skyharbor",   color:"#D9A441"},
-    {code:"IL", name:"Iberline",    color:"#1F8A5C"},
+    {code:"SK", name:"Skyharbor", color:"#D9A441"},
+    {code:"IL", name:"Iberline", color:"#1F8A5C"},
   ];
 
   const FLIGHTS = [
@@ -707,7 +749,7 @@
   let favorites = {};
   try{ favorites = JSON.parse(localStorage.getItem('aerlume_favs')||'{}'); }catch(e){ favorites = {}; }
 
-  function stars(n){ return '★'.repeat(n) + '☆'.repeat(5-n); }
+  function stars(n){ return '*'.repeat(n) + '-'.repeat(5-n); }
   function saveFavs(){ try{ localStorage.setItem('aerlume_favs', JSON.stringify(favorites)); }catch(e){} }
 
   let itemMeta = {};
@@ -809,7 +851,7 @@
       itemMeta[id] = {name:h.name, sub:h.area, price:h.price, partner:h.partner, mode:'hotels'};
       row.innerHTML = `
         ${favHeart(id)}
-        <div class="logo-circle" style="background:${h.color}">🏨</div>
+        <div class="logo-circle" style="background:${h.color}">H</div>
         <div class="info">
           <b>${h.name}</b>
           <div class="meta"><span class="mono" style="color:var(--gold);">${stars(h.stars)}</span>${partnerBadge(h.partner)}</div>
@@ -843,7 +885,7 @@
       itemMeta[id] = {name:c.model, sub:c.type, price:c.price, partner:c.partner, mode:'cars'};
       row.innerHTML = `
         ${favHeart(id)}
-        <div class="logo-circle" style="background:${c.color}">🚗</div>
+        <div class="logo-circle" style="background:${c.color}">C</div>
         <div class="info">
           <b>${c.model}</b>
           <div class="meta"><span>${c.type} · ${c.seats} seats · ${c.bags} bags</span>${partnerBadge(c.partner)}</div>
@@ -875,7 +917,7 @@
       itemMeta[id] = {name:b.op+' · '+b.dep+'→'+b.arr, sub:b.stops, price:b.price, partner:b.partner, mode:'buses'};
       row.innerHTML = `
         ${favHeart(id)}
-        <div class="logo-circle" style="background:${b.color}">🚌</div>
+        <div class="logo-circle" style="background:${b.color}">B</div>
         <div class="info">
           <b>${b.op}</b>
           <div class="meta"><span>${b.stops}</span>${partnerBadge(b.partner)}</div>
@@ -908,7 +950,7 @@
       itemMeta[id] = {name:p.name, sub:p.nights+' nights, flight + hotel bundled', price:p.price, partner:p.partner, mode:'packages'};
       row.innerHTML = `
         <div class="left">
-          <div class="logos"><span>✈️</span><span>🏨</span></div>
+          <div class="logos"><span>F</span><span>H</span></div>
           <div><b>${p.name}</b><div class="sub"><span>${p.nights} nights</span><span style="color:#9CF0C6;">Save ${fmt(p.save)}</span>${p.tag?`<span>${p.tag}</span>`:''}<span>via ${p.partner}</span></div></div>
         </div>
         <div style="display:flex;align-items:center;gap:16px;">
@@ -979,7 +1021,7 @@
     e.preventDefault();
     const input = e.target.querySelector('input');
     const btn = e.target.querySelector('button');
-    btn.textContent = 'Saved ✓';
+    btn.textContent = 'Saved';
     btn.style.background = 'var(--good)';
     input.disabled = true;
     return false;
@@ -1219,7 +1261,7 @@
     `;
     const todayIdx = 4;
     const verdict = document.getElementById('btVerdict');
-    if(prices[todayIdx] <= min + (max-min)*0.25){ verdict.innerHTML = '✓ <span class="down">Great time to book</span>'; }
+    if(prices[todayIdx] <= min + (max-min)*0.25){ verdict.innerHTML = '<span class="down">Great time to book</span>'; }
     else{ verdict.innerHTML = 'Book now — <span class="up">prices trending up</span>'; }
   }
 
@@ -1295,12 +1337,198 @@
     const d = matches[0];
     wrap.innerHTML = `<div class="aiplancard">
       <div class="head"><div><b>Your Aerlume plan</b><div class="sub">${aiVibe.charAt(0).toUpperCase()+aiVibe.slice(1)} · ${fmt(d.price*2+37)} · 3 days</div></div><span class="readypill">Ready to book</span></div>
-      <div class="aiplanrow"><div class="icon">✈️</div><div><b>Madrid → ${d.city} · Iberline direct</b><div class="sub">07:30 – 08:45 · ${fmt(d.price)} round trip · via Kiwi.com</div></div></div>
-      <div class="aiplanrow"><div class="icon">🏨</div><div><b>Stay near ${d.city} center</b><div class="sub">${fmt(Math.round(d.price*3.4))} / night · free cancel</div></div></div>
-      <div class="aiplanrow"><div class="icon">📍</div><div><b>Day plan</b><div class="sub">Old town walk → local market → sunset viewpoint → dinner</div></div></div>
+      <div class="aiplanrow"><div class="icon">F</div><div><b>Madrid → ${d.city} · Iberline direct</b><div class="sub">07:30 – 08:45 · ${fmt(d.price)} round trip · via Kiwi.com</div></div></div>
+      <div class="aiplanrow"><div class="icon">H</div><div><b>Stay near ${d.city} center</b><div class="sub">${fmt(Math.round(d.price*3.4))} / night · free cancel</div></div></div>
+      <div class="aiplanrow"><div class="icon">D</div><div><b>Day plan</b><div class="sub">Old town walk → local market → sunset viewpoint → dinner</div></div></div>
       <button class="checkoutbtn" onclick="document.querySelector('.xcard[data-city=\\'${d.city}\\']')?.click()">Open all in one checkout →</button>
     </div>`;
   });
+
+  /* ---------- Custom date-range calendar picker ---------- */
+  (function(){
+    const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const WEEKDAYS = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+    const PAIR_CONFIG = {
+      fl:{start:'flDepart', end:'flReturn'},
+      ho:{start:'hoIn', end:'hoOut'},
+      ca:{start:'caPickupDate', end:'caDropoffDate'},
+      bu:{start:'buDepart', end:'buReturn'},
+      pk:{start:'pkDepart', end:'pkReturn'},
+    };
+
+    function pad(n){ return String(n).padStart(2,'0'); }
+    function toISO(y,m,d){ return `${y}-${pad(m+1)}-${pad(d)}`; }
+    function parseISO(iso){ const [y,m,d] = iso.split('-').map(Number); return {y, m:m-1, d}; }
+    function fmtDisplay(iso){ if(!iso) return ''; const {y,m,d} = parseISO(iso); return `${MONTHS[m].slice(0,3)} ${d}, ${y}`; }
+
+    let popup = null, viewYear = 0, viewMonth = 0, activePair = null, tempStart = null, tempEnd = null;
+
+    function buildPopup(){
+      if(popup) return popup;
+      popup = document.createElement('div');
+      popup.className = 'dp-popup';
+      popup.innerHTML = `
+        <div class="dp-modetabs">
+          <button type="button" class="active" data-mode="specific">Specific dates</button>
+          <button type="button" data-mode="flexible">Flexible dates</button>
+        </div>
+        <div class="dp-months">
+          <div class="dp-month" data-side="0"></div>
+          <div class="dp-month" data-side="1"></div>
+        </div>
+        <div class="dp-flexnote" hidden>Flexible dates aren't ready yet in this preview — pick specific dates to see live partner prices.</div>
+        <div class="dp-footer">
+          <span class="dp-hint"></span>
+          <button type="button" class="dp-applybtn">Apply</button>
+        </div>`;
+      document.body.appendChild(popup);
+      popup.addEventListener('click', e=>e.stopPropagation());
+      popup.querySelectorAll('.dp-modetabs button').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          popup.querySelectorAll('.dp-modetabs button').forEach(b=>b.classList.remove('active'));
+          btn.classList.add('active');
+          const flexible = btn.dataset.mode === 'flexible';
+          popup.querySelector('.dp-months').hidden = flexible;
+          popup.querySelector('.dp-flexnote').hidden = !flexible;
+        });
+      });
+      popup.querySelector('.dp-applybtn').addEventListener('click', applySelection);
+      return popup;
+    }
+
+    function onDayClick(iso){
+      if(!tempStart || (tempStart && tempEnd)){ tempStart = iso; tempEnd = null; }
+      else if(iso < tempStart){ tempStart = iso; }
+      else { tempEnd = iso; }
+      renderCalendars();
+    }
+
+    function renderMonth(sideEl, y, m, showPrev, showNext){
+      const first = new Date(y,m,1);
+      const startWeekday = first.getDay();
+      const daysInMonth = new Date(y,m+1,0).getDate();
+      const now = new Date();
+      const todayISO = toISO(now.getFullYear(), now.getMonth(), now.getDate());
+      let daysHtml = '';
+      for(let i=0;i<startWeekday;i++) daysHtml += `<div class="dp-day dp-out"></div>`;
+      for(let d=1; d<=daysInMonth; d++){
+        const iso = toISO(y,m,d);
+        const isPast = iso < todayISO;
+        let cls = 'dp-day';
+        if(iso===todayISO) cls += ' dp-today';
+        if(tempStart && iso===tempStart) cls += ' dp-rangestart';
+        if(tempEnd && iso===tempEnd) cls += ' dp-rangeend';
+        if(tempStart && tempEnd && iso>tempStart && iso<tempEnd) cls += ' dp-inrange';
+        daysHtml += `<div class="${cls}"><button type="button" data-iso="${iso}" ${isPast?'disabled':''}>${d}</button></div>`;
+      }
+      sideEl.innerHTML = `
+        <div class="dp-monthhead">
+          <button type="button" class="dp-navbtn dp-prev ${showPrev?'':'dp-invisible'}">‹</button>
+          <b>${MONTHS[m]} ${y}</b>
+          <button type="button" class="dp-navbtn dp-next ${showNext?'':'dp-invisible'}">›</button>
+        </div>
+        <div class="dp-weekrow">${WEEKDAYS.map(w=>`<span>${w}</span>`).join('')}</div>
+        <div class="dp-daysgrid">${daysHtml}</div>`;
+      sideEl.querySelectorAll('.dp-day button:not(:disabled)').forEach(btn=>{
+        btn.addEventListener('click', ()=> onDayClick(btn.dataset.iso));
+      });
+      if(showPrev) sideEl.querySelector('.dp-prev').addEventListener('click', ()=>{
+        viewMonth--; if(viewMonth<0){ viewMonth=11; viewYear--; } renderCalendars();
+      });
+      if(showNext) sideEl.querySelector('.dp-next').addEventListener('click', ()=>{
+        viewMonth++; if(viewMonth>11){ viewMonth=0; viewYear++; } renderCalendars();
+      });
+    }
+
+    function renderCalendars(){
+      const sides = popup.querySelectorAll('.dp-month');
+      let m2 = viewMonth+1, y2 = viewYear;
+      if(m2>11){ m2=0; y2++; }
+      renderMonth(sides[0], viewYear, viewMonth, true, false);
+      renderMonth(sides[1], y2, m2, false, true);
+      updateHint();
+    }
+
+    function updateHint(){
+      const hint = popup.querySelector('.dp-hint');
+      if(!tempStart) hint.textContent = 'Select a departure date';
+      else if(!tempEnd) hint.textContent = 'Select a return date';
+      else hint.textContent = fmtDisplay(tempStart) + ' – ' + fmtDisplay(tempEnd);
+    }
+
+    function positionPopup(){
+      const groupEls = document.querySelectorAll('.dp-trigger[data-pair="'+activePair+'"]');
+      const anchor = groupEls[0];
+      if(!anchor) return;
+      const rect = anchor.getBoundingClientRect();
+      const top = rect.bottom + window.scrollY + 8;
+      let left = rect.left + window.scrollX;
+      const maxLeft = window.scrollX + document.documentElement.clientWidth - popup.offsetWidth - 12;
+      if(left > maxLeft) left = Math.max(12, maxLeft);
+      popup.style.top = top+'px';
+      popup.style.left = left+'px';
+    }
+
+    function openPicker(prefix){
+      buildPopup();
+      if(activePair === prefix && popup.classList.contains('dp-show')){ closePicker(); return; }
+      const cfg = PAIR_CONFIG[prefix];
+      activePair = prefix;
+      const startInput = document.getElementById(cfg.start);
+      const endInput = document.getElementById(cfg.end);
+      tempStart = startInput && startInput.value ? startInput.value : null;
+      tempEnd = endInput && endInput.value ? endInput.value : null;
+      const base = tempStart ? parseISO(tempStart) : {y:new Date().getFullYear(), m:new Date().getMonth()};
+      viewYear = base.y; viewMonth = base.m;
+      popup.querySelectorAll('.dp-modetabs button').forEach(b=>b.classList.toggle('active', b.dataset.mode==='specific'));
+      popup.querySelector('.dp-months').hidden = false;
+      popup.querySelector('.dp-flexnote').hidden = true;
+      renderCalendars();
+      popup.classList.add('dp-show');
+      positionPopup();
+      document.querySelectorAll('.dp-trigger[data-pair="'+prefix+'"]').forEach(el=>el.classList.add('dp-open'));
+      document.addEventListener('click', outsideClickHandler);
+      window.addEventListener('resize', positionPopup);
+    }
+
+    function closePicker(){
+      if(!popup) return;
+      popup.classList.remove('dp-show');
+      document.querySelectorAll('.dp-trigger.dp-open').forEach(el=>el.classList.remove('dp-open'));
+      document.removeEventListener('click', outsideClickHandler);
+      window.removeEventListener('resize', positionPopup);
+      activePair = null;
+    }
+
+    function outsideClickHandler(e){
+      if(popup && !popup.contains(e.target)) closePicker();
+    }
+
+    function applySelection(){
+      if(!activePair){ closePicker(); return; }
+      const cfg = PAIR_CONFIG[activePair];
+      const startInput = document.getElementById(cfg.start);
+      const endInput = document.getElementById(cfg.end);
+      const startDisp = document.getElementById(cfg.start+'_disp');
+      const endDisp = document.getElementById(cfg.end+'_disp');
+      if(tempStart && startInput){ startInput.value = tempStart; if(startDisp) startDisp.textContent = fmtDisplay(tempStart); }
+      if(tempEnd && endInput){ endInput.value = tempEnd; if(endDisp) endDisp.textContent = fmtDisplay(tempEnd); }
+      closePicker();
+    }
+
+    document.querySelectorAll('.dp-trigger').forEach(trigger=>{
+      trigger.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        openPicker(trigger.dataset.pair);
+      });
+    });
+    Object.values(PAIR_CONFIG).forEach(cfg=>{
+      const s = document.getElementById(cfg.start), en = document.getElementById(cfg.end);
+      const sd = document.getElementById(cfg.start+'_disp'), ed = document.getElementById(cfg.end+'_disp');
+      if(s && sd) sd.textContent = fmtDisplay(s.value);
+      if(en && ed) ed.textContent = fmtDisplay(en.value);
+    });
+  })();
 
   updateFavCount();
   updateTravelers();
