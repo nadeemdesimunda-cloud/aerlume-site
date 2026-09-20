@@ -362,7 +362,6 @@
       <button class="mode" data-mode="hotels" type="button"> <span data-i18n="mode.hotels">Hotels</span></button>
       <button class="mode" data-mode="cars" type="button"> <span data-i18n="mode.cars">Cars</span></button>
       <button class="mode" data-mode="buses" type="button"> <span data-i18n="mode.buses">Buses</span></button>
-      <button class="mode" data-mode="packages" type="button"> <span data-i18n="mode.packages">Packages</span></button>
     </div>
     <div class="navright">
       <button class="navlink hideMobile" id="drawerBesttime2" type="button"> Price Alerts</button>
@@ -392,7 +391,6 @@
     <button class="dlink" data-drawer-mode="hotels"> Stays</button>
     <button class="dlink" data-drawer-mode="cars"> Cars</button>
     <button class="dlink" data-drawer-mode="buses"> Buses</button>
-    <button class="dlink" data-drawer-mode="packages"> Packages</button>
     <hr>
     <div class="drawer-sub">Plan</div>
     <a href="#ai" class="dlink" id="drawerAi"> Plan with AI</a>
@@ -515,19 +513,6 @@
           <div class="datebtn dp-trigger" data-pair="bu" data-role="start"><label> Depart</label><span class="dp-display" id="buDepart_disp"></span><input type="hidden" id="buDepart" value="2026-10-12"/></div>
           <div class="datebtn dp-trigger" id="buReturnField" data-pair="bu" data-role="end"><label> Return</label><span class="dp-display" id="buReturn_disp"></span><input type="hidden" id="buReturn" value="2026-10-19"/></div>
           <button class="searchbtn" type="button" onclick="runSearch()">Search buses</button>
-        </div>
-      </div>
-
-      <div id="fields-packages" hidden>
-        <div class="pill-tabs"><button class="active" type="button">Flight + Hotel</button></div>
-        <div class="fieldsgrid">
-          <div class="fromto">
-            <div class="half"><label>From</label><input type="text" id="pkFrom" value="Madrid (MAD)"/></div>
-            <div class="half" style="text-align:right;"><label>To</label><input type="text" id="pkTo" value="Lisbon (LIS)" style="text-align:right;"/></div>
-          </div>
-          <div class="datebtn dp-trigger" data-pair="pk" data-role="start"><label> Depart</label><span class="dp-display" id="pkDepart_disp"></span><input type="hidden" id="pkDepart" value="2026-10-12"/></div>
-          <div class="datebtn dp-trigger" data-pair="pk" data-role="end"><label> Return</label><span class="dp-display" id="pkReturn_disp"></span><input type="hidden" id="pkReturn" value="2026-10-19"/></div>
-          <button class="searchbtn" type="button" onclick="runSearch()">Search packages</button>
         </div>
       </div>
 
@@ -732,13 +717,6 @@
     {op:"Flixbus Express", dep:"15:15", arr:"19:20", dur:"4h 05m", stops:"Nonstop", price:29, tag:"Fastest", partner:"Omio", color:"#3A86FF"},
     {op:"Avanza", dep:"22:00", arr:"03:10", dur:"5h 10m", stops:"1 stop · Coimbra", price:16, tag:null, partner:"Kiwi.com", color:"#8B5CF6"},
   ];
-  const PACKAGES = [
-    {name:"3 nights in Lisbon · flight + hotel", nights:3, price:187, save:42, tag:"Best value", partner:"Trip.com", color:"#3A86FF"},
-    {name:"4 nights in Porto · flight + hotel", nights:4, price:221, save:35, tag:null, partner:"Kiwi.com", color:"#3B5BA5"},
-    {name:"5 nights in Lisbon · flight + hotel", nights:5, price:268, save:58, tag:"Cheapest per night", partner:"CheapOair", color:"#8B5CF6"},
-    {name:"Weekend in Barcelona · flight + hotel", nights:2, price:149, save:27, tag:"Fastest booking", partner:"WayAway", color:"#D9A441"},
-  ];
-
   let mode = 'flights';
   let sortKey = 'best';
   let hotelTypeFilter = 'hotel';
@@ -936,34 +914,6 @@
     document.getElementById('resultTotal').textContent = BUSES.length;
   }
 
-  function renderPackages(){
-    renderProviderFilter(PACKAGES);
-    let items = PACKAGES.filter(p=> p.price<=maxPrice()*3 && providerAllowed(p.partner));
-    items = sortList(items, 'price');
-    const list = document.getElementById('flightList');
-    list.innerHTML = '';
-    if(!items.length){ list.innerHTML = `<div class="noresults">No packages match your filters.</div>`; }
-    items.forEach((p,i)=>{
-      const id = 'pk-'+p.name;
-      const row = document.createElement('div');
-      row.className = 'bundlecard';
-      row.style.animationDelay = (i*0.05)+'s';
-      itemMeta[id] = {name:p.name, sub:p.nights+' nights, flight + hotel bundled', price:p.price, partner:p.partner, mode:'packages'};
-      row.innerHTML = `
-        <div class="left">
-          <div class="logos"><span>F</span><span>H</span></div>
-          <div><b>${p.name}</b><div class="sub"><span>${p.nights} nights</span><span style="color:#9CF0C6;">Save ${fmt(p.save)}</span>${p.tag?`<span>${p.tag}</span>`:''}<span>via ${p.partner}</span></div></div>
-        </div>
-        <div style="display:flex;align-items:center;gap:16px;">
-          <div class="price mono">${fmt(p.price)}</div>
-          <button onclick="openBooking('${id}')">View bundle →</button>
-        </div>`;
-      list.appendChild(row);
-    });
-    document.getElementById('resultCount').textContent = items.length;
-    document.getElementById('resultTotal').textContent = PACKAGES.length;
-  }
-
   function renderResults(){
     const title = document.getElementById('resultsTitle');
     const livepill = '<span class="livepill"><span class="dot"></span> Live</span>';
@@ -971,7 +921,6 @@
     if(mode==='hotels'){ title.innerHTML = 'Hotels in '+(currentQuery.dest||'Lisbon')+' '+livepill; renderHotels(); }
     if(mode==='cars'){ title.innerHTML = 'Cars in '+(currentQuery.pickup||'Lisbon')+' '+livepill; renderCars(); }
     if(mode==='buses'){ title.innerHTML = (currentQuery.busFrom||'Madrid')+' → '+(currentQuery.busTo||'Porto')+' '+livepill; renderBuses(); }
-    if(mode==='packages'){ title.innerHTML = 'Packages · '+(currentQuery.pkTo||'Lisbon & Porto')+' '+livepill; renderPackages(); }
     document.querySelector('.besttime-row').style.display = (mode==='flights') ? '' : 'none';
     document.getElementById('directOnlyChip').style.display = (mode==='flights') ? '' : 'none';
     secondsAgo = 0;
@@ -986,7 +935,6 @@
       document.getElementById('fields-hotels').hidden = mode!=='hotels';
       document.getElementById('fields-cars').hidden = mode!=='cars';
       document.getElementById('fields-buses').hidden = mode!=='buses';
-      document.getElementById('fields-packages').hidden = mode!=='packages';
       renderResults();
     });
   });
@@ -1041,8 +989,6 @@
     } else if(mode==='buses'){
       currentQuery.busFrom = document.getElementById('buFrom').value.trim() || 'Madrid';
       currentQuery.busTo = document.getElementById('buTo').value.trim() || 'Porto';
-    } else if(mode==='packages'){
-      currentQuery.pkTo = document.getElementById('pkTo').value.trim() || 'Lisbon & Porto';
     }
     renderResults();
     document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
@@ -1354,7 +1300,6 @@
       ho:{start:'hoIn', end:'hoOut'},
       ca:{start:'caPickupDate', end:'caDropoffDate'},
       bu:{start:'buDepart', end:'buReturn'},
-      pk:{start:'pkDepart', end:'pkReturn'},
     };
 
     function pad(n){ return String(n).padStart(2,'0'); }
