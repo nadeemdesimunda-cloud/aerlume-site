@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">Mintravo</title>
+  <defs>
+    <linearGradient id="background" x1="8" y1="7" x2="56" y2="58" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1BBBE5"/>
+      <stop offset=".48" stop-color="#3578F6"/>
+      <stop offset="1" stop-color="#5A55DE"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="17" fill="url(#background)"/>
+  <rect x="3" y="3" width="58" height="58" rx="16" fill="none" stroke="#fff" stroke-opacity=".24" stroke-width="2"/>
+  <path d="M13 46V17h9l10 14 10-14h9v29h-8V29L32 43 21 29v17Z" fill="#fff"/>
+  <circle cx="51" cy="13" r="6" fill="#FF6B4A" stroke="#fff" stroke-width="2.5"/>
+</svg>
