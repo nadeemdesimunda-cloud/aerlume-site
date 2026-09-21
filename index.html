@@ -970,6 +970,32 @@
     {op:"Flixbus Express", dep:"15:15", arr:"19:20", dur:"4h 05m", stops:"Nonstop", price:29, tag:"Fastest", partner:"Omio", color:"#3A86FF"},
     {op:"Avanza", dep:"22:00", arr:"03:10", dur:"5h 10m", stops:"1 stop · Coimbra", price:16, tag:null, partner:"Kiwi.com", color:"#8B5CF6"},
   ];
+    const CITY_CODES = {'lisbon':'LIS','porto':'OPO','barcelona':'BCN','paris':'CDG','faro (algarve)':'FAO','faro':'FAO','marrakech':'RAK','rome':'FCO','ibiza':'IBZ','madrid':'MAD','london':'LON'};
+  function extractCode(text){
+    const m = (text||'').match(/\(([A-Za-z]{3})\)/);
+    if(m) return m[1].toUpperCase();
+    const key = (text||'').trim().toLowerCase();
+    return CITY_CODES[key] || null;
+  }
+  function ddmm(dateStr){
+    let d = dateStr ? new Date(dateStr) : new Date(Date.now()+1000*60*60*24*21);
+    if(isNaN(d.getTime())) d = new Date(Date.now()+1000*60*60*24*21);
+    return String(d.getDate()).padStart(2,'0') + String(d.getMonth()+1).padStart(2,'0');
+  }
+  let realFlightState = {status:'idle', origin:null, destination:null, data:null};
+  async function fetchRealFlights(origin, destination){
+    realFlightState = {status:'loading', origin, destination, data:null};
+    if(mode==='flights') renderResults();
+    try{
+      const resp = await fetch(`/api/cheapest?origin=${origin}&destination=${destination}&currency=${(CUR.code||'EUR').toLowerCase()}`);
+      const json = await resp.json();
+      const hit = json && json.data && json.data[destination] && json.data[destination]['0'];
+      realFlightState = {status: hit ? 'ok':'empty', origin, destination, data: hit || null};
+    }catch(e){
+      realFlightState = {status:'error', origin, destination, data:null};
+    }
+    if(mode==='flights') renderResults();
+  }
   let mode = 'flights';
   let sortKey = 'best';
   let hotelTypeFilter = 'hotel';
@@ -1036,42 +1062,63 @@
     return `<span class="tag-pill ${cls}">${tag}</span>`;
   }
 
+    const AIRLINE_NAMES = {FR:'Ryanair', U2:'easyJet', VY:'Vueling', IB:'Iberia', UX:'Air Europa', W4:'Wizz Air Malta', W6:'Wizz Air', TO:'Transavia France', TP:'TAP Air Portugal', LH:'Lufthansa', AF:'Air France', KL:'KLM', BA:'British Airways', I2:'Iberia Express', PC:'Pegasus', V7:'Volotea', NT:'Binter Canarias'};
+  function airlineName(code){ return AIRLINE_NAMES[code] || code; }
+
   function renderFlights(){
-    const mult = priceMultiplier(searchSeed((currentQuery.from||'')+(currentQuery.to||'')+(currentQuery.depart||'')));
-    const priced = FLIGHTS.map(f=>({...f, price: Math.max(9, Math.round(f.price*mult))}));
-    renderProviderFilter(priced);
-    let items = priced.filter(f=> stopsAllowed(f.stops) && f.price<=maxPrice() && providerAllowed(f.partner));
-    items = sortList(items, 'price');
     const list = document.getElementById('flightList');
+    renderProviderFilter([{partner:'Aviasales'}]);
+    const origin = extractCode(currentQuery.from) || 'MAD';
+    const destination = extractCode(currentQuery.to);
+    if(!destination){
+      list.innerHTML = `<div class="noresults">Couldn't recognize that destination. Try a format like <b>Lisbon (LIS)</b>, or pick a city from Explore below.</div>`;
+      document.getElementById('resultCount').textContent = 0;
+      document.getElementById('resultTotal').textContent = 0;
+      return;
+    }
+    if(realFlightState.status!=='loading' && (realFlightState.origin!==origin || realFlightState.destination!==destination)){
+      fetchRealFlights(origin, destination);
+    }
+    if(realFlightState.status==='loading' || realFlightState.origin!==origin || realFlightState.destination!==destination){
+      list.innerHTML = `<div class="noresults">Searching live prices for ${origin} → ${destination}…</div>`;
+      document.getElementById('resultCount').textContent = 0;
+      document.getElementById('resultTotal').textContent = 0;
+      return;
+    }
+    if(realFlightState.status!=='ok'){
+      const bookUrl = `https://www.aviasales.com/search/${origin}${ddmm()}${destination}1?marker=779667&currency=${(CUR.code||'EUR').toLowerCase()}`;
+      list.innerHTML = `<div class="noresults">We couldn't find live pricing for ${origin} → ${destination} right now. Try a popular route like Madrid → Lisbon, Barcelona, or Rome — or search directly on our partner.<br><br><a class="viewbtn" style="display:inline-block;margin-top:10px;" href="${bookUrl}" target="_blank" rel="noopener">Search live on partner →</a></div>`;
+      document.getElementById('resultCount').textContent = 0;
+      document.getElementById('resultTotal').textContent = 0;
+      return;
+    }
+    const f = realFlightState.data;
+    const dep = new Date(f.departure_at);
+    const depStr = isNaN(dep.getTime()) ? '' : dep.toLocaleDateString(undefined,{month:'short', day:'numeric'});
+    const air = airlineName(f.airline);
+    const bookUrl = `https://www.aviasales.com/search/${origin}${ddmm(f.departure_at)}${destination}${f.return_at?ddmm(f.return_at):''}1?marker=779667&currency=${(CUR.code||'EUR').toLowerCase()}`;
+    const id = 'fl-'+f.airline+'-'+f.flight_number;
+    itemMeta[id] = {name: air+' · '+depStr, sub:'Real-time fare', price:f.price, partner:'Aviasales', mode:'flights'};
     list.innerHTML = '';
-    if(!items.length){ list.innerHTML = `<div class="noresults">No flights match your filters. <br><b>Try widening your price range or stops.</b></div>`; }
-    items.forEach((f,i)=>{
-      const air = AIRLINES[f.a];
-      const id = 'fl-'+f.a+'-'+f.dep;
-      const row = document.createElement('div');
-      row.className = 'dealcard';
-      row.style.animationDelay = (i*0.05)+'s';
-      const stopsLabel = f.stops===0?'Nonstop':(f.stops===1?'1 stop':f.stops+' stops');
-      const tripLabel = flightTrip==='oneway' ? 'one way, all fees in' : (flightTrip==='multi' ? 'per leg, all fees in' : 'round trip, all fees in');
-      itemMeta[id] = {name: air.name+' · '+f.dep+'→'+f.arr, sub: stopsLabel, price:f.price, partner:f.partner, mode:'flights'};
-      row.innerHTML = `
-        ${favHeart(id)}
-        <div class="logo-circle" style="background:${air.color}">${air.code}</div>
-        <div class="info">
-          <b>${air.name}</b>
-          <div class="meta"><span>${stopsLabel}</span>${partnerBadge(f.partner)}</div>
-          <div class="route"><span class="mono">${f.dep}</span><span class="arrow">→</span><span class="mono">${f.arr}</span><span style="color:var(--ink-soft);font-weight:400;font-size:12.5px;">· ${f.dur}</span></div>
-        </div>
-        <div class="right">
-          ${tagPill(f.tag)}
-          <div class="price mono">${fmt(f.price)}</div>
-          <div class="pricesub">${tripLabel}</div>
-          <button class="viewbtn" onclick="openBooking('${id}')">View on partner →</button>
-        </div>`;
-      list.appendChild(row);
-    });
-    document.getElementById('resultCount').textContent = items.length;
-    document.getElementById('resultTotal').textContent = priced.length;
+    const row = document.createElement('div');
+    row.className = 'dealcard';
+    row.innerHTML = `
+      ${favHeart(id)}
+      <div class="logo-circle" style="background:#3A86FF">${f.airline}</div>
+      <div class="info">
+        <b>${air}</b>
+        <div class="meta"><span>Flight ${f.flight_number}</span>${partnerBadge('Aviasales')}</div>
+        <div class="route"><span class="mono">${depStr}</span><span style="color:var(--ink-soft);font-weight:400;font-size:12.5px;"> · lowest fare found in the last 48h</span></div>
+      </div>
+      <div class="right">
+        <span class="tag-pill tag-cheap">Live price</span>
+        <div class="price mono">${fmt(f.price)}</div>
+        <div class="pricesub">round trip, real-time data</div>
+        <a class="viewbtn" href="${bookUrl}" target="_blank" rel="noopener">Book on partner →</a>
+      </div>`;
+    list.appendChild(row);
+    document.getElementById('resultCount').textContent = 1;
+    document.getElementById('resultTotal').textContent = 1;
   }
 
   function renderHotels(){
@@ -1522,7 +1569,7 @@ async function loadRealDestinationPrices(){
     const grid = document.getElementById('exploreGrid');
     if(!grid) return;
     grid.innerHTML = DESTINATIONS.map(d=>`
-      <div class="xcard" data-city="${d.city}">
+      <div class="xcard" data-city="${d.city} (${d.code})">
         <div class="bg" style="background:${d.grad}">
           <span class="code">${d.code}</span>
           <span class="arrowbtn">→</span>
