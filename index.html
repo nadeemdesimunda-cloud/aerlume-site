@@ -239,6 +239,7 @@
   .sortpill.active{background:var(--ink);color:#fff;border-color:var(--ink);font-weight:600;}
 
   .results-shell{display:grid;grid-template-columns:250px 1fr;gap:22px;margin-top:20px;align-items:start;}
+  .results-shell.partner-only{grid-template-columns:1fr;}
   @media (max-width:920px){.results-shell{grid-template-columns:1fr;}}
   .filterbox{background:var(--paper-raised);border:1px solid var(--line);border-radius:16px;padding:18px;position:sticky;top:88px;display:flex;flex-direction:column;gap:18px;}
   @media (max-width:920px){.filterbox{position:static;display:none;}.filterbox.show{display:flex;}}
@@ -255,6 +256,17 @@
 
   .dealcard{background:var(--paper-raised);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin-bottom:12px;display:grid;grid-template-columns:44px 1.6fr auto;gap:16px;align-items:center;position:relative;opacity:0;transform:translateY(10px);animation:fadeUp .45s ease forwards;transition:transform .2s ease,box-shadow .2s ease;}
   .dealcard:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);}
+  .affiliate-card{
+    cursor:pointer;
+    background:linear-gradient(120deg,var(--paper-raised),color-mix(in srgb,var(--sky-soft) 55%,var(--paper-raised)));
+    border-color:color-mix(in srgb,var(--sky) 24%,var(--line));
+  }
+  .affiliate-card .logo-circle{background:linear-gradient(135deg,var(--sky),var(--purple));}
+  .affiliate-card .partner-note{font-size:12.5px;color:var(--ink-soft);line-height:1.5;margin-top:7px;}
+  .affiliate-card .affiliate-cta{
+    display:inline-flex;align-items:center;justify-content:center;min-height:42px;margin-top:8px;
+    background:var(--ink);color:#fff;border-radius:12px;padding:9px 17px;font-size:12.5px;font-weight:750;
+  }
   @media (max-width:680px){.dealcard{grid-template-columns:1fr;text-align:left;}}
   .logo-circle{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px;flex:none;}
   .dealcard .info b{display:block;font-size:15px;}
@@ -790,16 +802,14 @@
       </div>
 
       <div id="fields-cars" hidden>
-        <div class="pill-tabs" id="carTypeTabs">
-          <button class="active" type="button" data-ctype="all">All cars</button>
-          <button type="button" data-ctype="Economy">Economy</button>
-          <button type="button" data-ctype="SUV">SUV</button>
+        <div class="pill-tabs">
+          <button class="active" type="button" tabindex="-1">Car rental partner</button>
         </div>
         <div class="fieldsgrid">
           <div class="fromto"><div class="half"><label>Pick-up</label><input type="text" id="caPickup" value="Lisbon Airport (LIS)"/></div><div class="half" style="text-align:right;"><label>Drop-off</label><input type="text" id="caDropoff" value="Lisbon Airport (LIS)" style="text-align:right;"/></div></div>
           <div class="datebtn dp-trigger" data-pair="ca" data-role="start"><label> Pick-up date</label><span class="dp-display" id="caPickupDate_disp"></span><input type="hidden" id="caPickupDate" value="2026-10-12"/></div>
           <div class="datebtn dp-trigger" data-pair="ca" data-role="end"><label> Drop-off date</label><span class="dp-display" id="caDropoffDate_disp"></span><input type="hidden" id="caDropoffDate" value="2026-10-19"/></div>
-          <button class="searchbtn" type="button" onclick="runSearch()">Search cars</button>
+          <button class="searchbtn" type="button" onclick="openDiscoverCars()">Search cars</button>
         </div>
       </div>
 
@@ -947,6 +957,10 @@
   function fmt(n){ return CUR.symbol + Math.round(n * CUR.rate).toLocaleString(); }
 
   const BOOKING_LINKS = {"Kiwi.com":"#","Trip.com":"#","CheapOair":"#","Omio":"#","WayAway":"#"};
+  const DISCOVERCARS_URL = 'https://www.discovercars.com/?a_aid=dgzonellc';
+  function openDiscoverCars(){
+    window.open(DISCOVERCARS_URL, '_blank', 'noopener');
+  }
 
   function searchSeed(str){ let h=0; for(let i=0;i<str.length;i++){ h=(h*31+str.charCodeAt(i))>>>0; } return h; }
   function priceMultiplier(seed){ const x=Math.sin(seed)*10000; const frac=x-Math.floor(x); return 0.78+frac*0.55; }
@@ -978,12 +992,6 @@
     {name:"Chiado Design Suites", stars:4, area:"Chiado, 0.2km from center", price:96, tag:null, partner:"Kiwi.com", color:"#FF6B35", type:"hotel"},
     {name:"Belem Garden Hotel", stars:3, area:"Belém, 3.1km from center", price:61, tag:null, partner:"Omio", color:"#D9A441", type:"resort"},
     {name:"Principe Real Loft", stars:4, area:"Príncipe Real, 1.2km from center", price:89, tag:null, partner:"WayAway", color:"#3B5BA5", type:"apartment"},
-  ];
-  const CARS = [
-    {model:"VW Polo or similar", type:"Economy", seats:5, bags:2, price:24, tag:"Best value", partner:"Kiwi.com", color:"#3A86FF"},
-    {model:"Toyota Corolla or similar", type:"Compact", seats:5, bags:3, price:29, tag:null, partner:"Trip.com", color:"#3B5BA5"},
-    {model:"Jeep Renegade or similar", type:"SUV", seats:5, bags:4, price:41, tag:"Cheapest SUV", partner:"WayAway", color:"#D9A441"},
-    {model:"Fiat 500", type:"Mini", seats:4, bags:1, price:19, tag:"Cheapest", partner:"CheapOair", color:"#8B5CF6"},
   ];
   const BUSES = [
     {op:"FlixBus", dep:"08:00", arr:"12:45", dur:"4h 45m", stops:"Nonstop", price:19, tag:"Cheapest", partner:"Omio", color:"#1F8A5C"},
@@ -1025,7 +1033,6 @@
   let mode = 'flights';
   let sortKey = 'best';
   let hotelTypeFilter = 'hotel';
-  let carTypeFilter = 'all';
   let flightTrip = 'round';
   let busTrip = 'round';
   let travelers = 1;
@@ -1184,36 +1191,28 @@
   }
 
   function renderCars(){
-    const byType = carTypeFilter==='all' ? CARS : CARS.filter(c=> c.type===carTypeFilter);
-    renderProviderFilter(byType.length ? byType : CARS);
-    let items = (byType.length ? byType : CARS).filter(c=> c.price<=maxPrice() && providerAllowed(c.partner));
-    items = sortList(items, 'price');
     const list = document.getElementById('flightList');
-    list.innerHTML = '';
-    if(!items.length){ list.innerHTML = `<div class="noresults">No cars match your filters.</div>`; }
-    items.forEach((c,i)=>{
-      const id = 'ca-'+c.model;
-      const row = document.createElement('div');
-      row.className = 'dealcard';
-      row.style.animationDelay = (i*0.05)+'s';
-      itemMeta[id] = {name:c.model, sub:c.type, price:c.price, partner:c.partner, mode:'cars'};
-      row.innerHTML = `
-        ${favHeart(id)}
-        <div class="logo-circle" style="background:${c.color}">C</div>
-        <div class="info">
-          <b>${c.model}</b>
-          <div class="meta"><span>${c.type} · ${c.seats} seats · ${c.bags} bags</span>${partnerBadge(c.partner)}</div>
-        </div>
-        <div class="right">
-          ${tagPill(c.tag)}
-          <div class="price mono">${fmt(c.price)}</div>
-          <div class="pricesub">per day, taxes included</div>
-          <button class="viewbtn" onclick="openBooking('${id}')">View on partner →</button>
-        </div>`;
-      list.appendChild(row);
-    });
-    document.getElementById('resultCount').textContent = items.length;
-    document.getElementById('resultTotal').textContent = CARS.length;
+    list.replaceChildren();
+    const card = document.createElement('a');
+    card.className = 'dealcard affiliate-card';
+    card.href = DISCOVERCARS_URL;
+    card.target = '_blank';
+    card.rel = 'noopener sponsored';
+    card.setAttribute('aria-label','Search rental cars on DiscoverCars in a new tab');
+    card.innerHTML = `
+      <div class="logo-circle">DC</div>
+      <div class="info">
+        <b>Compare rental cars with DiscoverCars</b>
+        <div class="meta"><span>Worldwide car rental comparison</span>${partnerBadge('DiscoverCars')}</div>
+        <div class="partner-note">Compare trusted rental companies, review full terms, and complete your booking securely on DiscoverCars.</div>
+      </div>
+      <div class="right">
+        <span class="tag-pill tag-best">Affiliate partner</span>
+        <span class="affiliate-cta">Search on DiscoverCars →</span>
+      </div>`;
+    list.appendChild(card);
+    document.getElementById('resultCount').textContent = 1;
+    document.getElementById('resultTotal').textContent = 1;
   }
 
   function renderBuses(){
@@ -1254,10 +1253,15 @@
     const livepill = '<span class="livepill"><span class="dot"></span> Live</span>';
     if(mode==='flights'){ title.innerHTML = (currentQuery.from||'Madrid')+' → '+(currentQuery.to||'Lisbon')+' '+livepill; document.getElementById('alertRoute').textContent = "Get a price alert for "+(currentQuery.from||'Madrid')+' → '+(currentQuery.to||'Lisbon'); renderFlights(); }
     if(mode==='hotels'){ title.innerHTML = 'Hotels in '+(currentQuery.dest||'Lisbon')+' '+livepill; renderHotels(); }
-    if(mode==='cars'){ title.innerHTML = 'Cars in '+(currentQuery.pickup||'Lisbon')+' '+livepill; renderCars(); }
+    if(mode==='cars'){ title.textContent = 'Compare rental cars with DiscoverCars'; renderCars(); }
     if(mode==='buses'){ title.innerHTML = (currentQuery.busFrom||'Madrid')+' → '+(currentQuery.busTo||'Porto')+' '+livepill; renderBuses(); }
     document.querySelector('.besttime-row').style.display = (mode==='flights') ? '' : 'none';
     document.getElementById('directOnlyChip').style.display = (mode==='flights') ? '' : 'none';
+    document.getElementById('filterChips').style.display = (mode==='cars') ? 'none' : '';
+    document.getElementById('filterboxEl').style.display = (mode==='cars') ? 'none' : '';
+    document.querySelector('.results-shell').classList.toggle('partner-only', mode==='cars');
+    document.querySelector('.protip').style.display = (mode==='cars') ? 'none' : '';
+    document.querySelector('.results-sub').style.display = (mode==='cars') ? 'none' : '';
     secondsAgo = 0;
   }
 
@@ -1567,14 +1571,6 @@
       if(mode==='hotels') renderResults();
     });
   });
-  document.querySelectorAll('#carTypeTabs button').forEach(tab=>{
-    tab.addEventListener('click', ()=>{
-      document.querySelectorAll('#carTypeTabs button').forEach(t=>t.classList.remove('active'));
-      tab.classList.add('active'); carTypeFilter = tab.dataset.ctype;
-      if(mode==='cars') renderResults();
-    });
-  });
-
   /* ---------- Swap buttons ---------- */
   function wireSwap(btnId, fromId, toId){
     const btn = document.getElementById(btnId);
