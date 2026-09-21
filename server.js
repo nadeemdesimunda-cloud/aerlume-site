@@ -24,6 +24,8 @@ app.use((req, res, next) => {
 // Small in-memory cache so we don't hammer Travelpayouts on every page load.
 const cache = new Map();
 const CACHE_TTL_MS = 1000 * 60 * 60; // 1 hour
+const CITY_PHOTO_TTL_MS = 1000 * 60 * 60 * 24 * 7; // 7 days
+const WIKI_USER_AGENT = 'Mintravo/1.0 (https://mintravo.com; travel search)';
 
 async function cachedFetch(key, url) {
     const hit = cache.get(key);
@@ -111,6 +113,49 @@ app.get('/api/hotels', async (req, res) => {
         res.json(data);
     } catch (err) {
         res.status(502).json({ error: 'Could not reach Hotellook' });
+    }
+});
+
+// Real city photos from Wikipedia / Wikimedia Commons (free, no API key).
+app.get('/api/city-photo', async (req, res) => {
+    const city = String(req.query.city || '').trim().slice(0, 80);
+    const country = String(req.query.country || '').trim().slice(0, 80);
+    if (!city) return res.status(400).json({ error: 'city is required' });
+    const cacheKey = `cityphoto:${city.toLowerCase()}:${country.toLowerCase()}`;
+    const hit = cache.get(cacheKey);
+    if (hit && Date.now() - hit.time < CITY_PHOTO_TTL_MS) {
+        return res.json(hit.data);
+    }
+    const baseCity = city.replace(/\s*\([^)]*\)/g, '').trim();
+    const titles = [
+        city,
+        country ? `${baseCity}, ${country}` : null,
+        baseCity !== city ? baseCity : null,
+        `${baseCity} (city)`,
+        baseCity === 'Marrakech' ? 'Marrakesh' : null,
+    ].filter(Boolean);
+    const isPhoto = (url) => url && !/\.svg/i.test(url) && !/flag/i.test(url);
+    try {
+        for (const title of [...new Set(titles)]) {
+            const wikiResp = await fetch(
+                `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`,
+                { headers: { 'User-Agent': WIKI_USER_AGENT } },
+            );
+            if (!wikiResp.ok) continue;
+            const wiki = await wikiResp.json();
+            const thumb = wiki.thumbnail?.source;
+            if (!isPhoto(thumb)) continue;
+            const payload = {
+                url: thumb.replace(/\/(\d+)px-/, '/800px-'),
+                title: wiki.title || title,
+                source: 'wikimedia',
+            };
+            cache.set(cacheKey, { data: payload, time: Date.now() });
+            return res.json(payload);
+        }
+        return res.status(404).json({ error: 'No photo found for this city' });
+    } catch (err) {
+        return res.status(502).json({ error: 'Could not reach Wikipedia' });
     }
 });
 

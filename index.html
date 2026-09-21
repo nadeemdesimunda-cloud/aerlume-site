@@ -317,7 +317,13 @@
   .exploregrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-top:20px;}
   .xcard{position:relative;border-radius:18px;overflow:hidden;cursor:pointer;background:var(--paper-raised);border:1px solid var(--line);transition:transform .22s ease,box-shadow .22s ease;}
   .xcard:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);}
-  .xcard .bg{height:150px;display:flex;flex-direction:column;justify-content:space-between;padding:12px;color:#fff;}
+  .xcard .bg{height:150px;display:flex;flex-direction:column;justify-content:space-between;padding:12px;color:#fff;background-size:cover;background-position:center;background-repeat:no-repeat;}
+  .xcard .bg.has-photo{position:relative;}
+  .xcard .bg.has-photo::before{
+    content:'';position:absolute;inset:0;z-index:0;
+    background:linear-gradient(to bottom,rgba(10,25,49,.08),rgba(10,25,49,.58));
+  }
+  .xcard .bg.has-photo > *{position:relative;z-index:1;}
   .xcard .code{background:rgba(255,255,255,.92);color:var(--ink);font-size:11px;font-weight:800;padding:4px 10px;border-radius:100px;width:fit-content;}
   .xcard .arrowbtn{width:30px;height:30px;border-radius:50%;background:#fff;color:var(--ink);display:flex;align-items:center;justify-content:center;align-self:flex-end;}
   .xcard .info{padding:12px 14px;}
@@ -517,7 +523,7 @@
   .exploregrid{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;}
   .xcard{border-radius:22px;}
   .xcard .bg{height:190px;position:relative;isolation:isolate;overflow:hidden;}
-  .xcard .bg::before,.xcard .bg::after{
+  .xcard .bg:not(.has-photo)::before,.xcard .bg:not(.has-photo)::after{
     content:"";position:absolute;border-radius:50%;border:1px solid rgba(255,255,255,.3);z-index:-1;
   }
   .xcard .bg::before{width:150px;height:150px;right:-45px;top:-48px;background:rgba(255,255,255,.08);}
@@ -1856,14 +1862,14 @@
 
   /* ---------- Explore ---------- */
   const DESTINATIONS = [
-    {code:"LIS", city:"Lisbon", country:"Portugal", price:33, grad:"linear-gradient(160deg,#3A86FF,#2563EB)", vibe:"city", tag:"Trending"},
-    {code:"OPO", city:"Porto", country:"Portugal", price:41, grad:"linear-gradient(160deg,#FF8A5C,#E0501C)", vibe:"culture", tag:null},
-    {code:"BCN", city:"Barcelona", country:"Spain", price:29, grad:"linear-gradient(160deg,#122344,#0A1931)", vibe:"city", tag:"Cheapest"},
-    {code:"CDG", city:"Paris", country:"France", price:78, grad:"linear-gradient(160deg,#A78BFA,#8B5CF6)", vibe:"culture", tag:null},
-    {code:"FAO", city:"Faro (Algarve)", country:"Portugal", price:38, grad:"linear-gradient(160deg,#D9A441,#B9852B)", vibe:"beach", tag:"Beach pick"},
-    {code:"RAK", city:"Marrakech", country:"Morocco", price:56, grad:"linear-gradient(160deg,#F0529C,#D6317E)", vibe:"adventure", tag:null},
-    {code:"FCO", city:"Rome", country:"Italy", price:64, grad:"linear-gradient(160deg,#1F8A5C,#166B47)", vibe:"culture", tag:null},
-    {code:"IBZ", city:"Ibiza", country:"Spain", price:72, grad:"linear-gradient(160deg,#FF6B35,#FF8A5C)", vibe:"beach", tag:null},
+    {code:"LIS", city:"Lisbon", country:"Portugal", photoCity:"Lisbon", price:33, grad:"linear-gradient(160deg,#3A86FF,#2563EB)", vibe:"city", tag:"Trending"},
+    {code:"OPO", city:"Porto", country:"Portugal", photoCity:"Porto", price:41, grad:"linear-gradient(160deg,#FF8A5C,#E0501C)", vibe:"culture", tag:null},
+    {code:"BCN", city:"Barcelona", country:"Spain", photoCity:"Barcelona", price:29, grad:"linear-gradient(160deg,#122344,#0A1931)", vibe:"city", tag:"Cheapest"},
+    {code:"CDG", city:"Paris", country:"France", photoCity:"Paris", price:78, grad:"linear-gradient(160deg,#A78BFA,#8B5CF6)", vibe:"culture", tag:null},
+    {code:"FAO", city:"Faro (Algarve)", country:"Portugal", photoCity:"Faro", price:38, grad:"linear-gradient(160deg,#D9A441,#B9852B)", vibe:"beach", tag:"Beach pick"},
+    {code:"RAK", city:"Marrakech", country:"Morocco", photoCity:"Marrakesh", price:56, grad:"linear-gradient(160deg,#F0529C,#D6317E)", vibe:"adventure", tag:null},
+    {code:"FCO", city:"Rome", country:"Italy", photoCity:"Rome", price:64, grad:"linear-gradient(160deg,#1F8A5C,#166B47)", vibe:"culture", tag:null},
+    {code:"IBZ", city:"Ibiza", country:"Spain", photoCity:"Ibiza (city)", price:72, grad:"linear-gradient(160deg,#FF6B35,#FF8A5C)", vibe:"beach", tag:null},
   ];
 async function loadRealDestinationPrices(){
     try{
@@ -1879,11 +1885,28 @@ async function loadRealDestinationPrices(){
           if(changed) renderExplore();
     }catch(e){ }
 }
+  async function loadCityPhotos(){
+    await Promise.all(Array.from(document.querySelectorAll('.xcard')).map(async card=>{
+      const city = card.dataset.photoCity;
+      const country = card.dataset.country;
+      if(!city) return;
+      try{
+        const resp = await fetch(`/api/city-photo?city=${encodeURIComponent(city)}&country=${encodeURIComponent(country||'')}`);
+        if(!resp.ok) return;
+        const json = await resp.json();
+        if(!json.url) return;
+        const bg = card.querySelector('.bg');
+        bg.style.backgroundImage = `url("${json.url}")`;
+        bg.classList.add('has-photo');
+        if(json.title) bg.title = `Photo: ${json.title} (Wikimedia)`;
+      }catch(e){}
+    }));
+  }
   function renderExplore(){
     const grid = document.getElementById('exploreGrid');
     if(!grid) return;
     grid.innerHTML = DESTINATIONS.map(d=>`
-      <div class="xcard" data-city="${d.city} (${d.code})">
+      <div class="xcard" data-city="${d.city} (${d.code})" data-photo-city="${escapeHTML(d.photoCity||d.city)}" data-country="${escapeHTML(d.country)}">
         <div class="bg" style="background:${d.grad}">
           <span class="code">${d.code}</span>
           <span class="arrowbtn">→</span>
@@ -1901,6 +1924,7 @@ async function loadRealDestinationPrices(){
         runSearch();
       });
     });
+    loadCityPhotos();
   }
 
   /* ---------- Custom date-range calendar picker ---------- */
