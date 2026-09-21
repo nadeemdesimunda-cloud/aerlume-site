@@ -121,7 +121,7 @@ app.get('/api/city-photo', async (req, res) => {
     const city = String(req.query.city || '').trim().slice(0, 80);
     const country = String(req.query.country || '').trim().slice(0, 80);
     if (!city) return res.status(400).json({ error: 'city is required' });
-    const cacheKey = `cityphoto:${city.toLowerCase()}:${country.toLowerCase()}`;
+    const cacheKey = `cityphoto:v2:${city.toLowerCase()}:${country.toLowerCase()}`;
     const hit = cache.get(cacheKey);
     if (hit && Date.now() - hit.time < CITY_PHOTO_TTL_MS) {
         return res.json(hit.data);
@@ -135,6 +135,17 @@ app.get('/api/city-photo', async (req, res) => {
         baseCity === 'Marrakech' ? 'Marrakesh' : null,
     ].filter(Boolean);
     const isPhoto = (url) => url && !/\.svg/i.test(url) && !/flag/i.test(url);
+    const cleanUrl = (url) => (url ? String(url).replace(/\?.*$/, '') : null);
+    const pickPhotoUrl = (wiki) => {
+        const original = cleanUrl(wiki.originalimage?.source);
+        if (isPhoto(original)) return original;
+        const thumb = cleanUrl(wiki.thumbnail?.source);
+        if (!isPhoto(thumb)) return null;
+        if (thumb.includes('/thumb/')) {
+            return thumb.replace(/\/(\d+)px-/, '/960px-');
+        }
+        return thumb;
+    };
     try {
         for (const title of [...new Set(titles)]) {
             const wikiResp = await fetch(
@@ -143,10 +154,10 @@ app.get('/api/city-photo', async (req, res) => {
             );
             if (!wikiResp.ok) continue;
             const wiki = await wikiResp.json();
-            const thumb = wiki.thumbnail?.source;
-            if (!isPhoto(thumb)) continue;
+            const photoUrl = pickPhotoUrl(wiki);
+            if (!photoUrl) continue;
             const payload = {
-                url: thumb.replace(/\/(\d+)px-/, '/800px-'),
+                url: photoUrl,
                 title: wiki.title || title,
                 source: 'wikimedia',
             };

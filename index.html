@@ -1896,9 +1896,13 @@ async function loadRealDestinationPrices(){
         const json = await resp.json();
         if(!json.url) return;
         const bg = card.querySelector('.bg');
-        bg.style.backgroundImage = `url("${json.url}")`;
-        bg.classList.add('has-photo');
-        if(json.title) bg.title = `Photo: ${json.title} (Wikimedia)`;
+        const img = new Image();
+        img.onload = ()=>{
+          bg.style.backgroundImage = `url("${json.url}")`;
+          bg.classList.add('has-photo');
+          if(json.title) bg.title = `Photo: ${json.title} (Wikimedia)`;
+        };
+        img.src = json.url;
       }catch(e){}
     }));
   }
