@@ -1511,7 +1511,8 @@ async function loadRealDestinationPrices(){
           const data = await resp.json();
           let changed = false;
           DESTINATIONS.forEach(d=>{
-                  const hit = data.data[d.code];
+            const code = ({CDG:'PAR',FCO:'ROM'})[d.code] || d.code;
+                  const hit = data.data[code];
                   if(hit && typeof hit.price === 'number'){ d.price = hit.price; changed = true; }
           });
           if(changed) renderExplore();
