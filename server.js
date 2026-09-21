@@ -11,6 +11,10 @@ const CANONICAL_HOST = 'mintravo.com';
 // dashboard under Variables) -- never hardcoded here and never sent to the browser.
 const TP_TOKEN = process.env.TRAVELPAYOUTS_TOKEN;
 const TP_MARKER = process.env.TRAVELPAYOUTS_MARKER;
+const OMIO_ACCESS_TOKEN = process.env.OMIO_ACCESS_TOKEN;
+const OMIO_ACCOUNT_SID = process.env.OMIO_ACCOUNT_SID;
+const OMIO_PROGRAM_ID = process.env.OMIO_PROGRAM_ID;
+const IMPACT_API_BASE = 'https://api.impact.com/Mediapartners';
 
 // Keep the custom domain as the public URL while retaining Railway's health checks.
 app.use((req, res, next) => {
@@ -33,6 +37,44 @@ async function cachedFetch(key, url) {
     const resp = await fetch(url);
     if (!resp.ok) throw new Error(`Travelpayouts request failed: ${resp.status}`);
     const data = await resp.json();
+    cache.set(key, { data, time: Date.now() });
+    return data;
+}
+
+function omioConfigured() {
+    return Boolean(OMIO_ACCESS_TOKEN && OMIO_ACCOUNT_SID);
+}
+
+function impactAuthHeader() {
+    return 'Basic ' + Buffer.from(`${OMIO_ACCOUNT_SID}:${OMIO_ACCESS_TOKEN}`).toString('base64');
+}
+
+async function cachedImpactFetch(key, url, method = 'GET') {
+    const hit = cache.get(key);
+    if (hit && Date.now() - hit.time < CACHE_TTL_MS) return hit.data;
+    if (!omioConfigured()) throw new Error('Omio API not configured');
+    const resp = await fetch(url, {
+        method,
+        headers: {
+            Accept: 'application/json',
+            Authorization: impactAuthHeader(),
+        },
+    });
+    const text = await resp.text();
+    let data;
+    try {
+        data = text ? JSON.parse(text) : {};
+    } catch {
+        const err = new Error(`Impact returned non-JSON: ${resp.status}`);
+        err.status = resp.status;
+        throw err;
+    }
+    if (!resp.ok) {
+        const err = new Error(`Impact request failed: ${resp.status}`);
+        err.status = resp.status;
+        err.data = data;
+        throw err;
+    }
     cache.set(key, { data, time: Date.now() });
     return data;
 }
@@ -167,6 +209,49 @@ app.get('/api/city-photo', async (req, res) => {
         return res.status(404).json({ error: 'No photo found for this city' });
     } catch (err) {
         return res.status(502).json({ error: 'Could not reach Wikipedia' });
+    }
+});
+
+// Omio catalog search via impact.com Mediapartners API (Basic auth: AccountSID + token).
+app.get('/api/omio-search', async (req, res) => {
+    if (!omioConfigured()) return res.status(503).json({ error: 'Omio API not configured yet' });
+    const query = String(req.query.query || '').trim().slice(0, 200);
+    const currency = String(req.query.currency || 'EUR').trim().toUpperCase();
+    if (!query) return res.status(400).json({ error: 'query is required' });
+    try {
+        const params = new URLSearchParams({
+            Keyword: query,
+            Query: query,
+            PageSize: '50',
+            Page: '1',
+        });
+        const url = `${IMPACT_API_BASE}/${encodeURIComponent(OMIO_ACCOUNT_SID)}/Catalogs/ItemSearch?${params}`;
+        const data = await cachedImpactFetch(`omio-search:${query.toLowerCase()}:${currency}`, url);
+        res.json(data);
+    } catch (err) {
+        if (err.data) return res.status(502).json(err.data);
+        res.status(502).json({ error: 'Could not reach Omio/Impact' });
+    }
+});
+
+// Generate an affiliate tracking link to Omio for a destination search.
+app.get('/api/omio-link', async (req, res) => {
+    if (!omioConfigured()) return res.status(503).json({ error: 'Omio API not configured yet' });
+    if (!OMIO_PROGRAM_ID) return res.status(503).json({ error: 'Omio program ID not configured yet' });
+    const destination = String(req.query.destination || '').trim().slice(0, 200);
+    if (!destination) return res.status(400).json({ error: 'destination is required' });
+    try {
+        const deepLink = `https://www.omio.com/search?query=${encodeURIComponent(destination)}`;
+        const params = new URLSearchParams({
+            Type: 'Regular',
+            DeepLink: deepLink,
+        });
+        const url = `${IMPACT_API_BASE}/${encodeURIComponent(OMIO_ACCOUNT_SID)}/Programs/${encodeURIComponent(OMIO_PROGRAM_ID)}/TrackingLinks?${params}`;
+        const data = await cachedImpactFetch(`omio-link:${destination.toLowerCase()}`, url, 'POST');
+        res.json(data);
+    } catch (err) {
+        if (err.data) return res.status(502).json(err.data);
+        res.status(502).json({ error: 'Could not reach Omio/Impact' });
     }
 });
 
