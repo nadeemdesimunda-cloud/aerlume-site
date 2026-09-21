@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" role="img" aria-labelledby="title">
   <title id="title">Mintravo</title>
-  <rect width="40" height="40" rx="12" fill="#0A1931"/>
-  <path d="M10 30V10l10 10 10-10v20" fill="none" stroke="#FFF" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect width="40" height="40" rx="12" fill="#FFF"/>
+  <path d="M10 30V10l10 10 10-10v20" fill="none" stroke="#0A1931" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
   <circle cx="30" cy="10" r="2.6" fill="#FF6B35"/>
 </svg>
