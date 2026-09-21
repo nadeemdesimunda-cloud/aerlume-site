@@ -989,7 +989,12 @@
     try{
       const resp = await fetch(`/api/cheapest?origin=${origin}&destination=${destination}&currency=${(CUR.code||'EUR').toLowerCase()}`);
       const json = await resp.json();
-      const hit = json && json.data && json.data[destination] && json.data[destination]['0'];
+      const dataObj = json && json.data;
+              let hit = null;
+              if(dataObj){
+                          if(dataObj[destination] && dataObj[destination]['0']) hit = dataObj[destination]['0'];
+                          else { const keys = Object.keys(dataObj); if(keys.length && dataObj[keys[0]] && dataObj[keys[0]]['0']) hit = dataObj[keys[0]]['0']; }
+              }
       realFlightState = {status: hit ? 'ok':'empty', origin, destination, data: hit || null};
     }catch(e){
       realFlightState = {status:'error', origin, destination, data:null};
