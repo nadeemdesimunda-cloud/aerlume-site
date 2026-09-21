@@ -792,18 +792,6 @@
         </div>
       </div>
 
-      <div id="fields-cars" hidden>
-        <div class="pill-tabs">
-          <button class="active" type="button" tabindex="-1">Car rental partner</button>
-        </div>
-        <div class="fieldsgrid">
-          <div class="fromto"><div class="half"><label>Pick-up</label><input type="text" id="caPickup" value="Lisbon Airport (LIS)"/></div><div class="half" style="text-align:right;"><label>Drop-off</label><input type="text" id="caDropoff" value="Lisbon Airport (LIS)" style="text-align:right;"/></div></div>
-          <div class="datebtn dp-trigger" data-pair="ca" data-role="start"><label> Pick-up date</label><span class="dp-display" id="caPickupDate_disp"></span><input type="hidden" id="caPickupDate" value="2026-10-12"/></div>
-          <div class="datebtn dp-trigger" data-pair="ca" data-role="end"><label> Drop-off date</label><span class="dp-display" id="caDropoffDate_disp"></span><input type="hidden" id="caDropoffDate" value="2026-10-19"/></div>
-          <button class="searchbtn" type="button" onclick="runSearch()">Search cars</button>
-        </div>
-      </div>
-
       <div id="fields-buses" hidden>
         <div class="pill-tabs" id="busTripTabs">
           <button class="active" type="button" data-trip="round">Round trip</button>
@@ -1373,8 +1361,8 @@
       mode = btn.dataset.mode;
       document.getElementById('fields-flights').hidden = mode!=='flights';
       document.getElementById('fields-hotels').hidden = mode!=='hotels';
-      document.getElementById('fields-cars').hidden = mode!=='cars';
       document.getElementById('fields-buses').hidden = mode!=='buses';
+      document.querySelector('.searchcard').hidden = mode==='cars';
       renderResults();
     });
   });
@@ -1425,8 +1413,6 @@
     } else if(mode==='hotels'){
       currentQuery.dest = document.getElementById('hoDest').value.trim() || 'Lisbon, Portugal';
       currentQuery.checkin = document.getElementById('hoIn').value;
-    } else if(mode==='cars'){
-      currentQuery.pickup = document.getElementById('caPickup').value.trim() || 'Lisbon Airport (LIS)';
     } else if(mode==='buses'){
       currentQuery.busFrom = document.getElementById('buFrom').value.trim() || 'Madrid';
       currentQuery.busTo = document.getElementById('buTo').value.trim() || 'Porto';
@@ -1924,7 +1910,6 @@ async function loadRealDestinationPrices(){
     const PAIR_CONFIG = {
       fl:{start:'flDepart', end:'flReturn'},
       ho:{start:'hoIn', end:'hoOut'},
-      ca:{start:'caPickupDate', end:'caDropoffDate'},
       bu:{start:'buDepart', end:'buReturn'},
     };
 
