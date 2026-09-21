@@ -1504,6 +1504,19 @@
     {code:"FCO", city:"Rome", country:"Italy", price:64, grad:"linear-gradient(160deg,#1F8A5C,#166B47)", vibe:"culture", tag:null},
     {code:"IBZ", city:"Ibiza", country:"Spain", price:72, grad:"linear-gradient(160deg,#FF6B35,#FF8A5C)", vibe:"beach", tag:null},
   ];
+async function loadRealDestinationPrices(){
+    try{
+          const resp = await fetch('/api/destinations?origin=MAD&currency=eur');
+          if(!resp.ok) return;
+          const data = await resp.json();
+          let changed = false;
+          DESTINATIONS.forEach(d=>{
+                  const hit = data[d.code];
+                  if(hit && typeof hit.price === 'number'){ d.price = hit.price; changed = true; }
+          });
+          if(changed) renderExplore();
+    }catch(e){ }
+}
   function renderExplore(){
     const grid = document.getElementById('exploreGrid');
     if(!grid) return;
@@ -1725,6 +1738,7 @@
   updateFavCount();
   updateTravelers();
   renderExplore();
+    loadRealDestinationPrices();
   renderBestTime();
 
   /* ---------- live-ish counters ---------- */
