@@ -64,6 +64,56 @@ app.get('/api/cheapest', async (req, res) => {
     }
 });
 
+// Multiple live fares for one route, ordered cheapest first.
+app.get('/api/flights', async (req, res) => {
+    if (!TP_TOKEN) return res.status(503).json({ error: 'API not configured yet' });
+    const origin = String(req.query.origin || 'MAD').trim().toUpperCase();
+    const destination = String(req.query.destination || 'LIS').trim().toUpperCase();
+    const currency = String(req.query.currency || 'eur').trim().toLowerCase();
+    if (!/^[A-Z]{3}$/.test(origin) || !/^[A-Z]{3}$/.test(destination) || !/^[a-z]{3}$/.test(currency)) {
+        return res.status(400).json({ error: 'Invalid flight search parameters' });
+    }
+    try {
+        const params = new URLSearchParams({
+            origin,
+            destination,
+            currency,
+            sorting: 'price',
+            limit: '10',
+            one_way: 'false',
+            token: TP_TOKEN,
+        });
+        const url = `https://api.travelpayouts.com/aviasales/v3/prices_for_dates?${params}`;
+        const data = await cachedFetch(`flights:${origin}:${destination}:${currency}`, url);
+        res.json(data);
+    } catch (err) {
+        res.status(502).json({ error: 'Could not reach Travelpayouts' });
+    }
+});
+
+// Real cached hotel prices from Hotellook (part of the Travelpayouts network).
+app.get('/api/hotels', async (req, res) => {
+    if (!TP_TOKEN) return res.status(503).json({ error: 'API not configured yet' });
+    const location = String(req.query.location || 'Lisbon').trim().slice(0, 100);
+    const currency = String(req.query.currency || 'eur').trim().toLowerCase();
+    if (!location || !/^[a-z]{3}$/.test(currency)) {
+        return res.status(400).json({ error: 'Invalid hotel search parameters' });
+    }
+    try {
+        const params = new URLSearchParams({
+            location,
+            currency,
+            limit: '10',
+            token: TP_TOKEN,
+        });
+        const url = `https://engine.hotellook.com/api/v2/cache.json?${params}`;
+        const data = await cachedFetch(`hotels:${location.toLowerCase()}:${currency}`, url);
+        res.json(data);
+    } catch (err) {
+        res.status(502).json({ error: 'Could not reach Hotellook' });
+    }
+});
+
 // Hands the frontend your public marker (safe to expose -- it's how Travelpayouts
 // credits bookings to you, not a secret) so booking links can be built client-side.
 app.get('/api/marker', (req, res) => {

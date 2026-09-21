@@ -256,16 +256,9 @@
 
   .dealcard{background:var(--paper-raised);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin-bottom:12px;display:grid;grid-template-columns:44px 1.6fr auto;gap:16px;align-items:center;position:relative;opacity:0;transform:translateY(10px);animation:fadeUp .45s ease forwards;transition:transform .2s ease,box-shadow .2s ease;}
   .dealcard:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);}
-  .affiliate-card{
-    cursor:pointer;
-    background:linear-gradient(120deg,var(--paper-raised),color-mix(in srgb,var(--sky-soft) 55%,var(--paper-raised)));
-    border-color:color-mix(in srgb,var(--sky) 24%,var(--line));
-  }
-  .affiliate-card .logo-circle{background:linear-gradient(135deg,var(--sky),var(--purple));}
-  .affiliate-card .partner-note{font-size:12.5px;color:var(--ink-soft);line-height:1.5;margin-top:7px;}
-  .affiliate-card .affiliate-cta{
-    display:inline-flex;align-items:center;justify-content:center;min-height:42px;margin-top:8px;
-    background:var(--ink);color:#fff;border-radius:12px;padding:9px 17px;font-size:12.5px;font-weight:750;
+  .discovercars-widget-shell{
+    min-height:280px;background:var(--paper-raised);border:1px solid var(--line);border-radius:20px;
+    padding:clamp(12px,2vw,22px);box-shadow:var(--shadow-md);overflow:hidden;
   }
   @media (max-width:680px){.dealcard{grid-template-columns:1fr;text-align:left;}}
   .logo-circle{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:13px;flex:none;}
@@ -787,10 +780,8 @@
       </div>
 
       <div id="fields-hotels" hidden>
-        <div class="pill-tabs" id="hotelTypeTabs">
-          <button class="active" type="button" data-htype="hotel">Hotels</button>
-          <button type="button" data-htype="apartment">Apartments</button>
-          <button type="button" data-htype="resort">Resorts</button>
+        <div class="pill-tabs">
+          <button class="active" type="button" tabindex="-1">Live hotel prices</button>
         </div>
         <div class="fieldsgrid">
           <div class="fromto" style="grid-template-columns:1fr;"><div class="half"><label>Destination</label><input type="text" id="hoDest" value="Lisbon, Portugal"/></div></div>
@@ -809,7 +800,7 @@
           <div class="fromto"><div class="half"><label>Pick-up</label><input type="text" id="caPickup" value="Lisbon Airport (LIS)"/></div><div class="half" style="text-align:right;"><label>Drop-off</label><input type="text" id="caDropoff" value="Lisbon Airport (LIS)" style="text-align:right;"/></div></div>
           <div class="datebtn dp-trigger" data-pair="ca" data-role="start"><label> Pick-up date</label><span class="dp-display" id="caPickupDate_disp"></span><input type="hidden" id="caPickupDate" value="2026-10-12"/></div>
           <div class="datebtn dp-trigger" data-pair="ca" data-role="end"><label> Drop-off date</label><span class="dp-display" id="caDropoffDate_disp"></span><input type="hidden" id="caDropoffDate" value="2026-10-19"/></div>
-          <button class="searchbtn" type="button" onclick="openDiscoverCars()">Search cars</button>
+          <button class="searchbtn" type="button" onclick="runSearch()">Search cars</button>
         </div>
       </div>
 
@@ -871,7 +862,7 @@
 
     <div class="results-shell">
       <aside class="filterbox" id="filterboxEl">
-        <div class="filtergroup">
+        <div class="filtergroup" id="stopsFilterGroup">
           <h4>Stops</h4>
           <label class="opt"><span><input type="checkbox" class="f-stops" value="nonstop" checked> Nonstop</span></label>
           <label class="opt"><span><input type="checkbox" class="f-stops" value="1stop" checked> 1 stop</span></label>
@@ -955,44 +946,33 @@
   const CURRENCIES = { EUR:{symbol:'€', rate:1}, USD:{symbol:'$', rate:1.08}, GBP:{symbol:'£', rate:0.86}, PKR:{symbol:'₨', rate:301.4} };
   let CUR = {code:'EUR', ...CURRENCIES.EUR};
   function fmt(n){ return CUR.symbol + Math.round(n * CUR.rate).toLocaleString(); }
-
-  const BOOKING_LINKS = {"Kiwi.com":"#","Trip.com":"#","CheapOair":"#","Omio":"#","WayAway":"#"};
-  const DISCOVERCARS_URL = 'https://www.discovercars.com/?a_aid=dgzonellc';
-  function openDiscoverCars(){
-    window.open(DISCOVERCARS_URL, '_blank', 'noopener');
+  function fmtLive(n){
+    return new Intl.NumberFormat(undefined,{style:'currency',currency:CUR.code,maximumFractionDigits:0}).format(Number(n)||0);
+  }
+  function escapeHTML(value){
+    return String(value ?? '').replace(/[&<>"']/g,char=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[char]));
   }
 
-  function searchSeed(str){ let h=0; for(let i=0;i<str.length;i++){ h=(h*31+str.charCodeAt(i))>>>0; } return h; }
-  function priceMultiplier(seed){ const x=Math.sin(seed)*10000; const frac=x-Math.floor(x); return 0.78+frac*0.55; }
+  const BOOKING_LINKS = {"Kiwi.com":"#","Trip.com":"#","CheapOair":"#","Omio":"#","WayAway":"#"};
+  let travelpayoutsMarker = '';
+  let markerPromise = null;
+  function getTravelpayoutsMarker(){
+    if(travelpayoutsMarker) return Promise.resolve(travelpayoutsMarker);
+    if(!markerPromise){
+      markerPromise = fetch('/api/marker')
+        .then(response=>response.ok ? response.json() : {marker:null})
+        .then(data=>{
+          travelpayoutsMarker = data && data.marker ? String(data.marker) : '';
+          return travelpayoutsMarker;
+        })
+        .catch(()=>'');
+    }
+    return markerPromise;
+  }
 
   const PARTNER_CLASS = {"Kiwi.com":"#0EA5A0","Trip.com":"#8B5CF6","CheapOair":"#F0529C","Omio":"#D9A441","WayAway":"#3A86FF"};
   function partnerBadge(partner){ return `<span style="font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:${PARTNER_CLASS[partner]||'var(--sky)'};font-weight:800;">via ${partner}</span>`; }
 
-  const AIRLINES = [
-    {code:"AV", name:"Avelo Air", color:"#3A86FF"},
-    {code:"NR", name:"Norvia", color:"#FF6B35"},
-    {code:"BX", name:"Blue Crane", color:"#3B5BA5"},
-    {code:"TW", name:"Tarnova Wings",color:"#8B5CF6"},
-    {code:"SK", name:"Skyharbor", color:"#D9A441"},
-    {code:"IL", name:"Iberline", color:"#1F8A5C"},
-  ];
-
-  const FLIGHTS = [
-    {a:0, dep:"07:20", arr:"08:45", dur:"1h 25m", durMin:85, stops:0, price:38, tag:"Best value", partner:"Kiwi.com", slot:"morning"},
-    {a:1, dep:"11:05", arr:"12:20", dur:"1h 15m", durMin:75, stops:0, price:34, tag:null, partner:"Trip.com", slot:"morning"},
-    {a:2, dep:"14:40", arr:"18:10", dur:"3h 30m", durMin:210, stops:1, price:29, tag:"Cheapest", partner:"CheapOair", slot:"afternoon"},
-    {a:3, dep:"06:00", arr:"07:20", dur:"1h 20m", durMin:80, stops:0, price:52, tag:"Fastest", partner:"Kiwi.com", slot:"morning"},
-    {a:4, dep:"19:15", arr:"20:35", dur:"1h 20m", durMin:80, stops:0, price:41, tag:null, partner:"WayAway", slot:"evening"},
-    {a:5, dep:"09:50", arr:"13:05", dur:"3h 15m", durMin:195, stops:1, price:31, tag:null, partner:"Trip.com", slot:"morning"},
-    {a:2, dep:"23:40", arr:"03:55", dur:"4h 15m", durMin:255, stops:2, price:22, tag:"Lowest fare", partner:"CheapOair", slot:"night"},
-  ];
-  const HOTELS = [
-    {name:"Baixa Riverside Hotel", stars:5, area:"Baixa, 0.4km from center", price:112, tag:"Best value", partner:"Trip.com", color:"#3A86FF", type:"hotel"},
-    {name:"Alfama Boutique Stay", stars:4, area:"Alfama, 0.9km from center", price:78, tag:"Cheapest", partner:"CheapOair", color:"#8B5CF6", type:"apartment"},
-    {name:"Chiado Design Suites", stars:4, area:"Chiado, 0.2km from center", price:96, tag:null, partner:"Kiwi.com", color:"#FF6B35", type:"hotel"},
-    {name:"Belem Garden Hotel", stars:3, area:"Belém, 3.1km from center", price:61, tag:null, partner:"Omio", color:"#D9A441", type:"resort"},
-    {name:"Principe Real Loft", stars:4, area:"Príncipe Real, 1.2km from center", price:89, tag:null, partner:"WayAway", color:"#3B5BA5", type:"apartment"},
-  ];
   const BUSES = [
     {op:"FlixBus", dep:"08:00", arr:"12:45", dur:"4h 45m", stops:"Nonstop", price:19, tag:"Cheapest", partner:"Omio", color:"#1F8A5C"},
     {op:"Alsa", dep:"10:30", arr:"15:00", dur:"4h 30m", stops:"Nonstop", price:24, tag:"Best value", partner:"Trip.com", color:"#FF6B35"},
@@ -1011,28 +991,81 @@
     if(isNaN(d.getTime())) d = new Date(Date.now()+1000*60*60*24*21);
     return String(d.getDate()).padStart(2,'0') + String(d.getMonth()+1).padStart(2,'0');
   }
-  let realFlightState = {status:'idle', origin:null, destination:null, data:null};
-  async function fetchRealFlights(origin, destination){
-    realFlightState = {status:'loading', origin, destination, data:null};
+  function formatDateTime(value){
+    const date = new Date(value);
+    return isNaN(date.getTime()) ? '' : date.toLocaleString(undefined,{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+  }
+  function durationLabel(minutes){
+    const value = Number(minutes)||0;
+    if(!value) return '';
+    return `${Math.floor(value/60)}h ${value%60}m`;
+  }
+  function aviasalesBookUrl(fare, origin, destination){
+    let href;
+    try{
+      href = fare.link
+        ? new URL(fare.link, 'https://www.aviasales.com')
+        : new URL(`https://www.aviasales.com/search/${origin}${ddmm(fare.departure_at)}${destination}${fare.return_at?ddmm(fare.return_at):''}1`);
+    }catch(e){
+      href = new URL('https://www.aviasales.com/');
+    }
+    if(travelpayoutsMarker) href.searchParams.set('marker',travelpayoutsMarker);
+    href.searchParams.set('currency',(CUR.code||'EUR').toLowerCase());
+    return href.toString();
+  }
+  function hotelPartnerUrl(location){
+    const url = new URL('https://search.hotellook.com/');
+    url.searchParams.set('location',location);
+    url.searchParams.set('currency',(CUR.code||'EUR').toLowerCase());
+    url.searchParams.set('language','en');
+    if(travelpayoutsMarker) url.searchParams.set('marker',travelpayoutsMarker);
+    return url.toString();
+  }
+
+  let realFlightState = {status:'idle', key:'', data:[]};
+  async function fetchRealFlights(origin, destination, currency){
+    const key = `${origin}:${destination}:${currency}`;
+    realFlightState = {status:'loading', key, data:[]};
     if(mode==='flights') renderResults();
     try{
-      const resp = await fetch(`/api/cheapest?origin=${origin}&destination=${destination}&currency=${(CUR.code||'EUR').toLowerCase()}`);
+      const [resp] = await Promise.all([
+        fetch(`/api/flights?origin=${origin}&destination=${destination}&currency=${currency}`),
+        getTravelpayoutsMarker(),
+      ]);
+      if(!resp.ok) throw new Error(`Flight request failed: ${resp.status}`);
       const json = await resp.json();
-      const dataObj = json && json.data;
-              let hit = null;
-              if(dataObj){
-                          if(dataObj[destination] && dataObj[destination]['0']) hit = dataObj[destination]['0'];
-                          else { const keys = Object.keys(dataObj); if(keys.length && dataObj[keys[0]] && dataObj[keys[0]]['0']) hit = dataObj[keys[0]]['0']; }
-              }
-      realFlightState = {status: hit ? 'ok':'empty', origin, destination, data: hit || null};
+      const fares = (json && Array.isArray(json.data) ? json.data : []).filter(fare=>fare && Number(fare.price)>0);
+      syncLivePriceRange(fares);
+      realFlightState = {status: fares.length ? 'ok':'empty', key, data:fares};
     }catch(e){
-      realFlightState = {status:'error', origin, destination, data:null};
+      realFlightState = {status:'error', key, data:[]};
     }
     if(mode==='flights') renderResults();
   }
+
+  let realHotelState = {status:'idle', key:'', data:[]};
+  async function fetchRealHotels(location, currency){
+    const key = `${location.toLowerCase()}:${currency}`;
+    realHotelState = {status:'loading',key,data:[]};
+    if(mode==='hotels') renderResults();
+    try{
+      const [resp] = await Promise.all([
+        fetch(`/api/hotels?location=${encodeURIComponent(location)}&currency=${currency}`),
+        getTravelpayoutsMarker(),
+      ]);
+      if(!resp.ok) throw new Error(`Hotel request failed: ${resp.status}`);
+      const json = await resp.json();
+      const hotels = (Array.isArray(json) ? json : (json && Array.isArray(json.data) ? json.data : []))
+        .filter(hotel=>hotel && Number(hotel.priceFrom ?? hotel.priceAvg ?? hotel.price)>0);
+      syncLivePriceRange(hotels.map(hotel=>({price:Number(hotel.priceFrom ?? hotel.priceAvg ?? hotel.price)})));
+      realHotelState = {status:hotels.length?'ok':'empty',key,data:hotels};
+    }catch(e){
+      realHotelState = {status:'error',key,data:[]};
+    }
+    if(mode==='hotels') renderResults();
+  }
   let mode = 'flights';
   let sortKey = 'best';
-  let hotelTypeFilter = 'hotel';
   let flightTrip = 'round';
   let busTrip = 'round';
   let travelers = 1;
@@ -1063,6 +1096,15 @@
     return boxes.includes('2stop');
   }
   function maxPrice(){ return Number(document.getElementById('priceRange').value); }
+  function syncLivePriceRange(items){
+    const prices = items.map(item=>Number(item.price)).filter(price=>price>0);
+    if(!prices.length) return;
+    const ceiling = Math.max(50,Math.ceil(Math.max(...prices)/10)*10);
+    const range = document.getElementById('priceRange');
+    range.max = ceiling;
+    range.value = ceiling;
+    document.getElementById('priceVal').textContent = fmtLive(ceiling);
+  }
   function sortList(arr, priceKey){
     const a = arr.slice();
     if(sortKey==='cheap') a.sort((x,y)=>x[priceKey]-y[priceKey]);
@@ -1103,114 +1145,172 @@
     renderProviderFilter([{partner:'Aviasales'}]);
     const origin = extractCode(currentQuery.from) || 'MAD';
     const destination = extractCode(currentQuery.to);
+    const currency = (CUR.code||'EUR').toLowerCase();
+    const key = `${origin}:${destination}:${currency}`;
     if(!destination){
       list.innerHTML = `<div class="noresults">Couldn't recognize that destination. Try a format like <b>Lisbon (LIS)</b>, or pick a city from Explore below.</div>`;
       document.getElementById('resultCount').textContent = 0;
       document.getElementById('resultTotal').textContent = 0;
       return;
     }
-    if(realFlightState.status!=='loading' && (realFlightState.origin!==origin || realFlightState.destination!==destination)){
-      fetchRealFlights(origin, destination);
+    if(realFlightState.status!=='loading' && realFlightState.key!==key){
+      fetchRealFlights(origin,destination,currency);
     }
-    if(realFlightState.status==='loading' || realFlightState.origin!==origin || realFlightState.destination!==destination){
+    if(realFlightState.status==='loading' || realFlightState.key!==key){
       list.innerHTML = `<div class="noresults">Searching live prices for ${origin} → ${destination}…</div>`;
       document.getElementById('resultCount').textContent = 0;
       document.getElementById('resultTotal').textContent = 0;
       return;
     }
     if(realFlightState.status!=='ok'){
-      const bookUrl = `https://www.aviasales.com/search/${origin}${ddmm()}${destination}1?marker=779667&currency=${(CUR.code||'EUR').toLowerCase()}`;
+      const bookUrl = aviasalesBookUrl({},origin,destination);
       list.innerHTML = `<div class="noresults">We couldn't find live pricing for ${origin} → ${destination} right now. Try a popular route like Madrid → Lisbon, Barcelona, or Rome — or search directly on our partner.<br><br><a class="viewbtn" style="display:inline-block;margin-top:10px;" href="${bookUrl}" target="_blank" rel="noopener">Search live on partner →</a></div>`;
       document.getElementById('resultCount').textContent = 0;
       document.getElementById('resultTotal').textContent = 0;
       return;
     }
-    const f = realFlightState.data;
-    const dep = new Date(f.departure_at);
-    const depStr = isNaN(dep.getTime()) ? '' : dep.toLocaleDateString(undefined,{month:'short', day:'numeric'});
-    const air = airlineName(f.airline);
-    const bookUrl = `https://www.aviasales.com/search/${origin}${ddmm(f.departure_at)}${destination}${f.return_at?ddmm(f.return_at):''}1?marker=779667&currency=${(CUR.code||'EUR').toLowerCase()}`;
-    const id = 'fl-'+f.airline+'-'+f.flight_number;
-    itemMeta[id] = {name: air+' · '+depStr, sub:'Real-time fare', price:f.price, partner:'Aviasales', mode:'flights'};
-    list.innerHTML = '';
-    const row = document.createElement('div');
-    row.className = 'dealcard';
-    row.innerHTML = `
-      ${favHeart(id)}
-      <div class="logo-circle" style="background:#3A86FF">${f.airline}</div>
-      <div class="info">
-        <b>${air}</b>
-        <div class="meta"><span>Flight ${f.flight_number}</span>${partnerBadge('Aviasales')}</div>
-        <div class="route"><span class="mono">${depStr}</span><span style="color:var(--ink-soft);font-weight:400;font-size:12.5px;"> · lowest fare found in the last 48h</span></div>
-      </div>
-      <div class="right">
-        <span class="tag-pill tag-cheap">Live price</span>
-        <div class="price mono">${fmt(f.price)}</div>
-        <div class="pricesub">round trip, real-time data</div>
-        <a class="viewbtn" href="${bookUrl}" target="_blank" rel="noopener">Book on partner →</a>
-      </div>`;
-    list.appendChild(row);
-    document.getElementById('resultCount').textContent = 1;
-    document.getElementById('resultTotal').textContent = 1;
-  }
-
-  function renderHotels(){
-    const mult = priceMultiplier(searchSeed((currentQuery.dest||'')+(currentQuery.checkin||'')));
-    const priced = HOTELS.map(h=>({...h, price: Math.max(15, Math.round(h.price*mult))}));
-    const byType = priced.filter(h=> h.type===hotelTypeFilter);
-    renderProviderFilter(byType.length ? byType : priced);
-    let items = (byType.length ? byType : priced).filter(h=> h.price<=maxPrice() && providerAllowed(h.partner));
-    items = sortList(items, 'price');
-    const list = document.getElementById('flightList');
-    list.innerHTML = '';
-    if(!items.length){ list.innerHTML = `<div class="noresults">No hotels match your filters.</div>`; }
-    items.forEach((h,i)=>{
-      const id = 'ho-'+h.name;
+    let fares = realFlightState.data.map(fare=>({...fare,durMin:Number(fare.duration)||0,partner:'Aviasales'}))
+      .filter(fare=>stopsAllowed(Number(fare.transfers)||0) && Number(fare.price)<=maxPrice() && providerAllowed('Aviasales'));
+    fares = sortList(fares,'price');
+    list.replaceChildren();
+    if(!fares.length){
+      list.innerHTML = `<div class="noresults">No live fares match your current filters.</div>`;
+    }
+    fares.forEach((fare,index)=>{
+      const airlineCode = String(fare.airline||'FL').toUpperCase().slice(0,3);
+      const airline = airlineName(airlineCode);
+      const departure = formatDateTime(fare.departure_at);
+      const returning = formatDateTime(fare.return_at);
+      const stops = Number(fare.transfers)||0;
+      const stopText = stops===0 ? 'Direct' : `${stops} stop${stops===1?'':'s'}`;
+      const duration = durationLabel(fare.duration);
+      const flightNumber = fare.flight_number ? `Flight ${escapeHTML(fare.flight_number)}` : `${origin} → ${destination}`;
+      const bookUrl = aviasalesBookUrl(fare,origin,destination);
+      const id = `fl-${index}-${airlineCode.replace(/[^A-Z0-9]/g,'')}-${String(fare.flight_number||'fare').replace(/[^A-Za-z0-9]/g,'')}`;
+      itemMeta[id] = {name:`${airline} · ${departure}`,sub:'Live Aviasales fare',price:Number(fare.price),partner:'Aviasales',mode:'flights'};
       const row = document.createElement('div');
       row.className = 'dealcard';
-      row.style.animationDelay = (i*0.05)+'s';
-      itemMeta[id] = {name:h.name, sub:h.area, price:h.price, partner:h.partner, mode:'hotels'};
+      row.style.animationDelay = `${index*0.04}s`;
       row.innerHTML = `
         ${favHeart(id)}
-        <div class="logo-circle" style="background:${h.color}">H</div>
+        <div class="logo-circle" style="background:#3A86FF">${escapeHTML(airlineCode)}</div>
         <div class="info">
-          <b>${h.name}</b>
-          <div class="meta"><span class="mono" style="color:var(--gold);">${stars(h.stars)}</span>${partnerBadge(h.partner)}</div>
-          <div class="route" style="font-weight:400;color:var(--ink-soft);font-size:13px;">${h.area}</div>
+          <b>${escapeHTML(airline)}</b>
+          <div class="meta"><span>${flightNumber}</span>${partnerBadge('Aviasales')}</div>
+          <div class="route"><span class="mono">${escapeHTML(departure)}</span><span class="arrow">→</span><span class="mono">${escapeHTML(returning||destination)}</span></div>
+          <div class="meta"><span>${escapeHTML(stopText)}</span>${duration?`<span>${escapeHTML(duration)} total</span>`:''}</div>
         </div>
         <div class="right">
-          ${tagPill(h.tag)}
-          <div class="price mono">${fmt(h.price)}</div>
-          <div class="pricesub">per night, taxes included</div>
-          <button class="viewbtn" onclick="openBooking('${id}')">View on partner →</button>
+          ${index===0?'<span class="tag-pill tag-cheap">Cheapest</span>':'<span class="tag-pill tag-best">Live fare</span>'}
+          <div class="price mono">${fmtLive(fare.price)}</div>
+          <div class="pricesub">${fare.return_at?'round trip':'one way'}, partner price</div>
+          <a class="viewbtn" href="${escapeHTML(bookUrl)}" target="_blank" rel="noopener sponsored">Book on partner →</a>
         </div>`;
       list.appendChild(row);
     });
-    document.getElementById('resultCount').textContent = items.length;
-    document.getElementById('resultTotal').textContent = priced.length;
+    document.getElementById('resultCount').textContent = fares.length;
+    document.getElementById('resultTotal').textContent = realFlightState.data.length;
+  }
+
+  function renderHotels(){
+    const list = document.getElementById('flightList');
+    const location = (currentQuery.dest||'Lisbon, Portugal').trim();
+    const currency = (CUR.code||'EUR').toLowerCase();
+    const key = `${location.toLowerCase()}:${currency}`;
+    renderProviderFilter([{partner:'Hotellook'}]);
+    if(realHotelState.status!=='loading' && realHotelState.key!==key){
+      fetchRealHotels(location,currency);
+    }
+    if(realHotelState.status==='loading' || realHotelState.key!==key){
+      list.innerHTML = `<div class="noresults">Searching live hotel prices in ${escapeHTML(location)}…</div>`;
+      document.getElementById('resultCount').textContent = 0;
+      document.getElementById('resultTotal').textContent = 0;
+      return;
+    }
+    const partnerUrl = hotelPartnerUrl(location);
+    if(realHotelState.status!=='ok'){
+      list.innerHTML = `<div class="noresults">We couldn't find live hotel pricing for ${escapeHTML(location)} right now. Try another city or search directly on our partner.<br><br><a class="viewbtn" style="display:inline-block;margin-top:10px;" href="${escapeHTML(partnerUrl)}" target="_blank" rel="noopener sponsored">Search live on partner →</a></div>`;
+      document.getElementById('resultCount').textContent = 0;
+      document.getElementById('resultTotal').textContent = 0;
+      return;
+    }
+    let hotels = realHotelState.data.map((hotel,index)=>{
+      const hotelLocation = hotel.location||{};
+      return {
+        name:String(hotel.hotelName||hotel.name||`Hotel ${index+1}`),
+        stars:Math.max(0,Math.min(5,Math.round(Number(hotel.stars)||0))),
+        price:Number(hotel.priceFrom ?? hotel.priceAvg ?? hotel.price),
+        area:[hotelLocation.name,hotelLocation.country].filter(Boolean).join(', ')||location,
+        partner:'Hotellook',
+        durMin:0,
+      };
+    }).filter(hotel=>hotel.price<=maxPrice() && providerAllowed('Hotellook'));
+    hotels = sortList(hotels,'price');
+    list.replaceChildren();
+    if(!hotels.length) list.innerHTML = `<div class="noresults">No live hotels match your current filters.</div>`;
+    hotels.forEach((hotel,index)=>{
+      const id = `ho-${index}-${hotel.name.replace(/[^A-Za-z0-9]/g,'').slice(0,30)}`;
+      const row = document.createElement('div');
+      row.className = 'dealcard';
+      row.style.animationDelay = `${index*0.04}s`;
+      itemMeta[id] = {name:hotel.name,sub:hotel.area,price:hotel.price,partner:'Hotellook',mode:'hotels'};
+      row.innerHTML = `
+        ${favHeart(id)}
+        <div class="logo-circle" style="background:#0A1931">H</div>
+        <div class="info">
+          <b>${escapeHTML(hotel.name)}</b>
+          <div class="meta"><span class="mono" style="color:var(--gold);">${hotel.stars?stars(hotel.stars):'Unrated'}</span>${partnerBadge('Hotellook')}</div>
+          <div class="route" style="font-weight:400;color:var(--ink-soft);font-size:13px;">${escapeHTML(hotel.area)}</div>
+        </div>
+        <div class="right">
+          ${index===0?'<span class="tag-pill tag-cheap">Lowest live price</span>':'<span class="tag-pill tag-best">Live price</span>'}
+          <div class="price mono">${fmtLive(hotel.price)}</div>
+          <div class="pricesub">from per night</div>
+          <a class="viewbtn" href="${escapeHTML(partnerUrl)}" target="_blank" rel="noopener sponsored">View on partner →</a>
+        </div>`;
+      list.appendChild(row);
+    });
+    document.getElementById('resultCount').textContent = hotels.length;
+    document.getElementById('resultTotal').textContent = realHotelState.data.length;
   }
 
   function renderCars(){
     const list = document.getElementById('flightList');
     list.replaceChildren();
-    const card = document.createElement('a');
-    card.className = 'dealcard affiliate-card';
-    card.href = DISCOVERCARS_URL;
-    card.target = '_blank';
-    card.rel = 'noopener sponsored';
-    card.setAttribute('aria-label','Search rental cars on DiscoverCars in a new tab');
-    card.innerHTML = `
-      <div class="logo-circle">DC</div>
-      <div class="info">
-        <b>Compare rental cars with DiscoverCars</b>
-        <div class="meta"><span>Worldwide car rental comparison</span>${partnerBadge('DiscoverCars')}</div>
-        <div class="partner-note">Compare trusted rental companies, review full terms, and complete your booking securely on DiscoverCars.</div>
-      </div>
-      <div class="right">
-        <span class="tag-pill tag-best">Affiliate partner</span>
-        <span class="affiliate-cta">Search on DiscoverCars →</span>
-      </div>`;
-    list.appendChild(card);
+    const shell = document.createElement('div');
+    shell.className = 'discovercars-widget-shell';
+    const widget = document.createElement('script');
+    const attributes = {
+      id:'dchwidget',
+      src:'https://www.discovercars.com/widget.js?v1',
+      'data-dev-env':'com',
+      'data-location':'',
+      'data-lang':'en',
+      'data-currency':'eur',
+      'data-utm-source':'',
+      'data-utm-medium':'widget',
+      'data-aff-code':'dgzonellc',
+      'data-autocomplete':'on',
+      'data-style-submit-bg-color':'#007ac2',
+      'data-style-submit-font-color':'#ffffff',
+      'data-style-form-bg-color':'#fcd34d',
+      'data-style-form-font-color':'#000000',
+      'data-style-submit-text':'Search now',
+      'data-style-title-style':'#000000',
+      'data-title-text':'Search and compare car rentals and save up to 70%!',
+      async:'async',
+      'data-style-rounded-corners':'on',
+      'data-layout-benefits':'on',
+      'data-layout-description':'on',
+      'data-layout-description-text':"We've selected the best deals from our car rental partners.",
+      'data-layout-logo-style':'on dark',
+      'data-layout-powered-by':'on',
+      'data-layout-style-form-bg-color':'#007ac2',
+      'data-layout-title':'on',
+    };
+    Object.entries(attributes).forEach(([name,value])=>widget.setAttribute(name,value));
+    shell.appendChild(widget);
+    list.appendChild(shell);
     document.getElementById('resultCount').textContent = 1;
     document.getElementById('resultTotal').textContent = 1;
   }
@@ -1251,12 +1351,13 @@
   function renderResults(){
     const title = document.getElementById('resultsTitle');
     const livepill = '<span class="livepill"><span class="dot"></span> Live</span>';
-    if(mode==='flights'){ title.innerHTML = (currentQuery.from||'Madrid')+' → '+(currentQuery.to||'Lisbon')+' '+livepill; document.getElementById('alertRoute').textContent = "Get a price alert for "+(currentQuery.from||'Madrid')+' → '+(currentQuery.to||'Lisbon'); renderFlights(); }
-    if(mode==='hotels'){ title.innerHTML = 'Hotels in '+(currentQuery.dest||'Lisbon')+' '+livepill; renderHotels(); }
+    if(mode==='flights'){ title.innerHTML = escapeHTML(currentQuery.from||'Madrid')+' → '+escapeHTML(currentQuery.to||'Lisbon')+' '+livepill; document.getElementById('alertRoute').textContent = "Get a price alert for "+(currentQuery.from||'Madrid')+' → '+(currentQuery.to||'Lisbon'); renderFlights(); }
+    if(mode==='hotels'){ title.innerHTML = 'Hotels in '+escapeHTML(currentQuery.dest||'Lisbon')+' '+livepill; renderHotels(); }
     if(mode==='cars'){ title.textContent = 'Compare rental cars with DiscoverCars'; renderCars(); }
     if(mode==='buses'){ title.innerHTML = (currentQuery.busFrom||'Madrid')+' → '+(currentQuery.busTo||'Porto')+' '+livepill; renderBuses(); }
     document.querySelector('.besttime-row').style.display = (mode==='flights') ? '' : 'none';
     document.getElementById('directOnlyChip').style.display = (mode==='flights') ? '' : 'none';
+    document.getElementById('stopsFilterGroup').style.display = (mode==='flights') ? '' : 'none';
     document.getElementById('filterChips').style.display = (mode==='cars') ? 'none' : '';
     document.getElementById('filterboxEl').style.display = (mode==='cars') ? 'none' : '';
     document.querySelector('.results-shell').classList.toggle('partner-only', mode==='cars');
@@ -1293,14 +1394,15 @@
 
   document.querySelectorAll('.f-stops').forEach(cb=>cb.addEventListener('change', renderResults));
   document.getElementById('priceRange').addEventListener('input', (e)=>{
-    document.getElementById('priceVal').textContent = '€'+e.target.value;
+    document.getElementById('priceVal').textContent = fmtLive(e.target.value);
     renderResults();
   });
 
   function resetFilters(){
     document.querySelectorAll('.f-stops').forEach(cb=>cb.checked=true);
-    document.getElementById('priceRange').value = 120;
-    document.getElementById('priceVal').textContent = '€120';
+    const range = document.getElementById('priceRange');
+    range.value = range.max;
+    document.getElementById('priceVal').textContent = fmtLive(range.max);
     delete providerSelections[mode];
     renderResults();
   }
@@ -1564,13 +1666,6 @@
   wireTripTabs('flightTripTabs', 'flReturnField', 'flightSearchBtn', 'Search all modes', (t)=>{ flightTrip = t; });
   wireTripTabs('busTripTabs', 'buReturnField', null, 'Search buses', (t)=>{ busTrip = t; renderResults(); });
 
-  document.querySelectorAll('#hotelTypeTabs button').forEach(tab=>{
-    tab.addEventListener('click', ()=>{
-      document.querySelectorAll('#hotelTypeTabs button').forEach(t=>t.classList.remove('active'));
-      tab.classList.add('active'); hotelTypeFilter = tab.dataset.htype;
-      if(mode==='hotels') renderResults();
-    });
-  });
   /* ---------- Swap buttons ---------- */
   function wireSwap(btnId, fromId, toId){
     const btn = document.getElementById(btnId);
