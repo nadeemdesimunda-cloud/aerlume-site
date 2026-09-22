@@ -2,6 +2,14 @@
 // Railway sets the PORT environment variable automatically -- do not hardcode a port.
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
+const { renderPage, renderBlogIndex, renderBlogPost, SITE } = require('./lib/html');
+const legalPages = require('./content/legal');
+
+const blogPosts = JSON.parse(
+    fs.readFileSync(path.join(__dirname, 'blog', 'posts.json'), 'utf8')
+);
+const blogBySlug = new Map(blogPosts.map((post) => [post.slug, post]));
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -260,6 +268,81 @@ app.get('/api/omio-link', async (req, res) => {
 app.get('/api/marker', (req, res) => {
     res.json({ marker: TP_MARKER || null });
 });
+
+// ---- SEO: robots.txt & dynamic sitemap ----
+app.get('/robots.txt', (req, res) => {
+    res.type('text/plain').send(
+        `User-agent: *\nAllow: /\nDisallow: /api/\n\nSitemap: ${SITE}/sitemap.xml\n`
+    );
+});
+
+app.get('/sitemap.xml', (req, res) => {
+    const staticPaths = [
+        '/',
+        '/blog',
+        '/about',
+        '/contact',
+        '/privacy',
+        '/terms',
+        '/cookies',
+        '/affiliate-disclosure',
+    ];
+    const urls = [
+        ...staticPaths.map((loc) => ({ loc, changefreq: loc === '/' ? 'daily' : 'monthly', priority: loc === '/' ? '1.0' : '0.7' })),
+        ...blogPosts.map((post) => ({
+            loc: `/blog/${post.slug}`,
+            changefreq: 'monthly',
+            priority: '0.8',
+            lastmod: post.updated || post.date,
+        })),
+    ];
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.map((u) => `  <url>
+    <loc>${SITE}${u.loc}</loc>${u.lastmod ? `\n    <lastmod>${u.lastmod}</lastmod>` : ''}
+    <changefreq>${u.changefreq}</changefreq>
+    <priority>${u.priority}</priority>
+  </url>`).join('\n')}
+</urlset>`;
+    res.type('application/xml').send(xml);
+});
+
+// ---- Blog & legal pages ----
+app.get('/blog', (req, res) => {
+    res.type('html').send(renderBlogIndex(blogPosts));
+});
+
+app.get('/blog/:slug', (req, res) => {
+    const post = blogBySlug.get(req.params.slug);
+    if (!post) return res.status(404).type('html').send(renderPage({
+        title: 'Article not found — Mintravo',
+        description: 'This blog article could not be found.',
+        canonical: `${SITE}/blog`,
+        active: 'blog',
+        body: '<article class="prose"><p>Sorry, that article does not exist. <a href="/blog">Browse all posts</a>.</p></article>',
+    }));
+    res.type('html').send(renderBlogPost(post));
+});
+
+for (const [slug, page] of Object.entries(legalPages)) {
+    app.get(`/${slug}`, (req, res) => {
+        res.type('html').send(renderPage({
+            title: page.title,
+            description: page.description,
+            canonical: `${SITE}/${slug}`,
+            active: slug === 'about' ? 'about' : slug === 'contact' ? 'contact' : undefined,
+            jsonLd: [{
+                '@context': 'https://schema.org',
+                '@type': 'WebPage',
+                name: page.heading,
+                description: page.description,
+                url: `${SITE}/${slug}`,
+                isPartOf: { '@type': 'WebSite', name: 'Mintravo', url: SITE },
+            }],
+            body: `<article class="prose">${page.body}</article>`,
+        }));
+    });
+}
 
 app.use(express.static(__dirname));
 

@@ -1,0 +1,38 @@
+[
+  {
+    "slug": "madrid-lisbon-train-vs-flight",
+    "title": "Madrid to Lisbon: Train vs Flight — Which Is Actually Cheaper?",
+    "excerpt": "We compare rail and air options on one of Europe's busiest routes, including hidden costs most comparison sites skip.",
+    "category": "Route guides",
+    "date": "2026-09-18",
+    "readTime": "6 min",
+    "content": "<p>Madrid and Lisbon are connected by dozens of daily flights and a growing rail network. On paper, the flight looks faster — but once you add airport transfers, baggage fees, and peak-hour pricing, the train often wins on total trip cost.</p><h2>When the flight makes sense</h2><p>Book a flight if you need to arrive before noon, if you're traveling light with carry-on only, or if you find a sale fare under €45 each way. Direct flights take about 1h 15m in the air; plan 3–4 hours door to door from central Madrid.</p><h2>When the train wins</h2><p>High-speed and overnight options drop you in city centers without security lines. For weekend trips, rail can beat budget airlines once you factor in seat selection and airport transport (€15–€25 each way in both cities).</p><h2>How to compare on Mintravo</h2><p>Search Madrid → Lisbon on our homepage, then switch between <strong>Flights</strong> and <strong>Buses</strong> tabs to see live partner prices side by side. Prices come directly from booking partners — we don't mark them up.</p><h2>Pro tip</h2><p>Tuesday and Wednesday departures on this route are typically 12–18% cheaper than Friday–Sunday, based on fare history across our partners.</p>"
+  },
+  {
+    "slug": "best-time-book-flights-europe",
+    "title": "Best Time to Book Flights in Europe (2026 Guide)",
+    "excerpt": "A practical booking window cheat sheet for short-haul and long-haul routes from major European hubs.",
+    "category": "Booking tips",
+    "date": "2026-09-12",
+    "readTime": "5 min",
+    "content": "<p>There is no single magic day to book, but patterns repeat every season. Use these windows as a starting point, then set a price alert on Mintravo for your specific route.</p><h2>Short-haul (under 3 hours)</h2><p>Book 4–8 weeks ahead for summer travel, 2–4 weeks for off-season. Last-minute sales happen, but seat choice disappears fast on popular routes like London–Barcelona and Paris–Rome.</p><h2>Long-haul from Europe</h2><p>For transatlantic trips, start watching fares 3–5 months out. Tuesday/Wednesday departures are often cheaper than weekends. Avoid booking the Friday before school holidays in your departure country.</p><h2>Should you wait for a drop?</h2><p>If prices have risen two weeks in a row on your route, booking now usually beats waiting. Our \"Best time to book\" panel on search results uses 90 days of partner fare history for that specific city pair.</p><h2>Tools that help</h2><ul><li>Compare multiple partners in one search on Mintravo</li><li>Filter by \"Cheapest\" or \"Direct only\" after searching</li><li>Set a price alert email before you commit</li></ul>"
+  },
+  {
+    "slug": "cheapest-european-cities-2026",
+    "title": "10 Cheapest European Cities to Fly to from Madrid in 2026",
+    "excerpt": "Round-trip fares under €80 still exist — if you know which destinations to watch and when to book.",
+    "category": "Deals",
+    "date": "2026-09-05",
+    "readTime": "7 min",
+    "content": "<p>Budget airlines keep competition fierce from Madrid-Barajas (MAD). These city pairs regularly show round-trip fares under €80 when booked a few weeks ahead in off-peak months.</p><h2>Standout value destinations</h2><ul><li><strong>Lisbon (LIS)</strong> — frequent sales, 1h flight</li><li><strong>Porto (OPO)</strong> — often cheaper than Lisbon with similar appeal</li><li><strong>Milan (BGY/MXP)</strong> — watch both airports; Bergamo can be €20 less</li><li><strong>Rome (FCO/CIA)</strong> — Ciampino often wins on price</li><li><strong>Athens (ATH)</strong> — shoulder season (Apr–May, Oct) is the sweet spot</li></ul><h2>How we find these fares</h2><p>Mintravo pulls live prices from partner APIs — not cached estimates. Check our <a href=\"/#explore\">Explore</a> section for round-trip deals from Madrid updated in the last 72 hours.</p><h2>Don't forget ground costs</h2><p>A €29 flight to a secondary airport plus a €35 transfer can lose to a €55 flight to the main city. Always compare total trip cost, not just the fare box.</p>"
+  },
+  {
+    "slug": "how-meta-search-works",
+    "title": "How Travel Meta-Search Works (And Why Mintravo Doesn't Sell Tickets)",
+    "excerpt": "Understand how comparison sites earn commission, where prices come from, and what happens when you click Book.",
+    "category": "Transparency",
+    "date": "2026-08-28",
+    "readTime": "4 min",
+    "content": "<p>Mintravo is a meta-search engine — we find and compare offers, but you always complete your purchase on a partner site like Kiwi.com, Trip.com, or Omio.</p><h2>Where prices come from</h2><p>When you search, we query partner APIs in real time. The price you see is the price the partner returned at that moment. Fares can change in minutes if seats sell or airlines adjust inventory.</p><h2>How we make money</h2><p>If you book through our links, partners may pay us an affiliate commission. That never increases your price — partners use commission to fund distribution, the same way they pay other referral channels.</p><h2>What we don't do</h2><ul><li>We don't store payment details</li><li>We don't issue tickets or handle refunds</li><li>We don't invent \"from\" prices — if live data isn't available, we say so</li></ul><p>Read our full <a href=\"/affiliate-disclosure\">affiliate disclosure</a> for partner names and how commissions work.</p>"
+  }
+]
